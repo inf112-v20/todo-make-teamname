@@ -1,4 +1,6 @@
 #Obligatorisk Oppgave 1
+
+
 ## Kompetanse
 Fag som alle i gruppen har tatt:
 INF100, INF101, INF102, MNF130, DAT103.
