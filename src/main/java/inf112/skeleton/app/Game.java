@@ -53,4 +53,8 @@ public class Game implements ApplicationListener {
         font.dispose();
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
 }
