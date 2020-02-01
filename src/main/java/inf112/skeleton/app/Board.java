@@ -35,7 +35,7 @@ public class Board  {
         object.setTileX(x);
         object.setTileY(y);
     }
-    public void addObject(IBoardObject object, Direction direction){
+    public void moveObjectDir(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
                 addObject(object, object.getTileX()-1, object.getTileY());
@@ -62,9 +62,9 @@ public class Board  {
         return grid[y][x].remove();
     }
 
-    public void moveObject(IBoardObject object){
+    public void moveObject(IBoardObject object, int x, int y){
         //TODO Make a method that easily moves objects
-        addObject(removeObject(object), object.getTileX(), object.getTileY());
+        addObject(removeObject(object), x, y);
     }
 
     public BoardTile getTile(int x, int y){
