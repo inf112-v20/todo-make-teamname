@@ -9,4 +9,8 @@ public interface IBoardObject {
     int getTileX();
 
     int getTileY();
+
+    int setTileX(int x);
+
+    int setTileY(int y);
 }

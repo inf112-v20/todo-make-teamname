@@ -32,7 +32,7 @@ public class BoardTile {
             IBoardObject key = items[i];
             int j = i - 1;
 
-            /* Move elements of arr[0..i-1], that are
+            /* Move elements of items[0..i-1], that are
                greater than key, to one position ahead
                of their current position */
             while (j >= 0 && items[j].getSize() > key.getSize()) {

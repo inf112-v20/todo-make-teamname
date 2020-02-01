@@ -7,6 +7,10 @@ INF100, INF101, INF102, MNF130, DAT103.
 
 (Tidligere erfaring med LibGdx her)
 
+Erik:
+ * Litt LibGdx erfaring, ett tidlegere prosjekt.
+ * INF214, MAT121, MAT221, STAT110.
+
 #Roller
 * Teamleader -Kristoffer
 * Logikk - Erik
@@ -32,7 +36,7 @@ Lage tester
 Dokumentere
 
 ##Kort beskrivelse av programmet
-Et program som kan spille RoboValley opp til 4 personer over LAN.
+Et program som kan spille RoboRally opp til 4 personer over LAN.
 
 ##LISTE OVER KRAV:
 PRIORITERT LISTE OVER KRAV SOM SKAL INN I FØRSTE ITERASJON;

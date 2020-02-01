@@ -6,14 +6,10 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 
 public class BoardTileTest {
-    Game game;
-    Board board;
     BoardTile tile;
 
     @Before
     public void setUp(){
-        game = new Game();
-        board = game.getBoard();
         tile = new BoardTile(1,1);
     }
     @Test
