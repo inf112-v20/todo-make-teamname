@@ -63,7 +63,6 @@ public class Board  {
     }
 
     public void moveObject(IBoardObject object, int x, int y){
-        //TODO Make a method that easily moves objects
         addObject(removeObject(object), x, y);
     }
 
