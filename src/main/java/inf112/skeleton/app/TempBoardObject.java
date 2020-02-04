@@ -15,13 +15,8 @@ public class TempBoardObject implements IBoardObject{
     }
 
     @Override
-    public void setDirection() {
+    public void setDirection(Direction newDir) {
 
-    }
-
-    @Override
-    public int getSize() {
-        return size;
     }
 
     @Override
@@ -35,12 +30,10 @@ public class TempBoardObject implements IBoardObject{
     }
 
     @Override
-    public int setTileX(int x) {
-        return 0;
+    public void setTileX(int x) {
     }
 
     @Override
-    public int setTileY(int y) {
-        return 0;
+    public void setTileY(int y) {
     }
 }
