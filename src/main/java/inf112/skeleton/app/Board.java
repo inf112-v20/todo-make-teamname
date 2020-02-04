@@ -22,7 +22,7 @@ public class Board  {
     public void render (SpriteBatch batch) {
         for (int y=0; y < grid.length; y++) {
             for (int x=0; x < grid[0].length; x++) {
-                batch.draw(new Texture("assets/Cell_Empty.png"), x * 32, y * 32); //Temp version
+                batch.draw(grid[y][x].getSprite(), x * 32, y * 32); //Temp version
             }
         }
     }

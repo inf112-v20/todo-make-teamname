@@ -12,12 +12,12 @@ public class BoardTile {
     public BoardTile(int x, int y) {
         this.x = x;
         this.y = y;
-//        sprite = new Texture("assets/Cell_Empty.png");
+        sprite = new Texture("assets/Cell_Empty.png");
     }
     //TODO Make a version that doesn't give null pointer when testing
-//    public Texture getSprite() {
-//        return sprite;
-//    }
+    public Texture getSprite() {
+        return sprite;
+        }
 
 
     public void add(IBoardObject object) {

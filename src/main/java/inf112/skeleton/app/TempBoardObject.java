@@ -33,4 +33,14 @@ public class TempBoardObject implements IBoardObject{
     public int getTileY() {
         return 0;
     }
+
+    @Override
+    public int setTileX(int x) {
+        return 0;
+    }
+
+    @Override
+    public int setTileY(int y) {
+        return 0;
+    }
 }

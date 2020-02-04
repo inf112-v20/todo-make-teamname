@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Game implements ApplicationListener {
+public class Game extends com.badlogic.gdx.Game {
     private SpriteBatch batch;
     private BitmapFont font;
     private Board board;
