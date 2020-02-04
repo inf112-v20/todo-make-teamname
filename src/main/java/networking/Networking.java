@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package networking;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
