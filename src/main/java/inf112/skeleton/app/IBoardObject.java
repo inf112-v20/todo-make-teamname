@@ -1,16 +1,15 @@
 package inf112.skeleton.app;
 
 public interface IBoardObject {
-    Direction getDirection();
-    void setDirection();
 
-    int getSize();
+    Direction getDirection();
+    void setDirection(Direction d);
 
     int getTileX();
 
     int getTileY();
 
-    int setTileX(int x);
+    void setTileX(int x);
 
-    int setTileY(int y);
+    void setTileY(int y);
 }
