@@ -29,6 +29,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean keyUp(int keycode){
+        if (testBot == null)return true;
         switch (keycode){
             case Input.Keys.UP:
                 board.moveObjectDir(testBot, Direction.NORTH);

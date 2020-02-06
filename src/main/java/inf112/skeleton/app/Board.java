@@ -35,6 +35,7 @@ public class Board  {
         if (x >= height || y >= width || x < 0 || y < 0){
             //System.out.println("ERROR: Input not inside Board!");
             System.out.println("You fell off the board");
+            removeObject(object);
             return;
         }
         grid[y][x].add(object);
@@ -44,24 +45,16 @@ public class Board  {
     public void moveObjectDir(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
-                IBoardObject copy = object;
-                removeObject(object.getTileX(), object.getTileY());
-                addObject(copy, object.getTileX(), object.getTileY()+1);
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                copy = object;
-                removeObject(object.getTileX(), object.getTileY());
-                addObject(copy, object.getTileX()+1, object.getTileY());
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                copy = object;
-                removeObject(object.getTileX(), object.getTileY());
-                addObject(copy, object.getTileX(), object.getTileY()-1);
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                copy = object;
-                removeObject(object.getTileX(), object.getTileY());
-                addObject(copy, object.getTileX()-1, object.getTileY());
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
                 break;
         }
     }
