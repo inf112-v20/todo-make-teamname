@@ -10,8 +10,9 @@ public class Board  {
     private int width, height;
 
     //Object numbers:
-    public final static int CONVEYORBELT = 0;
-    public final static int ROBOT = 1;
+    public final static int BOTTOMLAYER = 0; //CONVEYORBELT
+    public final static int WALLLAYER = 1; //CONVEYORBELT
+    public final static int ROBOT = 2;
 
 
     public Board(int width, int height) {
@@ -49,7 +50,6 @@ public class Board  {
 
     //Moves a object a direction
     public void moveObjectDir(IBoardObject object, Direction direction){
-        //TODO Fix all objectNr
         switch (direction){
             case NORTH:
                 addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
