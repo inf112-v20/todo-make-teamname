@@ -20,7 +20,7 @@ public class MPServer {
 
         server.addListener(snl);
         try {
-            server.bind(ServerPort);
+            server.bind(54555, 54777);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -31,7 +31,7 @@ public class MPServer {
     private void registerPackets(){
         Kryo kryo = server.getKryo();
         kryo.register(Packets.Packet01Message.class);
-        kryo.register(Packets.Packet02Message.class);
+        kryo.register(Packets.Packet02BoardInfo.class);
 
     }
     public static void main(String[] args) {

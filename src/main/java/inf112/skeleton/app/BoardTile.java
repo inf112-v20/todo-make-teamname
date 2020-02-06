@@ -1,6 +1,7 @@
 package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.Texture;
+import inf112.skeleton.app.objects.Robot;
 
 import java.util.ArrayList;
 
@@ -34,17 +35,16 @@ public class BoardTile {
 
 
     public void add(IBoardObject object) {
-        items[itemSize] = object;
-        itemSize++;
+        //TODO fix for all IBoardObjects
+        if(object instanceof Robot) items[1] = object;
     }
 
 
 
 
-    public IBoardObject remove() {
-        if(itemSize == 0) return null;
-        IBoardObject object = items[--itemSize];
-        items[itemSize] = null;
+    public IBoardObject remove(int objectNr) {
+        IBoardObject object = items[objectNr];
+        items[objectNr] = null;
         return object;
     }
 }

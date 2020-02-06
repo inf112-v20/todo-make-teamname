@@ -8,6 +8,10 @@ public class Board  {
 
     private BoardTile [][] grid;
     private int width, height;
+    //Object numbers:
+    public final static int CONVEYORBELT = 0;
+    public final static int ROBOT = 1;
+
 
     public Board(int width, int height) {
         this.width = width;
@@ -43,30 +47,34 @@ public class Board  {
         object.setTileY(y);
     }
     public void moveObjectDir(IBoardObject object, Direction direction){
+        //TODO Fix all objectNr
+        int objectNr;
+        if (object instanceof Robot) objectNr = ROBOT;
+        else objectNr = 0;
         switch (direction){
             case NORTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()-1, object.getTileY());
                 break;
         }
     }
 
-    public IBoardObject removeObject(int x, int y){
-        return grid[y][x].remove();
+    public IBoardObject removeObject(int x, int y, int objectNr){
+        return grid[y][x].remove(objectNr);
     }
 
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
-        return grid[y][x].remove();
+        return grid[y][x].remove(ROBOT);
     }
 
     public void moveObject(IBoardObject object, int x, int y){

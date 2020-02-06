@@ -20,7 +20,7 @@ public class ServerNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
-            System.out.println("[CLIENT] << " + p.message);
+            System.out.println("[" + p.clientName +"] >> " + p.message);
         }
     }
 }

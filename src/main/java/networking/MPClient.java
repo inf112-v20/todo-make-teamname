@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class MPClient {
     //Connection Stuff
     int portSocket = 54777;
-//    InetAddress IPAddress;
-    String IPAddress;
+    InetAddress IPAddress;
+
     public Client client;
     private ClientNetworkListener cnl;
 
@@ -26,16 +26,16 @@ public class MPClient {
         client.addListener(cnl);
 
         client.start();
-        IPAddress = "localhost";
-//        IPAddress = client.discoverHost(54777, 5000);
+        IPAddress = client.discoverHost(54777, 5000);
+        System.out.println(IPAddress);
         try {
-            client.connect(5000, IPAddress, portSocket);
+            client.connect(5000, IPAddress, 54555, 54777);
         }catch (IOException e){
             e.printStackTrace();
         }
         while(true){
             String message = sc.nextLine();
-            if(message.equals("Quit")) break;
+            if(message.equals("quit")) break;
             cnl.sendInfo(message);
         }
     }
