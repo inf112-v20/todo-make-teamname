@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.Robot;
-import networking.MPClient;
-import networking.MPServer;
 
 import java.net.InetAddress;
 
@@ -19,11 +17,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     private BitmapFont font;
     private Board board;
     private Robot testBot;
-    private MPClient client;
-    private InetAddress address;
-    private MPServer server;
-
-    public boolean hostingServer = true;
 
     @Override
     public void create() {
@@ -34,8 +27,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         testBot = new Robot(Direction.NORTH, 8,8);
         board.addObject(testBot, 0,0);
         Gdx.input.setInputProcessor(this);
-//        if(hostingServer) hostServer();
-//        client = new MPClient();
 
     }
 
@@ -93,19 +84,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
-    }
-
-    //Setup for hosting a server
-    public void hostServer(){
-        server = new MPServer();
-        Thread serverThread = new Thread(server);
-        serverThread.start();
-        address = server.getAddress();
-
-    }
-    //Sends cards to server
-    public void sendCards(Card[] cards){
-        client.sendCards(cards, 1);
     }
 
 }
