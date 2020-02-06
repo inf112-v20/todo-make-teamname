@@ -1,14 +1,26 @@
 package inf112.skeleton.app;
 
 import static org.junit.Assert.*;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class BoardTests {
-    Board testBoard = new Board(10,10);
+    public Board board;
+
+    @Before
+    public void setUp(){
+        board = new Board(12, 12);
+    }
 
     @Test
     public void checkTrue() {
         assertTrue(true);
+    }
+
+    @Test
+    public void checkMoveDir(){
+
     }
 
 }

@@ -10,6 +10,12 @@ public class Board  {
     private int width, height;
     private Robot selected;
 
+    //Object numbers:
+    public final static int BOTTOMLAYER = 0; //CONVEYORBELT
+    public final static int WALLLAYER = 1; //CONVEYORBELT
+    public final static int ROBOT = 2;
+
+
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
@@ -30,6 +36,7 @@ public class Board  {
                 for (Texture t : grid[y][x].getTextures()){
                     if (t != null)batch.draw(t, x*32, y*32);
                 }
+                //batch.draw(grid[y][x].getSprite(), x * 32, y * 32); //Temp version
             }
         }
     }
@@ -46,50 +53,55 @@ public class Board  {
         this.selected = r;
     }
 
+    //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
-        if (object == null)return;
-        if (x >= height || y >= width || x < 0 || y < 0) return;
+        if (x >= height || y >= width || x < 0 || y < 0){
+            //System.out.println("ERROR: Input not inside Board!");
+            System.out.println("You fell off the board");
+            removeObject(object);
+            return;
+        }
         grid[y][x].add(object);
         object.setTileX(x);
         object.setTileY(y);
     }
+
+    //Moves a object a direction
     public void moveObjectDir(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
-                moveObject(object, object.getTileX(), object.getTileY()+1);
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                moveObject(object, object.getTileX()+1, object.getTileY());
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                moveObject(object, object.getTileX(), object.getTileY()-1);
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                moveObject(object, object.getTileX()-1, object.getTileY());
+                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
                 break;
         }
     }
 
-    public IBoardObject removeObject(int x, int y){
-        return grid[y][x].remove();
+    //Moves a object to x any coordinate
+    public void moveObject( int x, int y){
+        addObject( grid[y][x].remove(ROBOT), x, y);
     }
 
+    //Removes a specific object
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
         return grid[y][x].remove();
     }
 
-    public void moveObject(IBoardObject object, int x, int y){
-        if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
-            System.out.println("You fell off the board, rebooting...");
-            addObject(removeObject(object),0,0);
-            selected = null;
-            return;
-        }
-        addObject(removeObject(object), x, y);
+    //Removes a object at the x and y coordinate
+    public IBoardObject removeObject(int x, int y){
+        return grid[y][x].remove(ROBOT);
     }
 
+    //Returns a specific tile
     public BoardTile getTile(int x, int y){
         return grid[y][x];
     }
