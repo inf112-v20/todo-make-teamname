@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.Robot;
 
+import java.net.InetAddress;
+
+
 public class Game extends InputAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
@@ -81,10 +84,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
-    }
-
-    public Board getBoard(){
-        return board;
     }
 
 }
