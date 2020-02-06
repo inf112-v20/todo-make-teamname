@@ -2,12 +2,18 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
 public class Board  {
 
     private BoardTile [][] grid;
     private int width, height;
+
+    //Object numbers:
+    public final static int CONVEYORBELT = 0;
+    public final static int ROBOT = 1;
+
 
     public Board(int width, int height) {
         this.width = width;
@@ -31,6 +37,7 @@ public class Board  {
         }
     }
 
+    //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
         if (x >= height || y >= width || x < 0 || y < 0){
             //System.out.println("ERROR: Input not inside Board!");
@@ -42,37 +49,47 @@ public class Board  {
         object.setTileX(x);
         object.setTileY(y);
     }
+
+    //Moves a object a direction
     public void moveObjectDir(IBoardObject object, Direction direction){
+        //TODO Fix all objectNr
+        int objectNr;
+        if (object instanceof Robot) objectNr = ROBOT;
+        else objectNr = 0;
         switch (direction){
             case NORTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()-1, object.getTileY());
                 break;
         }
     }
 
-    public IBoardObject removeObject(int x, int y){
-        return grid[y][x].remove();
-    }
-
-    public IBoardObject removeObject(IBoardObject object){
-        int x = object.getTileX();
-        int y = object.getTileY();
-        return grid[y][x].remove();
-    }
-
+    //Moves a object to x any coordinate
     public void moveObject(IBoardObject object, int x, int y){
         addObject(removeObject(object), x, y);
     }
 
+    //Removes a object at the x and y coordinate
+    public IBoardObject removeObject(int x, int y, int objectNr){
+        return grid[y][x].remove(objectNr);
+    }
+
+    //Removes a specific object
+    public IBoardObject removeObject(IBoardObject object){
+        int x = object.getTileX();
+        int y = object.getTileY();
+        return grid[y][x].remove(ROBOT);
+    }
+
+    //Returns a specific tile
     public BoardTile getTile(int x, int y){
         return grid[x][y];
     }
