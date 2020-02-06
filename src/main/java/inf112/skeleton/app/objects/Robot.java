@@ -1,5 +1,6 @@
 package inf112.skeleton.app.objects;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.IBoardObject;
 
@@ -7,9 +8,23 @@ public class Robot implements IBoardObject {
 
     private int x, y;
     private Direction dir;
+    private Texture sprite;
 
-    public Robot(Direction newDir) {
+    public Robot(Direction newDir, int x, int y) {
         dir = newDir;
+        this.x = x;
+        this.y = y;
+        sprite = new Texture("assets/Robot_Example.png");
+    }
+
+    @Override
+    public Texture getTexture() {
+        return sprite;
+    }
+
+    @Override
+    public void setTexture() {
+
     }
 
     @Override
