@@ -84,11 +84,6 @@ public class Board  {
     public void moveObject(IBoardObject object, int x, int y){
         if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
             System.out.println("You fell off the board, rebooting...");
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             addObject(removeObject(object),0,0);
             selected = null;
             return;
