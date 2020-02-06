@@ -17,13 +17,14 @@ public class Game extends InputAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
     private Board board;
+    private Robot testBot;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
-        board = new Board(16, 16);
+        board = BoardParser.parse("riskyexchange");
 
         Gdx.input.setInputProcessor(this);
 
@@ -60,7 +61,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
         return false;
     }
-
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer){
