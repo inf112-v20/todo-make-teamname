@@ -3,7 +3,6 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.IBoardObject;
-import inf112.skeleton.app.objects.Robot;
 
 public class Board  {
 
@@ -32,7 +31,6 @@ public class Board  {
                 for (Texture t : grid[y][x].getTextures()){
                     if (t != null)batch.draw(t, x*32, y*32);
                 }
-                //batch.draw(grid[y][x].getSprite(), x * 32, y * 32); //Temp version
             }
         }
     }
@@ -40,7 +38,6 @@ public class Board  {
     //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
         if (x >= height || y >= width || x < 0 || y < 0){
-            //System.out.println("ERROR: Input not inside Board!");
             System.out.println("You fell off the board");
             removeObject(object);
             return;
@@ -53,9 +50,6 @@ public class Board  {
     //Moves a object a direction
     public void moveObjectDir(IBoardObject object, Direction direction){
         //TODO Fix all objectNr
-        int objectNr;
-        if (object instanceof Robot) objectNr = ROBOT;
-        else objectNr = 0;
         switch (direction){
             case NORTH:
                 addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
@@ -73,19 +67,19 @@ public class Board  {
     }
 
     //Moves a object to x any coordinate
-    public void moveObject(IBoardObject object, int x, int y){
-        addObject(removeObject(object), x, y);
-    }
-
-    //Removes a object at the x and y coordinate
-    public IBoardObject removeObject(int x, int y, int objectNr){
-        return grid[y][x].remove(objectNr);
+    public void moveObject( int x, int y){
+        addObject( grid[y][x].remove(ROBOT), x, y);
     }
 
     //Removes a specific object
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
+        return grid[y][x].remove(ROBOT);
+    }
+
+    //Removes a object at the x and y coordinate
+    public IBoardObject removeObject(int x, int y){
         return grid[y][x].remove(ROBOT);
     }
 
