@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
 public class Board  {
@@ -55,12 +56,7 @@ public class Board  {
 
     //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
-        if (x >= height || y >= width || x < 0 || y < 0){
-            //System.out.println("ERROR: Input not inside Board!");
-            System.out.println("You fell off the board");
-            removeObject(object);
-            return;
-        }
+
         grid[y][x].add(object);
         object.setTileX(x);
         object.setTileY(y);
@@ -85,15 +81,25 @@ public class Board  {
     }
 
     //Moves a object to x any coordinate
-    public void moveObject( int x, int y){
-        addObject( grid[y][x].remove(ROBOT), x, y);
+    public void moveObject(IBoardObject object, int x, int y){
+        if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
+            System.out.println("You fell off the board, rebooting...");
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            addObject(removeObject(object),0,0);
+            selected = null;
+            return;
+        }
+        addObject(removeObject(object), x, y);
     }
-
     //Removes a specific object
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
-        return grid[y][x].remove();
+        return grid[y][x].remove(ROBOT);
     }
 
     //Removes a object at the x and y coordinate
