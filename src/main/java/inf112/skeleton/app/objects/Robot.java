@@ -10,10 +10,8 @@ public class Robot implements IBoardObject {
     private Direction dir;
     private Texture sprite;
 
-    public Robot(Direction newDir, int x, int y) {
+    public Robot(Direction newDir) {
         dir = newDir;
-        this.x = x;
-        this.y = y;
         sprite = new Texture("assets/Robot_Example.png");
     }
 

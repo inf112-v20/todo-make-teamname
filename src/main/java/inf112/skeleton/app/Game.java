@@ -9,11 +9,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.Robot;
 
+import javax.sound.midi.Soundbank;
+
 public class Game extends InputAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
     private Board board;
-    private Robot testBot;
 
     @Override
     public void create() {
@@ -21,32 +22,52 @@ public class Game extends InputAdapter implements ApplicationListener {
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         board = new Board(16, 16);
-        testBot = new Robot(Direction.NORTH, 8,8);
-        board.addObject(testBot, 0,0);
+
         Gdx.input.setInputProcessor(this);
 
     }
 
     @Override
-    public boolean keyUp(int keycode){
-        if (testBot == null)return true;
-        switch (keycode){
-            case Input.Keys.UP:
-                board.moveObjectDir(testBot, Direction.NORTH);
-                break;
-            case Input.Keys.DOWN:
-                board.moveObjectDir(testBot, Direction.SOUTH);
-                break;
-            case Input.Keys.LEFT:
-                board.moveObjectDir(testBot, Direction.WEST);
-                break;
-            case Input.Keys.RIGHT:
-                board.moveObjectDir(testBot, Direction.EAST);
-                break;
-            default:
-                break;
+    public boolean keyUp(int keycode) {
+            switch (keycode) {
+                case Input.Keys.UP:
+                    board.moveSelectedDir(Direction.NORTH);
+                    break;
+                case Input.Keys.DOWN:
+                    board.moveSelectedDir(Direction.SOUTH);
+                    break;
+                case Input.Keys.LEFT:
+                    board.moveSelectedDir(Direction.WEST);
+                    break;
+                case Input.Keys.RIGHT:
+                    board.moveSelectedDir(Direction.EAST);
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
-        return true;
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button){
+        for (IBoardObject o: board.getTile(screenX/32, Math.abs(15-(screenY/32))).getObjects()){
+            if (o instanceof Robot){
+                board.setSelected((Robot) o);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer){
+        if ((screenX < board.getWidth()*32 || screenY < board.getHeight()*32)){
+            int x = screenX/32;
+            int y = Math.abs(15-(screenY/32));
+            board.moveSelected(x, y);
+            return true;
+        }
+        else return false;
     }
 
     @Override

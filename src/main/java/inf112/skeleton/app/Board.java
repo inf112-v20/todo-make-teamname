@@ -8,6 +8,7 @@ public class Board  {
 
     private BoardTile [][] grid;
     private int width, height;
+    private Robot selected;
 
     public Board(int width, int height) {
         this.width = width;
@@ -18,7 +19,10 @@ public class Board  {
                 grid[y][x] = new BoardTile(x, y);
             }
         }
+        addObject(new Robot(Direction.NORTH),0,0);
     }
+    public int getWidth(){return this.width;}
+    public int getHeight(){return this.height;}
 
     public void render (SpriteBatch batch) {
         for (int y=0; y < grid.length; y++) {
@@ -26,18 +30,25 @@ public class Board  {
                 for (Texture t : grid[y][x].getTextures()){
                     if (t != null)batch.draw(t, x*32, y*32);
                 }
-                //batch.draw(grid[y][x].getSprite(), x * 32, y * 32); //Temp version
             }
         }
     }
+    public void moveSelectedDir(Direction dir){
+        if (selected == null)return;
+        moveObjectDir(selected, dir);
+    }
+    public void moveSelected(int x, int y){
+        if (selected == null)return;
+        moveObject(selected,x,y);
+    }
+
+    public void setSelected(Robot r){
+        this.selected = r;
+    }
 
     public void addObject(IBoardObject object, int x, int y){
-        if (x >= height || y >= width || x < 0 || y < 0){
-            //System.out.println("ERROR: Input not inside Board!");
-            System.out.println("You fell off the board");
-            removeObject(object);
-            return;
-        }
+        if (object == null)return;
+        if (x >= height || y >= width || x < 0 || y < 0) return;
         grid[y][x].add(object);
         object.setTileX(x);
         object.setTileY(y);
@@ -45,16 +56,16 @@ public class Board  {
     public void moveObjectDir(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
+                moveObject(object, object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
+                moveObject(object, object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
+                moveObject(object, object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
+                moveObject(object, object.getTileX()-1, object.getTileY());
                 break;
         }
     }
@@ -70,11 +81,17 @@ public class Board  {
     }
 
     public void moveObject(IBoardObject object, int x, int y){
+        if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
+            System.out.println("You fell off the board, rebooting...");
+            addObject(removeObject(object),0,0);
+            selected = null;
+            return;
+        }
         addObject(removeObject(object), x, y);
     }
 
     public BoardTile getTile(int x, int y){
-        return grid[x][y];
+        return grid[y][x];
     }
 
 }

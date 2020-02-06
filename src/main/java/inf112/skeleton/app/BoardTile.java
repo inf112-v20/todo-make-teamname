@@ -47,4 +47,6 @@ public class BoardTile {
         items[itemSize] = null;
         return object;
     }
+
+    public IBoardObject[] getObjects(){return this.items;}
 }

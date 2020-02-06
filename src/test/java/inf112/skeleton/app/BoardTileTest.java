@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.graphics.Texture;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,20 +14,11 @@ public class BoardTileTest {
         tile = new BoardTile(1,1);
     }
 
-    /*@Test
-    public void sortTest(){
-
-        for (int i = 1; i < 5; i++) {
-            TempBoardObject object = new TempBoardObject(i);
-            tile.add(object);
-        }
-        IBoardObject last = tile.remove();
-        for (int i = 0; i < 3; i++) {
-            IBoardObject next = tile.remove();
-            assertTrue(last.getSize() > next.getSize());
-            last = next;
-        }
+    @Test
+    public void test(){
+        tile = new BoardTile(1,1);
+        Texture sprite = tile.getSprite();
     }
-    */
+
 
 }
