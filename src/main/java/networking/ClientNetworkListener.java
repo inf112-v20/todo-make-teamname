@@ -30,7 +30,7 @@ public class ClientNetworkListener extends Listener {
     public void sendInfo(String message){
         firstMessage.message = message;
         client.sendTCP(firstMessage);
-        System.out.println("["+ userName + "] >> Sent : [" + message +"] to server.");
+        System.out.println("["+ firstMessage.clientName + "] >> Sent : [" + message +"] to server.");
     }
     public void disconnected(Connection c){
         System.out.println("[CLIENT] >> You have disconnected.");
@@ -39,7 +39,7 @@ public class ClientNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
-            System.out.println("[SERVER] << " + p.message);
+            System.out.println("["+ p.clientName +"] << " + p.message);
         }
     }
 }

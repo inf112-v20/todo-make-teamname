@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Server;
 import com.jcraft.jogg.Packet;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 public class MPServer {
     //Connection info
@@ -16,7 +18,7 @@ public class MPServer {
 
     public MPServer(){
         server = new Server();
-        snl = new ServerNetworkListener();
+        snl = new ServerNetworkListener(server);
 
         server.addListener(snl);
         try {
@@ -26,6 +28,11 @@ public class MPServer {
         }
         registerPackets();
         server.start();
+        try {
+            System.out.println(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     private void registerPackets(){

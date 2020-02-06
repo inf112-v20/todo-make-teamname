@@ -2,10 +2,10 @@ package networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class MPClient {
@@ -33,6 +33,13 @@ public class MPClient {
 
 
         client.start();
+        IPAddress = client.discoverHost(54777, 5000);
+        System.out.println(IPAddress);
+        try {
+            System.out.println(InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
         try {
             client.connect(5000, ip, 54555, 54777);
         }catch (IOException e){
