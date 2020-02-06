@@ -2,6 +2,7 @@ package networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.minlog.Log;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -25,11 +26,15 @@ public class MPClient {
         registerPackets();
         client.addListener(cnl);
 
+        String ip;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Whats the ip to your host?");
+        ip = sc.nextLine();
+
+
         client.start();
-        IPAddress = client.discoverHost(54777, 5000);
-        System.out.println(IPAddress);
         try {
-            client.connect(5000, IPAddress, 54555, 54777);
+            client.connect(5000, ip, 54555, 54777);
         }catch (IOException e){
             e.printStackTrace();
         }
