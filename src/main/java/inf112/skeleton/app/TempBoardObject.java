@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.graphics.Texture;
+
 public class TempBoardObject implements IBoardObject{
     //Temporary BoardObject for testing
 
@@ -7,6 +9,16 @@ public class TempBoardObject implements IBoardObject{
 
     public TempBoardObject(int size){
         this.size = size;
+    }
+
+    @Override
+    public Texture getTexture() {
+        return null;
+    }
+
+    @Override
+    public void setTexture() {
+
     }
 
     @Override

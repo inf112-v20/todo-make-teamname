@@ -12,7 +12,8 @@ public class BoardTileTest {
     public void setUp(){
         tile = new BoardTile(1,1);
     }
-    @Test
+
+    /*@Test
     public void sortTest(){
 
         for (int i = 1; i < 5; i++) {
@@ -26,6 +27,6 @@ public class BoardTileTest {
             last = next;
         }
     }
-
+    */
 
 }
