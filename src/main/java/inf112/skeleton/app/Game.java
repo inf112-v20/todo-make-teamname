@@ -17,7 +17,6 @@ public class Game extends InputAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
     private Board board;
-    private Robot testBot;
 
     @Override
     public void create() {
@@ -61,6 +60,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         }
         return false;
     }
+
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer){
