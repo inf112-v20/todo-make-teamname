@@ -12,7 +12,7 @@ Erik:
 * INF214, MAT121, MAT221, STAT110.
  
 Kristoffer:
-* ...
+* Har litt LibGdx erfaring har jobbet 
 
 Elias:
 * ...
