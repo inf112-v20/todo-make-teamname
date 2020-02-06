@@ -10,6 +10,7 @@ public class Main {
         cfg.title = "RoboRally :)";
         cfg.width = 512;
         cfg.height = 512;
+        cfg.resizable = false; //temporarly
         //new LwjglApplication(new HelloWorld());
         new LwjglApplication(new Game(), cfg);
     }
