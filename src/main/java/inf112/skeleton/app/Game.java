@@ -20,8 +20,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
-        board = new Board(8, 8);
-        testBot = new Robot(Direction.NORTH, 0,0);
+        board = new Board(16, 16);
+        testBot = new Robot(Direction.NORTH, 8,8);
         board.addObject(testBot, 0,0);
         Gdx.input.setInputProcessor(this);
 
