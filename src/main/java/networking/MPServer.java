@@ -8,15 +8,27 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-public class MPServer {
+public class MPServer implements Runnable{
     //Connection info
     int ServerPort = 54777;
+    private InetAddress address;
 
     //Kryonet server
     Server server;
     ServerNetworkListener snl;
 
+
     public MPServer(){
+    }
+
+    private void registerPackets(){
+        Kryo kryo = server.getKryo();
+        kryo.register(Packets.Packet01Message.class);
+        kryo.register(Packets.Packet02Cards.class);
+
+    }
+    @Override
+    public void run() {
         server = new Server();
         snl = new ServerNetworkListener(server);
 
@@ -29,20 +41,13 @@ public class MPServer {
         registerPackets();
         server.start();
         try {
-            System.out.println(InetAddress.getLocalHost());
+            address = InetAddress.getLocalHost();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
     }
 
-    private void registerPackets(){
-        Kryo kryo = server.getKryo();
-        kryo.register(Packets.Packet01Message.class);
-        kryo.register(Packets.Packet02BoardInfo.class);
-
-    }
-    public static void main(String[] args) {
-        new MPServer();
-
+    public InetAddress getAddress() {
+        return address;
     }
 }

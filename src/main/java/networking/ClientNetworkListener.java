@@ -3,19 +3,16 @@ package networking;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import inf112.skeleton.app.Card;
 
 import java.util.Scanner;
 
 public class ClientNetworkListener extends Listener {
     private Client client;
-    private String userName;
     Packets.Packet01Message firstMessage;
-    Scanner scanner = new Scanner(System.in);
 
     public void init(Client client){
         this.client = client;
-//        System.out.println("Enter username:");
-//        this.userName = scanner.nextLine();
         firstMessage = new Packets.Packet01Message();
         firstMessage.clientName = "Erik";
     }
@@ -32,6 +29,14 @@ public class ClientNetworkListener extends Listener {
         client.sendTCP(firstMessage);
         System.out.println("["+ firstMessage.clientName + "] >> Sent : [" + message +"] to server.");
     }
+
+    public void sendCards(Card[] cards, int playerNr){
+        Packets.Packet02Cards newCards = new Packets.Packet02Cards();
+        newCards.cards = cards;
+        newCards.playerNr = playerNr;
+        client.sendTCP(newCards);
+    }
+
     public void disconnected(Connection c){
         System.out.println("[CLIENT] >> You have disconnected.");
     }

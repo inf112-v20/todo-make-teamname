@@ -2,6 +2,7 @@ package networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import inf112.skeleton.app.Card;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -31,10 +32,7 @@ public class MPClient {
         System.out.println("Whats the ip to your host?");
         ip = sc.nextLine();
 
-
         client.start();
-        IPAddress = client.discoverHost(54777, 5000);
-        System.out.println(IPAddress);
         try {
             System.out.println(InetAddress.getLocalHost());
         } catch (UnknownHostException e) {
@@ -45,15 +43,19 @@ public class MPClient {
         }catch (IOException e){
             e.printStackTrace();
         }
-        while(true){
-            String message = sc.nextLine();
-            if(message.equals("quit")) break;
-            cnl.sendInfo(message);
-        }
     }
     private void registerPackets(){
         Kryo kryo = client.getKryo();
         kryo.register(Packets.Packet01Message.class);
+        kryo.register(Packets.Packet02Cards.class);
+    }
+
+    public void sendMessage(String message){
+            cnl.sendInfo(message);
+    }
+
+    public void sendCards(Card[] cards, int playerNr){
+        cnl.sendCards(cards, playerNr);
     }
 
     public static void main(String[] args) {
