@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
+import java.util.Arrays;
+
 public class Board  {
 
     private BoardTile [][] grid;
@@ -20,9 +22,9 @@ public class Board  {
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
-        grid = new BoardTile [width][height];
-        for (int y=0; y < width; y++) {
-            for (int x=0; x < height; x++) {
+        grid = new BoardTile [height][width];
+        for (int y=0; y < height; y++) {
+            for (int x=0; x < width; x++) {
                 grid[y][x] = new BoardTile(x, y);
             }
         }
@@ -107,4 +109,9 @@ public class Board  {
         return grid[y][x];
     }
 
+    public void printBoard() {
+        for (int i=0; i < height; i++) {
+            System.out.println(Arrays.toString(grid[i]));
+        }
+    }
 }
