@@ -16,7 +16,9 @@ Kristoffer:
 *   Har litt LibGdx erfaring, jobbet med et prosjekt tidligere.
 
 Mads:
-*  
+*   Andre året på datateknologi (INF115, INF122, DAT103)
+*   Har litt erfaring med å lage spill fra egne prosjekter.
+
 
 Elias:
 *   Andre året på datasikkerhet (DAT103, INF142, INF143)
