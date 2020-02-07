@@ -31,16 +31,16 @@ public class Game extends InputAdapter implements ApplicationListener {
     public boolean keyUp(int keycode) {
             switch (keycode) {
                 case Input.Keys.UP:
-                    board.moveSelectedDir(Direction.NORTH);
+                    board.moveSelected(Direction.NORTH);
                     break;
                 case Input.Keys.DOWN:
-                    board.moveSelectedDir(Direction.SOUTH);
+                    board.moveSelected(Direction.SOUTH);
                     break;
                 case Input.Keys.LEFT:
-                    board.moveSelectedDir(Direction.WEST);
+                    board.moveSelected(Direction.WEST);
                     break;
                 case Input.Keys.RIGHT:
-                    board.moveSelectedDir(Direction.EAST);
+                    board.moveSelected(Direction.EAST);
                     break;
                 default:
                     break;

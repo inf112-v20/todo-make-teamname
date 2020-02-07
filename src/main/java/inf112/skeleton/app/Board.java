@@ -30,32 +30,15 @@ public class Board  {
         }
         addObject(new Robot(),0,0);
     }
-    public int getWidth(){return this.width;}
+
     public int getHeight(){return this.height;}
 
-    public void render (SpriteBatch batch) {
-        for (int y=0; y < grid.length; y++) {
-            for (int x=0; x < grid[0].length; x++) {
-                for (Texture t : grid[y][x].getTextures()){
-                    if (t != null)batch.draw(t, x*32, y*32);
-                }
-            }
-        }
+    //Returns a specific tile
+    public BoardTile getTile(int x, int y){
+        return grid[y][x];
     }
 
-    public void moveSelectedDir(Direction dir){
-        if (selected == null)return;
-        moveObjectDir(selected, dir);
-    }
-
-    public void moveSelected(int x, int y){
-        if (selected == null)return;
-        moveObject(selected,x,y);
-    }
-
-    public void setSelected(Robot r){
-        this.selected = r;
-    }
+    public int getWidth(){return this.width;}
 
     //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
@@ -96,6 +79,19 @@ public class Board  {
         }
         addObject(removeObject(object), x, y);
     }
+
+    //moves selected robot in a direction
+    public void moveSelected(Direction dir){
+        if (selected == null)return;
+        moveObjectDir(selected, dir);
+    }
+
+    //moves selected robot to a new location
+    public void moveSelected(int x, int y){
+        if (selected == null)return;
+        moveObject(selected,x,y);
+    }
+
     //Removes a specific object
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
@@ -108,14 +104,23 @@ public class Board  {
         return grid[y][x].remove(ROBOT);
     }
 
-    //Returns a specific tile
-    public BoardTile getTile(int x, int y){
-        return grid[y][x];
-    }
-
-    public void printBoard() {
-        for (int i=0; i < height; i++) {
-            System.out.println(Arrays.toString(grid[i]));
+    public void render (SpriteBatch batch) {
+        for (int y=0; y < grid.length; y++) {
+            for (int x=0; x < grid[0].length; x++) {
+                for (Texture t : grid[y][x].getTextures()){
+                    if (t != null)batch.draw(t, x*32, y*32);
+                }
+            }
         }
     }
+
+    //sets a robot as the selected robot
+    public void setSelected(Robot r){
+        this.selected = r;
+    }
+
+
+
+
+
 }
