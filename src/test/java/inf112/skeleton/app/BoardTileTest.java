@@ -16,11 +16,6 @@ public class BoardTileTest {
         tile = new BoardTile(1,1);
     }
 
-    @Test
-    public void test(){
-        tile = new BoardTile(1,1);
-        Texture sprite = tile.getSprite();
-    }
 
     @Test
     public void removeObj(){
