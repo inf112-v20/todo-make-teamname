@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "RoboRally :)";
-        cfg.width = 512;
+        cfg.width = 384;
         cfg.height = 512;
         cfg.resizable = false; //temporarly
         //new LwjglApplication(new HelloWorld());

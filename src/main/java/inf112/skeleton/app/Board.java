@@ -28,7 +28,7 @@ public class Board  {
                 grid[y][x] = new BoardTile(x, y);
             }
         }
-        addObject(new Robot(Direction.NORTH),0,0);
+        addObject(new Robot(),0,0);
     }
     public int getWidth(){return this.width;}
     public int getHeight(){return this.height;}
