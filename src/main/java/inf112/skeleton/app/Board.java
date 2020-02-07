@@ -49,7 +49,7 @@ public class Board  {
     }
 
     //Moves a object a direction
-    public void moveObjectDir(IBoardObject object, Direction direction){
+    public void moveObject(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
                 addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
@@ -83,7 +83,7 @@ public class Board  {
     //moves selected robot in a direction
     public void moveSelected(Direction dir){
         if (selected == null)return;
-        moveObjectDir(selected, dir);
+        moveObject(selected, dir);
     }
 
     //moves selected robot to a new location
