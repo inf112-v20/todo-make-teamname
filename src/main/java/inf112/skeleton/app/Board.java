@@ -51,16 +51,16 @@ public class Board  {
     public void moveObject(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
-                addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
+                moveObject(object, object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                addObject(removeObject(object), object.getTileX()+1, object.getTileY());
+                moveObject(object, object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                addObject(removeObject(object), object.getTileX(), object.getTileY()-1);
+                moveObject(object, object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                addObject(removeObject(object), object.getTileX()-1, object.getTileY());
+                moveObject(object, object.getTileX()-1, object.getTileY());
                 break;
             default:
                 System.out.println("Error");
