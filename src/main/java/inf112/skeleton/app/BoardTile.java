@@ -22,8 +22,6 @@ public class BoardTile {
     public BoardTile(int x, int y) {
         this.x = x;
         this.y = y;
-        sprite = new Texture("assets/Cell_Empty.png");
-
     }
 
     //TODO Make a version that doesn't give null pointer when testing
@@ -31,11 +29,16 @@ public class BoardTile {
         return sprite;
     }
 
+    public void setSprite(){
+        sprite = new Texture("assets/Cell_Empty.png");
+    }
+
     //Returns all the textures for all the objects on this tile
     public ArrayList<Texture> getTextures(){
         ArrayList<Texture> textures = new ArrayList<>();
+        setSprite();
         textures.add(getSprite());
-        for (IBoardObject i : items) if (i != null) textures.add(i.getTexture());
+        for (IBoardObject i : items) if (i != null) {i.setTexture(); textures.add(i.getTexture());}
         return textures;
     }
 

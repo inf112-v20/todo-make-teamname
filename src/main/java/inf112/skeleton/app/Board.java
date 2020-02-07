@@ -39,14 +39,15 @@ public class Board  {
                 for (Texture t : grid[y][x].getTextures()){
                     if (t != null)batch.draw(t, x*32, y*32);
                 }
-                //batch.draw(grid[y][x].getSprite(), x * 32, y * 32); //Temp version
             }
         }
     }
+
     public void moveSelectedDir(Direction dir){
         if (selected == null)return;
         moveObjectDir(selected, dir);
     }
+
     public void moveSelected(int x, int y){
         if (selected == null)return;
         moveObject(selected,x,y);

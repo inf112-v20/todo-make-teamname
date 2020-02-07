@@ -11,7 +11,9 @@ public class Robot implements IBoardObject {
 
     public Robot(Direction newDir) {
         dir = newDir;
-        sprite = new Texture("assets/Robot_Example.png");
+    }
+    public Robot(){
+
     }
 
     @Override
@@ -21,7 +23,7 @@ public class Robot implements IBoardObject {
 
     @Override
     public void setTexture() {
-
+        sprite = new Texture("assets/Robot_Example.png");
     }
 
     @Override
