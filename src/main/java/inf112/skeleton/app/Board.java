@@ -80,6 +80,8 @@ public class Board  {
             case WEST:
                 addObject(removeObject(object), object.getTileX()-1, object.getTileY());
                 break;
+            default:
+                System.out.println("Error");
         }
     }
 

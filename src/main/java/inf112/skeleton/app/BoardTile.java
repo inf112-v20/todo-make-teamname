@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 public class BoardTile {
     private int x, y;
-    private int itemSize = 0;
     private Texture sprite;
 
     public final static int BOTTOMLAYER = 0; //CONVEYORBELT
