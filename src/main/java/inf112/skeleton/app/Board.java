@@ -82,6 +82,7 @@ public class Board  {
                 break;
             default:
                 System.out.println("Error");
+                break;
         }
     }
 
