@@ -69,16 +69,16 @@ public class Board  {
     public void moveObjectDir(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()+1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()+1);
                 break;
             case EAST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()+1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()+1, object.getTileY());
                 break;
             case SOUTH:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX(), object.getTileY()-1);
+                addObject(removeObject(object), object.getTileX(), object.getTileY()-1);
                 break;
             case WEST:
-                addObject(removeObject(object.getTileX(), object.getTileY()), object.getTileX()-1, object.getTileY());
+                addObject(removeObject(object), object.getTileX()-1, object.getTileY());
                 break;
         }
     }
