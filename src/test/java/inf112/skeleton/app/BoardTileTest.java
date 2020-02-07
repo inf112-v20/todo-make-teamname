@@ -5,8 +5,8 @@ import inf112.skeleton.app.objects.Robot;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.junit.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
 
 public class BoardTileTest {
     BoardTile tile;
@@ -17,13 +17,24 @@ public class BoardTileTest {
     }
 
     @Test
-    public void testAdd(){
-        Robot testBot = new Robot();
-        tile.add(testBot);
-        testBot.setTileX(1);
-        testBot.setTileY(1);
-        assertEquals(testBot,tile.getObjects()[BoardTile.ROBOT]);
+    public void test(){
+        tile = new BoardTile(1,1);
+        Texture sprite = tile.getSprite();
     }
 
-
+    @Test
+    public void removeObj(){
+        tile = new BoardTile(2,2);
+        Robot robot = new Robot();
+        tile.add(robot);
+        tile.remove(BoardTile.ROBOT);
+        assertNull(tile.getObjects()[BoardTile.ROBOT]);
+    }
+    @Test
+    public void addObj(){
+        tile = new BoardTile(1,1);
+        Robot robot = new Robot();
+        tile.add(robot);
+        assertNotNull( tile.getObjects()[BoardTile.ROBOT]);
+    }
 }
