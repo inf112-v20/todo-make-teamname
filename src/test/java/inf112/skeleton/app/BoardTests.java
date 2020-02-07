@@ -32,7 +32,7 @@ public class BoardTests {
     public void checkMoveDirTest(){
         board.addObject(robot, 0, 0);
         int prevY = robot.getTileY();
-        board.moveObjectDir(robot, robot.getDirection());
+        board.moveObject(robot, robot.getDirection());
         assertNotEquals(prevY, robot.getTileY());
     }
 
