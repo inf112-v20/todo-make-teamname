@@ -7,7 +7,8 @@ import inf112.skeleton.app.objects.Robot;
 import java.util.ArrayList;
 
 public class BoardTile {
-    private int x, y;
+    private int x;
+    private int y;
     private int itemSize = 0;
     private Texture sprite;
 
@@ -42,14 +43,11 @@ public class BoardTile {
         return textures;
     }
 
-
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
         //TODO fix for all IBoardObjects
         if(object instanceof Robot) items[ROBOT] = object;
     }
-
-
 
     //Removes a object
     public IBoardObject remove(int objectNr) {
@@ -58,5 +56,7 @@ public class BoardTile {
         return object;
     }
 
-    public IBoardObject[] getObjects(){return this.items;}
+    public IBoardObject[] getObjects(){
+        return this.items;
+    }
 }
