@@ -97,4 +97,10 @@ Systemkrav:
 Prioritert liste over krav til første iterasjon:
   *  Representere spillbrett
   *  Representere en robot på brettet (som kan plasseres med mus)
+  
+Brukerhistorikk:
+  *  Jeg skal kunne åpne programmet og se et brett.
+  *  Jeg skal kunne velge en robot og plassere den med musen.
+  *  Jeg skal kunne flytte den med piltastene fra der jeg plasserer den.
+  *  Dersom jeg drar roboten av brettet eller går av skal roboten reboote.
    
