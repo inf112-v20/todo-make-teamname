@@ -13,13 +13,13 @@ public class BoardTileTest {
 
     @Before
     public void setUp(){
-        tile = new BoardTile(1,1);
+        tile = new BoardTile();
     }
 
 
     @Test
     public void removeObj(){
-        tile = new BoardTile(2,2);
+        tile = new BoardTile();
         Robot robot = new Robot();
         tile.add(robot);
         tile.remove(BoardTile.ROBOT);
@@ -27,7 +27,7 @@ public class BoardTileTest {
     }
     @Test
     public void addObj(){
-        tile = new BoardTile(1,1);
+        tile = new BoardTile();
         Robot robot = new Robot();
         tile.add(robot);
         assertNotNull( tile.getObjects()[BoardTile.ROBOT]);

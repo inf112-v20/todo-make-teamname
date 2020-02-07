@@ -24,7 +24,7 @@ public class Board  {
         grid = new BoardTile [height][width];
         for (int y=0; y < height; y++) {
             for (int x=0; x < width; x++) {
-                grid[y][x] = new BoardTile(x, y);
+                grid[y][x] = new BoardTile();
             }
         }
         addObject(new Robot(),0,0);

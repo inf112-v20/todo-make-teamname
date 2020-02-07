@@ -7,7 +7,6 @@ import inf112.skeleton.app.objects.Robot;
 import java.util.ArrayList;
 
 public class BoardTile {
-    private int x, y;
     private Texture sprite;
 
     public final static int BOTTOMLAYER = 0; //CONVEYORBELT
@@ -18,9 +17,7 @@ public class BoardTile {
     private IBoardObject[] items = {null, null, null, null};
 
 
-    public BoardTile(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public BoardTile() {
     }
 
     //TODO Make a version that doesn't give null pointer when testing
