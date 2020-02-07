@@ -6,7 +6,6 @@ import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 import org.junit.Before;
 import org.junit.Test;
-import sun.nio.cs.ext.IBM037;
 
 
 public class BoardTests {
