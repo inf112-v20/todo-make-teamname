@@ -9,4 +9,6 @@ public interface ICard {
     String getText();
 
     Texture getImage();
+
+    Integer getValue();
 }

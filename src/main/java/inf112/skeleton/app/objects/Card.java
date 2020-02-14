@@ -1,5 +1,26 @@
 package inf112.skeleton.app.objects;
 
-public class Card {
+import com.badlogic.gdx.graphics.Texture;
 
+public class Card implements ICard {
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public String getText() {
+        return null;
+    }
+
+    @Override
+    public Texture getImage() {
+        return null;
+    }
+
+    @Override
+    public Integer getValue() {
+        return null;
+    }
 }
