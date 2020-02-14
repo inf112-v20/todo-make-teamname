@@ -48,6 +48,7 @@ public class MPClient {
         Kryo kryo = client.getKryo();
         kryo.register(Packets.Packet01Message.class);
         kryo.register(Packets.Packet02Cards.class);
+        kryo.register(int.class);
     }
 
     public void sendMessage(String message){

@@ -25,6 +25,7 @@ public class MPServer implements Runnable{
         Kryo kryo = server.getKryo();
         kryo.register(Packets.Packet01Message.class);
         kryo.register(Packets.Packet02Cards.class);
+        kryo.register(int.class);
 
     }
     @Override
