@@ -17,4 +17,9 @@ public class OptionCard implements ICard {
     public Texture getImage() {
         return null;
     }
+
+    @Override
+    public Integer getValue() {
+        return null;
+    }
 }

@@ -5,8 +5,8 @@ import inf112.skeleton.app.objects.Robot;
 import org.junit.Before;
 import org.junit.Test;
 
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class BoardTileTest {
     BoardTile tile;
