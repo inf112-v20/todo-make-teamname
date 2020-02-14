@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.IBoardObject;
+import inf112.skeleton.app.objects.ICard;
+import inf112.skeleton.app.objects.Player;
 import inf112.skeleton.app.objects.Robot;
 
 
@@ -15,6 +17,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     private SpriteBatch batch;
     private BitmapFont font;
     private Board board;
+    private int nrOfPlayers = 1;
+    private Player[] players;
+    private Player myPlayer;
 
     @Override
     public void create() {
@@ -22,9 +27,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         board = BoardParser.parse("riskyexchange");
-
         Gdx.input.setInputProcessor(this);
-
+        myPlayer = new Player();
+        myPlayer.deal();
     }
 
     @Override
@@ -102,6 +107,15 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
+    }
+
+
+    private void doTurn(){
+        ICard[] cards = myPlayer.getCards();
+        for (ICard card: cards) {
+            board.moveObject(myPlayer.getRobot(), card);
+
+        }
     }
 
 }

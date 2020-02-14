@@ -3,6 +3,7 @@ package inf112.skeleton.app;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.IBoardObject;
+import inf112.skeleton.app.objects.ICard;
 import inf112.skeleton.app.objects.Robot;
 
 
@@ -65,6 +66,9 @@ public class Board  {
                 System.out.println("Error");
                 break;
         }
+    }
+    public void moveObject(IBoardObject object, ICard card){
+
     }
 
     //Moves a object to x any coordinate
