@@ -3,7 +3,7 @@ package networking;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import inf112.skeleton.app.objects.Card;
+import inf112.skeleton.app.objects.ProgramCard;
 
 public class ClientNetworkListener extends Listener {
     private Client client;
@@ -28,9 +28,9 @@ public class ClientNetworkListener extends Listener {
         System.out.println("["+ firstMessage.clientName + "] >> Sent : [" + message +"] to server.");
     }
 
-    public void sendCards(Card[] cards, int playerNr){
+    public void sendCards(ProgramCard[] programCards, int playerNr){
         Packets.Packet02Cards newCards = new Packets.Packet02Cards();
-        newCards.cards = cards;
+        newCards.programCards = programCards;
         newCards.playerNr = playerNr;
         client.sendTCP(newCards);
     }

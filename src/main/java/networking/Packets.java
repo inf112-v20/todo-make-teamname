@@ -1,9 +1,9 @@
 package networking;
 
-import inf112.skeleton.app.objects.Card;
+import inf112.skeleton.app.objects.ProgramCard;
 
 public class Packets {
     public static class Packet01Message{ public String message; public String clientName;}
-    public static class Packet02Cards{ public Card[] cards; public int playerNr;}
+    public static class Packet02Cards{ public ProgramCard[] programCards; public int playerNr;}
 
 }

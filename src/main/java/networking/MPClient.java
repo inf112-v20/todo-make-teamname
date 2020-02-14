@@ -2,7 +2,7 @@ package networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import inf112.skeleton.app.objects.Card;
+import inf112.skeleton.app.objects.ProgramCard;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -55,8 +55,8 @@ public class MPClient {
             cnl.sendInfo(message);
     }
 
-    public void sendCards(Card[] cards, int playerNr){
-        cnl.sendCards(cards, playerNr);
+    public void sendCards(ProgramCard[] programCards, int playerNr){
+        cnl.sendCards(programCards, playerNr);
     }
 
     public static void main(String[] args) {
