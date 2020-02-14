@@ -25,4 +25,9 @@ public class ProgramCard implements ICard{
     public Texture getImage() {
         return this.image;
     }
+
+    @Override
+    public Integer getValue() {
+        return null;
+    }
 }
