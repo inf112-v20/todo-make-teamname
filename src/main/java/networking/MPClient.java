@@ -2,7 +2,7 @@ package networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import inf112.skeleton.app.Card;
+import inf112.skeleton.app.objects.Card;
 
 import java.io.IOException;
 import java.net.InetAddress;

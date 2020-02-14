@@ -3,9 +3,7 @@ package networking;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import inf112.skeleton.app.Card;
-
-import java.util.Scanner;
+import inf112.skeleton.app.objects.Card;
 
 public class ClientNetworkListener extends Listener {
     private Client client;

@@ -41,7 +41,6 @@ public class Board  {
 
     //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
-
         grid[y][x].add(object);
         object.setTileX(x);
         object.setTileY(y);

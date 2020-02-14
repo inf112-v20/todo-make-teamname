@@ -50,11 +50,11 @@ public class Robot implements IBoardObject {
 
     @Override
     public void setTileX(int newX) {
-        x = newX;
+        this.x = newX;
     }
 
     @Override
     public void setTileY(int newY) {
-        y = newY;
+        this.y = newY;
     }
 }

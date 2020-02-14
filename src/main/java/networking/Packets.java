@@ -1,6 +1,6 @@
 package networking;
 
-import inf112.skeleton.app.Card;
+import inf112.skeleton.app.objects.Card;
 
 public class Packets {
     public static class Packet01Message{ public String message; public String clientName;}

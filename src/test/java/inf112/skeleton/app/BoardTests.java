@@ -60,6 +60,7 @@ public class BoardTests {
         assertNull(board.getTile(0,0).getObjects()[BoardTile.ROBOT]);
     }
 
+
     @After
     public void cleanBoard(){
         for (int x = 0; x < board.getWidth(); x++) {
@@ -68,5 +69,6 @@ public class BoardTests {
             }
         }
     }
+
 
 }
