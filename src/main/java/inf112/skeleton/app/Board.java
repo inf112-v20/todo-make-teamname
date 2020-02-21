@@ -28,9 +28,11 @@ public class Board  {
                 grid[y][x] = new BoardTile();
             }
         }
-        addObject(new Robot(),0,0);
     }
 
+    public BoardTile[][] getGrid(){
+        return grid;
+    }
     public int getHeight(){return this.height;}
 
     //Returns a specific tile
@@ -106,22 +108,11 @@ public class Board  {
         return grid[y][x].remove(ROBOT);
     }
 
-    public void render (SpriteBatch batch) {
-        for (int y=0; y < grid.length; y++) {
-            for (int x=0; x < grid[0].length; x++) {
-                for (Texture t : grid[y][x].getTextures()){
-                    if (t != null)batch.draw(t, x*32, y*32);
-                }
-            }
-        }
-    }
 
     //sets a robot as the selected robot
     public void setSelected(Robot r){
         this.selected = r;
     }
-
-
 
 
 

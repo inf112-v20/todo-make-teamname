@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.IBoardObject;
@@ -20,6 +21,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private int nrOfPlayers = 1;
     private Player[] players;
     private Player myPlayer;
+    private Thread test;
 
     @Override
     public void create() {
@@ -30,6 +32,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Gdx.input.setInputProcessor(this);
         myPlayer = new Player();
         myPlayer.deal();
+        doTurn();
     }
 
     @Override
@@ -90,7 +93,14 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         batch.begin();
-        board.render(batch);
+        BoardTile[][] grid = board.getGrid();
+        for (int y=0; y < board.getHeight(); y++) {
+            for (int x=0; x < board.getWidth(); x++) {
+                for (Texture t : grid[y][x].getTextures()){
+                    if (t != null)batch.draw(t, x*32, y*32);
+                }
+            }
+        }
         batch.end();
     }
 
@@ -107,15 +117,34 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
+        try {
+            test.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 
     private void doTurn(){
-        ICard[] cards = myPlayer.getCards();
-        for (ICard card: cards) {
-            board.moveObject(myPlayer.getRobot(), card);
-
-        }
+//        ICard[] cards = myPlayer.getCards();
+//        for (ICard card: cards) {
+//            board.moveObject(myPlayer.getRobot(), card);
+//
+//        }
+        board.addObject(myPlayer.getRobot(), 6, 8);
+        test = new Thread(() -> {Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
+            for (int i = 0; i < 1000; i++) {
+                for (Direction dir: dirs) {
+                    board.moveObject(myPlayer.getRobot(), dir);
+                    try {
+                        Thread.sleep(750);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        test.start();
     }
 
 }
