@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.objects.IBoardObject;
-import inf112.skeleton.app.objects.ICard;
-import inf112.skeleton.app.objects.Player;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.objects.*;
 
 
 public class Game extends InputAdapter implements ApplicationListener {
@@ -21,7 +18,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     private int nrOfPlayers = 1;
     private Player[] players;
     private Player myPlayer;
-    private Thread test;
+    private Thread phase;
 
     @Override
     public void create() {
@@ -32,7 +29,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         Gdx.input.setInputProcessor(this);
         myPlayer = new Player();
         myPlayer.deal();
-        doTurn();
+        board.addObject(myPlayer.getRobot(), 6, 8);
     }
 
     @Override
@@ -118,33 +115,37 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch.dispose();
         font.dispose();
         try {
-            test.join();
+            phase.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
 
-    private void doTurn(){
-//        ICard[] cards = myPlayer.getCards();
-//        for (ICard card: cards) {
-//            board.moveObject(myPlayer.getRobot(), card);
-//
-//        }
-        board.addObject(myPlayer.getRobot(), 6, 8);
-        test = new Thread(() -> {Direction[] dirs = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
-            for (int i = 0; i < 1000; i++) {
-                for (Direction dir: dirs) {
-                    board.moveObject(myPlayer.getRobot(), dir);
-                    try {
-                        Thread.sleep(750);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+    private void isReady(){
+        phase = new Thread(() -> {
+           ProgramCard[] cards = myPlayer.getCards();
+            for (ProgramCard card: cards) {
+                card.flip(); // flips the texture from back to front
+                if(card.getValue() > 0){
+                    for (int i = 0; i < card.getValue(); i++) {
+                        board.moveObject(myPlayer.getRobot(),myPlayer.getRobot().getDirection());
                     }
+                }else {
+                    //TODO turn robot
                 }
+
             }
         });
-        test.start();
+        phase.start();
+        if(phase != null){
+            try {
+                phase.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        myPlayer.deal();
     }
 
 }

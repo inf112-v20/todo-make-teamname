@@ -2,6 +2,7 @@ package inf112.skeleton.app.objects;
 
 public class Player {
     private Robot robot;
+    public ProgramCard[] cards;
 
     public Player(){
         robot = new Robot();
@@ -9,6 +10,7 @@ public class Player {
 
     public boolean hasWon(){return true;}
     public void deal(){}
-    public ICard[] getCards(){return null;}
+    public void setCards(ProgramCard[] cards){this.cards = cards;}
+    public ProgramCard[] getCards(){return cards;}
     public Robot getRobot(){return robot;}
 }

@@ -30,4 +30,8 @@ public class ProgramCard implements ICard{
     public Integer getValue() {
         return null;
     }
+    // Flips the texture of the card between front and back
+    public void flip(){
+
+    }
 }
