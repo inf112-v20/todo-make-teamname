@@ -12,18 +12,12 @@ public class CardTest {
 
     }
 
-
     public void isCardNameEqualToGetCardName(){
 
     }
 
-
     public void isCardValueEqualToGetCardValue(){
 
     }
-
-
-
-
 
 }
