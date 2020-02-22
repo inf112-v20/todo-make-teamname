@@ -7,6 +7,7 @@ public class ConveyorBelt implements IBoardObject{
     private boolean express;
 
     public ConveyorBelt(boolean express){
+        //if its an express conveyor belt...
         this.express = express;
     }
 
@@ -49,6 +50,8 @@ public class ConveyorBelt implements IBoardObject{
     public void setTileY(int y) {
 
     }
+
+
     public boolean getExpress(){
         return express;
     }

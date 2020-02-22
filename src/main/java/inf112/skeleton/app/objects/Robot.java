@@ -84,4 +84,40 @@ public class Robot implements IBoardObject {
     public int getRespawnY(){
         return respawnY;
     }
+
+    public void rotateRight() {
+        switch (dir){
+            case WEST:
+                dir = Direction.NORTH;
+                break;
+            case SOUTH:
+                dir = Direction.WEST;
+                break;
+            case EAST:
+                dir = Direction.SOUTH;
+                break;
+            case NORTH:
+                dir = Direction.EAST;
+                break;
+
+        }
+    }
+
+    public void rotateLeft() {
+        switch (dir){
+            case WEST:
+                dir = Direction.SOUTH;
+                break;
+            case SOUTH:
+                dir = Direction.EAST;
+                break;
+            case EAST:
+                dir = Direction.NORTH;
+                break;
+            case NORTH:
+                dir = Direction.WEST;
+                break;
+
+        }
+    }
 }

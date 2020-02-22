@@ -15,6 +15,6 @@ public class Player {
     public Robot getRobot(){return robot;}
 
     public void giveOptionCard() {
-        //Get an option card from the common option deck
+        //Get an option card from the common option card deck
     }
 }
