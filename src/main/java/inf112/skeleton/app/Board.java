@@ -14,7 +14,7 @@ public class Board  {
     private Robot selected;
 
     //Object numbers:
-    public final static int BOTTOMLAYER = 0; //CONVEYORBELT
+    public final static int CONVEYORBELT = 0; //CONVEYORBELT
     public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
 

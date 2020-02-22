@@ -8,6 +8,8 @@ public class Robot implements IBoardObject {
     private int x, y;
     private Direction dir;
     private Texture sprite;
+    private int health = 9;
+    private int respawnX, respawnY;
 
     public Robot(Direction newDir) {
         dir = newDir;
@@ -56,5 +58,30 @@ public class Robot implements IBoardObject {
     @Override
     public void setTileY(int newY) {
         this.y = newY;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+
+    public void takeDamage(){
+        health--;
+    }
+
+    public void healDamage(){
+        health++;
+    }
+    public void fullHealth(){
+        health = 9;
+    }
+    public void setRespawn(int x, int y){
+        respawnX = x;
+        respawnY = y;
+    }
+    public int getRespawnX(){
+        return respawnX;
+    }
+    public int getRespawnY(){
+        return respawnY;
     }
 }

@@ -125,16 +125,57 @@ public class Game extends InputAdapter implements ApplicationListener {
     private void isReady(){
         phase = new Thread(() -> {
            ProgramCard[] cards = myPlayer.getCards();
+           Robot robot = myPlayer.getRobot();
             for (ProgramCard card: cards) {
                 card.flip(); // flips the texture from back to front
                 if(card.getValue() > 0){
                     for (int i = 0; i < card.getValue(); i++) {
-                        board.moveObject(myPlayer.getRobot(),myPlayer.getRobot().getDirection());
+                        board.moveObject(robot,robot.getDirection());
                     }
                 }else {
                     //TODO turn robot
                 }
+                BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof ConveyorBelt){
+                    ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                    if(conveyorBelt.getExpress()){
+                        board.moveObject(robot, conveyorBelt.getDirection());
+                    }
+                }
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof ConveyorBelt){
+                    ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                    board.moveObject(robot, conveyorBelt.getDirection());
+                }
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof Pusher){
+                    Pusher pusher = (Pusher) currentTile.getObjects()[0];
+                    board.moveObject(robot, pusher.getDirection());
+                }
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof GearClockwise || currentTile.getObjects()[0] instanceof GearCounterClockwise){
 
+                    //robot.setDirection(); rotate
+                }
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[1] instanceof BoardLaser){
+                    //do damage to robot
+                }
+                //Robots hit each other
+
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof Flag){
+                    //pick up flag, player or robot?
+                }
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof RepairSite){
+                    robot.healDamage();
+                    robot.setRespawn(robot.getTileX(), robot.getTileY());
+                    RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
+                    if(repairSite.getHammer()){
+                        myPlayer.giveOptionCard();
+                    }
+                }
             }
         });
         phase.start();

@@ -3,11 +3,12 @@ package inf112.skeleton.app.objects;
 import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.Direction;
 
-public class ConveyorBelt implements IBoardObject{
-    private boolean express;
+public class RepairSite implements IBoardObject{
+    private boolean hammer;
 
-    public ConveyorBelt(boolean express){
-        this.express = express;
+    public RepairSite(boolean hammer){
+        //if it is a repair site with wrench and hammer, hammer = true, if not hammer = false.
+        this.hammer = hammer;
     }
 
     @Override
@@ -49,7 +50,8 @@ public class ConveyorBelt implements IBoardObject{
     public void setTileY(int y) {
 
     }
-    public boolean getExpress(){
-        return express;
+
+    public boolean getHammer() {
+        return hammer;
     }
 }

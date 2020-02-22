@@ -3,13 +3,7 @@ package inf112.skeleton.app.objects;
 import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.Direction;
 
-public class ConveyorBelt implements IBoardObject{
-    private boolean express;
-
-    public ConveyorBelt(boolean express){
-        this.express = express;
-    }
-
+public class BoardLaser implements IBoardObject {
     @Override
     public Texture getTexture() {
         return null;
@@ -48,8 +42,5 @@ public class ConveyorBelt implements IBoardObject{
     @Override
     public void setTileY(int y) {
 
-    }
-    public boolean getExpress(){
-        return express;
     }
 }

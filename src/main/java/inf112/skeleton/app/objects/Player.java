@@ -13,4 +13,8 @@ public class Player {
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
     public Robot getRobot(){return robot;}
+
+    public void giveOptionCard() {
+        //Get an option card from the common option deck
+    }
 }
