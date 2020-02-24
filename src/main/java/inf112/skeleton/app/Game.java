@@ -34,7 +34,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         gameIsDone = false;
         myPlayer = new Player();
         myPlayer.deal();
-        phase = new Thread(() -> {doTurn();});
+        phase = new Thread(this::doTurn);
         phase.start();
         board.addObject(myPlayer.getRobot(), 6, 8);
     }
@@ -121,15 +121,12 @@ public class Game extends InputAdapter implements ApplicationListener {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        try {
-            phase.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        phase.interrupt();
     }
 
     //Call this when cards have been selected to be played
     private void isReady(){
+
         isReadySem.release();
     }
 
