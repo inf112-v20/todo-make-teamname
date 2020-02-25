@@ -23,6 +23,9 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Semaphore isReadySem;
     private boolean gameIsDone;
 
+    private Texture background;
+    private Texture tempMap;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -37,6 +40,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         phase = new Thread(this::doTurn);
         phase.start();
         board.addObject(myPlayer.getRobot(), 6, 8);
+
+        background = new Texture("assets/pink_background.png");
+        tempMap = new Texture("assets/maps/riskyexchange.png");
     }
 
     @Override
@@ -97,6 +103,11 @@ public class Game extends InputAdapter implements ApplicationListener {
     @Override
     public void render() {
         batch.begin();
+
+        batch.draw(background, 0, 0);
+        batch.draw(tempMap, Settings.SCREEN_WIDTH / 8 , Settings.SCREEN_HEIGHT / 4);
+
+        /*
         BoardTile[][] grid = board.getGrid();
         for (int y=0; y < board.getHeight(); y++) {
             for (int x=0; x < board.getWidth(); x++) {
@@ -105,6 +116,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 }
             }
         }
+         */
         batch.end();
     }
 
