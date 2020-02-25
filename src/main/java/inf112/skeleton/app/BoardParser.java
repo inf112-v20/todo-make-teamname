@@ -27,7 +27,7 @@ public class BoardParser {
                     String row = sc.nextLine();
                     itemLayer[i] = row;
                 }
-                addLayer(board, itemLayer, 0);
+                addLayer(board, itemLayer);
                 return board;
             }
         }
@@ -38,7 +38,7 @@ public class BoardParser {
         return null;
     }
 
-    private static void addLayer(Board board, String [] map, int layer) {
+    private static void addLayer(Board board, String [] map) {
         for (int y=0; y < map.length; y++) {
             for (int x=0; x < map[0].length(); x++) {
                 IBoardObject object = factory(map[y].charAt(x));

@@ -69,7 +69,7 @@ public class Board  {
                 break;
         }
     }
-    public void moveObject(IBoardObject object, ICard card){
+    public void moveObject(IBoardObject object, ICard card) {
 
     }
 
@@ -113,7 +113,4 @@ public class Board  {
     public void setSelected(Robot r){
         this.selected = r;
     }
-
-
-
 }
