@@ -6,11 +6,14 @@ import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.ICard;
 import inf112.skeleton.app.objects.Robot;
 
+import java.util.ArrayList;
+
 
 public class Board  {
 
     private BoardTile [][] grid;
     private int width, height;
+    private ArrayList<Robot> robots;
     private Robot selected;
 
     //Object numbers:
@@ -20,6 +23,7 @@ public class Board  {
 
 
     public Board(int width, int height) {
+        this.robots = new ArrayList<Robot>();
         this.width = width;
         this.height = height;
         grid = new BoardTile [height][width];
@@ -44,6 +48,7 @@ public class Board  {
 
     //Adds a object at x and y coordinate
     public void addObject(IBoardObject object, int x, int y){
+        if (object instanceof Robot)robots.add((Robot)object);
         grid[y][x].add(object);
         object.setTileX(x);
         object.setTileY(y);
@@ -112,5 +117,9 @@ public class Board  {
     //sets a robot as the selected robot
     public void setSelected(Robot r){
         this.selected = r;
+    }
+
+    public ArrayList<Robot> getRobots() {
+        return robots;
     }
 }

@@ -52,12 +52,12 @@ public class Robot implements IBoardObject {
 
     @Override
     public void setTileX(int newX) {
-        this.x = newX;
+        x = newX;
     }
 
     @Override
     public void setTileY(int newY) {
-        this.y = newY;
+        y = newY;
     }
 
     public int getHealth(){

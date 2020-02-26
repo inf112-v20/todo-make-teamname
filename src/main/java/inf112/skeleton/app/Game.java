@@ -39,7 +39,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         myPlayer.deal();
         phase = new Thread(this::doTurn);
         phase.start();
-        board.addObject(myPlayer.getRobot(), 6, 8);
+        board.addObject(myPlayer.getRobot(), myPlayer.getRobot().getTileX(), myPlayer.getRobot().getTileY());
 
         background = new Texture("assets/pink_background.png");
         tempMap = new Texture("assets/maps/riskyexchange.png");
@@ -105,7 +105,10 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch.begin();
 
         batch.draw(background, 0, 0);
-        batch.draw(tempMap, Settings.SCREEN_WIDTH / 8 , Settings.SCREEN_HEIGHT / 4);
+        batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
+        for (Robot r : board.getRobots()){
+            batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
+        }
 
         /*
         BoardTile[][] grid = board.getGrid();
