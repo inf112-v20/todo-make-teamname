@@ -5,10 +5,12 @@ import inf112.skeleton.app.Direction;
 
 public class ConveyorBelt implements IBoardObject{
     private boolean express;
+    private Direction direction;
 
-    public ConveyorBelt(boolean express){
+    public ConveyorBelt(boolean express, Direction newDir){
         //if its an express conveyor belt...
         this.express = express;
+        direction = newDir;
     }
 
     @Override
@@ -23,12 +25,12 @@ public class ConveyorBelt implements IBoardObject{
 
     @Override
     public Direction getDirection() {
-        return null;
+        return direction;
     }
 
     @Override
     public void setDirection(Direction d) {
-
+        direction = d;
     }
 
     @Override
