@@ -9,7 +9,14 @@ public class ProgramCard implements ICard{
     private int value;
     String name;
     String text;
-    Texture image;
+
+
+    Texture [] images = {new Texture("assets/cards/card_move_1.png"),
+                        new Texture("assets/cards/card_move_2.png"),
+                        new Texture("assets/cards/card_turn_left.png"),
+                        new Texture("assets/cards/card_turn_right.png")};
+
+    private int type;
 
     public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight){
         /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
@@ -19,6 +26,8 @@ public class ProgramCard implements ICard{
         this.rotate = rotate;
         this.rotateLeft = rotateLeft;
         this.rotateRight = rotateRight;
+
+        type = value * 1000 + (rotate ? 100 : 0) + (rotateLeft ? 10 : 0) + (rotateRight ? 1 : 0);
     }
 
     @Override
@@ -33,7 +42,17 @@ public class ProgramCard implements ICard{
 
     @Override
     public Texture getImage() {
-        return this.image;
+        switch (type) {
+            case 1000:
+                return images[0];
+            case 2000:
+                return images[1];
+            case 0110:
+                return images[2];
+            case 0101:
+                return images[3];
+        }
+        return null;
     }
 
     @Override
