@@ -32,8 +32,8 @@ public class BoardTile {
     //Returns all the textures for all the objects on this tile
     public ArrayList<Texture> getTextures(){
         ArrayList<Texture> textures = new ArrayList<>();
-        setSprite();
-        textures.add(getSprite());
+        //setSprite();
+        //textures.add(getSprite());
         for (IBoardObject i : items) if (i != null) {i.setTexture(); textures.add(i.getTexture());}
         return textures;
     }

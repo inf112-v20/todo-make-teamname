@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.objects.ConveyorBelt;
 import inf112.skeleton.app.objects.GearClockwise;
 import inf112.skeleton.app.objects.GearCounterClockwise;
 import inf112.skeleton.app.objects.IBoardObject;
@@ -28,6 +29,15 @@ public class BoardParser {
                     itemLayer[i] = row;
                 }
                 addLayer(board, itemLayer);
+
+                String skip = sc.nextLine();
+
+                for (int i=0; i < height; i++) {
+                    String row = sc.nextLine();
+                    itemLayer[i] = row;
+                }
+
+                addLayer(board, itemLayer);
                 return board;
             }
         }
@@ -49,12 +59,34 @@ public class BoardParser {
         }
     }
 
+    /**
+     * A factory that parses characters into corresponding
+     * IBoardObjects.
+     * @param object what char to parse
+     * @return the object requested
+     */
     private static IBoardObject factory(char object) {
         switch(object) {
             case 'c':
                 return new GearCounterClockwise();
             case 'C':
                 return new GearClockwise();
+            case 'w':
+                return new ConveyorBelt(false, Direction.WEST);
+            case 'W':
+                return new ConveyorBelt(true, Direction.WEST);
+            case 'n':
+                return new ConveyorBelt(false, Direction.NORTH);
+            case 'N':
+                return new ConveyorBelt(true, Direction.NORTH);
+            case 'e':
+                return new ConveyorBelt(false, Direction.EAST);
+            case 'E':
+                return new ConveyorBelt(true, Direction.EAST);
+            case 's':
+                return new ConveyorBelt(false, Direction.SOUTH);
+            case 'S':
+                return new ConveyorBelt(true, Direction.SOUTH);
             default:
                 return null;
         }
