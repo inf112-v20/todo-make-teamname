@@ -14,7 +14,14 @@ public class Player {
     }
 
     public boolean hasWon(){return true;}
-    public void deal(){}
+    public void deal(){
+        //TODO:: change so that players get random cards
+        cards = new ProgramCard[4];
+        cards[0] = (new ProgramCard(1,false,false,false));
+        cards[1]= (new ProgramCard(2,false,false,false));
+        cards[2] = (new ProgramCard(0,true,true,false));
+        cards[3] = (new ProgramCard(1,true,false,true));
+    }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
     public Robot getRobot(){return robot;}

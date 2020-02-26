@@ -47,29 +47,29 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.UP:
-                board.moveSelected(Direction.NORTH);
-                break;
-            case Input.Keys.DOWN:
-                board.moveSelected(Direction.SOUTH);
-                break;
-            case Input.Keys.LEFT:
-                board.moveSelected(Direction.WEST);
-                break;
-            case Input.Keys.RIGHT:
-                board.moveSelected(Direction.EAST);
-                break;
-            default:
-                break;
+            switch (keycode) {
+                case Input.Keys.UP:
+                    board.moveSelected(Direction.NORTH);
+                    break;
+                case Input.Keys.DOWN:
+                    board.moveSelected(Direction.SOUTH);
+                    break;
+                case Input.Keys.LEFT:
+                    board.moveSelected(Direction.WEST);
+                    break;
+                case Input.Keys.RIGHT:
+                    board.moveSelected(Direction.EAST);
+                    break;
+                default:
+                    break;
+            }
+            return true;
         }
-        return true;
-    }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        for (IBoardObject o : board.getTile(screenX / 32, Math.abs(15 - (screenY / 32))).getObjects()) {
-            if (o instanceof Robot) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button){
+        for (IBoardObject o: board.getTile(screenX/32, Math.abs(15-(screenY/32))).getObjects()){
+            if (o instanceof Robot){
                 board.setSelected((Robot) o);
                 return true;
             }
@@ -78,13 +78,14 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if ((screenX < board.getWidth() * 32 || screenY < board.getHeight() * 32)) {
-            int x = screenX / 32;
-            int y = Math.abs(15 - (screenY / 32));
+    public boolean touchDragged(int screenX, int screenY, int pointer){
+        if ((screenX < board.getWidth()*32 || screenY < board.getHeight()*32)){
+            int x = screenX/32;
+            int y = Math.abs(15-(screenY/32));
             board.moveSelected(x, y);
             return true;
-        } else return false;
+        }
+        else return false;
     }
 
     @Override
@@ -104,9 +105,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch.begin();
 
         batch.draw(background, 0, 0);
-        batch.draw(tempMap, Settings.BOARD_LOC_X, Settings.BOARD_LOC_Y);
-        for (Robot r : board.getRobots()) {
-            batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
+        batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
+        for (Robot r : board.getRobots()){
+            batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
         }
 
         /*
@@ -139,7 +140,7 @@ public class Game extends InputAdapter implements ApplicationListener {
     }
 
     //Call this when cards have been selected to be played
-    private void isReady() {
+    private void isReady(){
 
         isReadySem.release();
     }
@@ -228,4 +229,5 @@ public class Game extends InputAdapter implements ApplicationListener {
             //TODO clean up phase, respawning, remove register etc...
         }
     }
+
 }
