@@ -1,0 +1,26 @@
+- = Empty
+P - Pit
+c - Gear (Counter Clockwise)
+C - Gear (Clockwise)
+r - Repair Station
+R - Repair Station With Hammer
+# - Numbers represent flags
+
+W - Express Conveyorbelt (WEST)
+N - Express Conveyorbelt (NORTH)
+E - Express Conveyorbelt (EAST)
+S - Express Conveyorbelt (SOUTH)
+
+w - Conveyorbelt (WEST)
+n - Conveyorbelt (NORTH)
+e - Conveyorbelt (EAST)
+s - Conveyorbelt (SOUTH)
+
+t - Wall (NORTHWEST)
+y - Wall (NORTH)
+u - Wall (NORTHEAST)
+g - Wall (WEST)
+j - Wall (EAST)
+b - Wall (SOUTHWEST)
+h - Wall (SOUTH)
+m - Wall (SOUTHEAST)

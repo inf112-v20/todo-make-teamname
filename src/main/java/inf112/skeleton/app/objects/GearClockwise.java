@@ -27,7 +27,6 @@ public class GearClockwise implements IBoardObject {
 
     @Override
     public void setTileX(int x) {
-
     }
 
     @Override

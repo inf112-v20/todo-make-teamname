@@ -27,11 +27,9 @@ public class Flag implements IBoardObject {
 
     @Override
     public void setTileX(int x) {
-
     }
 
     @Override
     public void setTileY(int y) {
-
     }
 }
