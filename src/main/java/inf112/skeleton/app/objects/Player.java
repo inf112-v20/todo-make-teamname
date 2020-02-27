@@ -30,7 +30,9 @@ public class Player {
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
     public Robot getRobot(){return robot;}
-
+    public ProgramCard[] getSelectedCards(){
+        return selectedCards;
+    }
     public void giveOptionCard() {
         //Get an option card from the common option card deck
     }
