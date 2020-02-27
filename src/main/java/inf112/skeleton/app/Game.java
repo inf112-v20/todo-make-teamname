@@ -29,6 +29,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private Texture background;
     private Texture tempMap;
+    private Texture selectedFrame;
+    private Texture buttonReady;
 
     @Override
     public void create() {
@@ -47,6 +49,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         background = new Texture("assets/pink_background.png");
         tempMap = new Texture("assets/maps/riskyexchange.png");
+        selectedFrame = new Texture("assets/cards/card_selected.png");
+        buttonReady = new Texture("assets/button_ready.png");
         cardBoxLeft = (Settings.SCREEN_WIDTH/2) - (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
         cardBoxRight = (Settings.SCREEN_WIDTH/2) + (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
     }
@@ -88,6 +92,17 @@ public class Game extends InputAdapter implements ApplicationListener {
             myPlayer.addSelectedCard(card);
 
         }
+        else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
+                screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
+                screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
+                screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
+            System.out.println("button pressed");
+            isReady();
+        }
+        System.out.println(screenX + ", " + screenY);
+
+
+
         return false;
 
 
@@ -128,20 +143,10 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (int i = 0; i < myPlayer.getCards().length; i++){
             batch.draw(myPlayer.getCards()[i].getImage(), (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             if (myPlayer.getCards()[i].getSelected()){
-                batch.draw((new Texture("assets/cards/card_selected.png")), (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                batch.draw(selectedFrame, (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
         }
-
-        /*
-        BoardTile[][] grid = board.getGrid();
-        for (int y=0; y < board.getHeight(); y++) {
-            for (int x=0; x < board.getWidth(); x++) {
-                for (Texture t : grid[y][x].getTextures()){
-                    if (t != null)batch.draw(t, x*32, y*32);
-                }
-            }
-        }
-         */
+        batch.draw(buttonReady, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3   , 64, 32);
         batch.end();
     }
 
@@ -175,7 +180,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            ProgramCard[] cards = myPlayer.getCards();
+            ProgramCard[] cards = myPlayer.getSelectedCards();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
                 //TODO: later do each step for all players too
