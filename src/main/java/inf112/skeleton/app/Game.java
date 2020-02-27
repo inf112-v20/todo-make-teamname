@@ -180,6 +180,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            if(Thread.interrupted()) return;
             ProgramCard[] cards = myPlayer.getSelectedCards();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
