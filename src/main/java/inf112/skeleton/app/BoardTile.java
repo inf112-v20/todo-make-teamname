@@ -5,7 +5,6 @@ import inf112.skeleton.app.objects.BoardLaser;
 import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
-import java.util.ArrayList;
 
 public class BoardTile {
     private Texture sprite;
@@ -21,28 +20,8 @@ public class BoardTile {
     public BoardTile() {
     }
 
-    //TODO Make a version that doesn't give null pointer when testing
-    public Texture getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(){
-        sprite = new Texture("assets/Cell_Empty.png");
-    }
-
-    //Returns all the textures for all the objects on this tile
-    public ArrayList<Texture> getTextures(){
-        ArrayList<Texture> textures = new ArrayList<>();
-        //setSprite();
-        //textures.add(getSprite());
-        for (IBoardObject i : items) if (i != null) {i.setTexture(); textures.add(i.getTexture());}
-        return textures;
-    }
-
-
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
-        //TODO fix for all IBoardObjects
         if(object instanceof Robot) items[ROBOT] = object;
         else if(object instanceof BoardLaser) items[WALLLAYER] = object;
         else items[BOTTOMLAYER] = object;

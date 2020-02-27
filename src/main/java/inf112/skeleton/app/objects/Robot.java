@@ -10,6 +10,7 @@ public class Robot implements IBoardObject {
     private Texture sprite;
     private int health = 9;
     private int respawnX, respawnY;
+    private boolean destroy = false;
 
     public Robot(Direction newDir) {
         dir = newDir;
@@ -18,14 +19,12 @@ public class Robot implements IBoardObject {
         this(Direction.EAST);
     }
 
-    @Override
     public Texture getTexture() {
         return sprite;
     }
 
 
     //TODO setTexture needs to handle robots having different textures
-    @Override
     public void setTexture() {
         sprite = new Texture("assets/Robot_Example.png");
     }
@@ -119,5 +118,17 @@ public class Robot implements IBoardObject {
                 break;
 
         }
+    }
+
+    public void destroy() {
+        destroy = true;
+    }
+
+    public boolean isDestroyed() {
+        return destroy;
+    }
+
+    public void respawn(){
+        destroy = true;
     }
 }

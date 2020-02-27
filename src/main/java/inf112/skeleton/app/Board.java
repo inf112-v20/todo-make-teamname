@@ -74,15 +74,14 @@ public class Board  {
                 break;
         }
     }
-    public void moveObject(IBoardObject object, ICard card) {
-
-    }
 
     //Moves a object to x any coordinate
     public void moveObject(IBoardObject object, int x, int y){
         if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
             System.out.println("You fell off the board, rebooting...");
-            addObject(removeObject(object),0,0);
+            removeObject(object);
+            Robot robot = (Robot) object;
+            robot.destroy();
             selected = null;
             return;
         }
@@ -115,6 +114,7 @@ public class Board  {
 
 
     //sets a robot as the selected robot
+    //Keep for later use when placing robots
     public void setSelected(Robot r){
         this.selected = r;
     }

@@ -14,16 +14,6 @@ public class ConveyorBelt implements IBoardObject{
     }
 
     @Override
-    public Texture getTexture() {
-        return null;
-    }
-
-    @Override
-    public void setTexture() {
-
-    }
-
-    @Override
     public Direction getDirection() {
         return direction;
     }

@@ -183,6 +183,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             ProgramCard[] cards = myPlayer.getSelectedCards();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
+                if(card == null || robot.isDestroyed()) continue;
                 //TODO: later do each step for all players too
                 card.flip(); // flips the texture from back to front
                 if (card.getValue() > 0) {
@@ -203,6 +204,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                 if (currentTile.getObjects()[0] instanceof Pit) {
                     //TODO Destroy robot;
+                    board.removeObject(robot);
 
                 } else {
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -253,7 +255,12 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                 }
             }
-            //TODO clean up phase, respawning, remove register etc...
+            //TODO clean up phase, remove register etc...
+            if(robot.isDestroyed()){
+                board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
+                robot.respawn();
+            }
+
         }
     }
 
