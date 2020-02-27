@@ -39,5 +39,6 @@ public class Player {
 
     public void addSelectedCard(int card) {
         selectedCards[selectedcounter++] = cards[card];
+        cards[card].setSelected(true);
     }
 }
