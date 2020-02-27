@@ -7,14 +7,15 @@ import java.util.ArrayList;
 public class Player {
     private Robot robot;
     public ProgramCard[] cards;
-    public ArrayList<ProgramCard> selectedCards;
+    public ProgramCard[] selectedCards;
+    private int selectedcounter = 0;
 
     public Player(){
         robot = new Robot();
         robot.setTexture();
         robot.setTileX(0);
         robot.setTileY(0);
-        selectedCards  = new ArrayList<ProgramCard>();
+        selectedCards  = new ProgramCard[5];
     }
 
     public boolean hasWon(){return true;}
@@ -35,7 +36,6 @@ public class Player {
     }
 
     public void addSelectedCard(int card) {
-        cards[card].setSelected(true);
-        selectedCards.add(cards[card]);
+        selectedCards[selectedcounter++] = cards[card];
     }
 }
