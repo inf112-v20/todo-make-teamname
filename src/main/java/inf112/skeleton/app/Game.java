@@ -43,6 +43,12 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         background = new Texture("assets/pink_background.png");
         tempMap = new Texture("assets/maps/riskyexchange.png");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        isReady();
     }
 
     @Override
@@ -141,12 +147,11 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     //Call this when cards have been selected to be played
     private void isReady(){
-
         isReadySem.release();
     }
 
 
-    private void doTurn() {
+    private void doTurn(){
         while (!gameIsDone) {
             try {
                 isReadySem.acquire();
@@ -161,6 +166,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                 if (card.getValue() > 0) {
                     for (int i = 0; i < card.getValue(); i++) {
                         board.moveObject(robot, robot.getDirection());
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if (card.getRotate()) {
@@ -183,17 +193,33 @@ public class Game extends InputAdapter implements ApplicationListener {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.getExpress()) {
                             board.moveObject(robot, conveyorBelt.getDirection());
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                        System.out.println("" + conveyorBelt.getDirection());
                         board.moveObject(robot, conveyorBelt.getDirection());
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Pusher) {
                         Pusher pusher = (Pusher) currentTile.getObjects()[0];
                         board.moveObject(robot, pusher.getDirection());
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
 
@@ -225,7 +251,13 @@ public class Game extends InputAdapter implements ApplicationListener {
                         }
                     }
                 }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            isReady();
             //TODO clean up phase, respawning, remove register etc...
         }
     }

@@ -50,10 +50,10 @@ public class BoardParser {
 
     private static void addLayer(Board board, String [] map) {
         for (int y=0; y < map.length; y++) {
-            for (int x=0; x < map[0].length(); x++) {
+            for (int x=0; x < map[y].length(); x++) {
                 IBoardObject object = factory(map[y].charAt(x));
                 if (object != null) {
-                    board.addObject(object, x, y);
+                    board.addObject(object, x, map.length - y -1);
                 }
             }
         }

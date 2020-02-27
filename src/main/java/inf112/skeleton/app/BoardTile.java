@@ -1,6 +1,7 @@
 package inf112.skeleton.app;
 
 import com.badlogic.gdx.graphics.Texture;
+import inf112.skeleton.app.objects.BoardLaser;
 import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
@@ -43,6 +44,8 @@ public class BoardTile {
     public void add(IBoardObject object) {
         //TODO fix for all IBoardObjects
         if(object instanceof Robot) items[ROBOT] = object;
+        else if(object instanceof BoardLaser) items[WALLLAYER] = object;
+        else items[BOTTOMLAYER] = object;
     }
 
 
