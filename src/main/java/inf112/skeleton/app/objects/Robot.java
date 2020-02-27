@@ -18,14 +18,12 @@ public class Robot implements IBoardObject {
         this(Direction.EAST);
     }
 
-    @Override
     public Texture getTexture() {
         return sprite;
     }
 
 
     //TODO setTexture needs to handle robots having different textures
-    @Override
     public void setTexture() {
         sprite = new Texture("assets/Robot_Example.png");
     }

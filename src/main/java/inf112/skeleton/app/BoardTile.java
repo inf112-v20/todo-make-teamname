@@ -21,25 +21,6 @@ public class BoardTile {
     public BoardTile() {
     }
 
-    //TODO Make a version that doesn't give null pointer when testing
-    public Texture getSprite() {
-        return sprite;
-    }
-
-    public void setSprite(){
-        sprite = new Texture("assets/Cell_Empty.png");
-    }
-
-    //Returns all the textures for all the objects on this tile
-    public ArrayList<Texture> getTextures(){
-        ArrayList<Texture> textures = new ArrayList<>();
-        //setSprite();
-        //textures.add(getSprite());
-        for (IBoardObject i : items) if (i != null) {i.setTexture(); textures.add(i.getTexture());}
-        return textures;
-    }
-
-
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
         //TODO fix for all IBoardObjects

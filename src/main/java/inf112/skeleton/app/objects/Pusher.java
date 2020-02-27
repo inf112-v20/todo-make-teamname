@@ -5,17 +5,6 @@ import inf112.skeleton.app.Direction;
 
 public class Pusher implements IBoardObject{
 
-
-    @Override
-    public Texture getTexture() {
-        return null;
-    }
-
-    @Override
-    public void setTexture() {
-
-    }
-
     @Override
     public Direction getDirection() {
         return null;
