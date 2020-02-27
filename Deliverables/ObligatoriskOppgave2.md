@@ -2,14 +2,13 @@
 
 ## Deloppgave 1 - Prosjekt og prosjektstruktur
 *   (Hva innebærer de ulike rollene (faktisk))
-*   (erfaringer som er verdt å nevne? team-messig eller prosjektmetodikk? vi har merket at det å planlegge krav og hva 
-de innebærer på forhånd tar tid, men vi merker at ved å gjøre dette så har vi et mye klarere bilde av akkurat hva vi 
- skal gjøre og hvordan.)
-*   (synes teamet at de valgene dere har tatt er gode? Hvis ikke, hva kan dere gjøre annerledes for å forbedre måten
-teamet fungerer på?)
-*   (hvordan er gruppedynamikken?)
-*   (hvordan fungerer kommunikasjonen for dere?)
-*   (kort retrospektiv - viktig)
+*   Erfaringer: Vi har merket at det å planlegge krav og hva de innebærer på forhånd tar tid, men vi merker at ved å 
+gjøre dette så har vi et mye klarere bilde av akkurat hva vi skal gjøre og hvordan.
+*   Valgene vi har tatt synes vi har vært gode og har passet med hva vi tenkte vi kunne få til i denne sprinten.
+*   Gruppedynamikk: er god, vi samarbeider godt og føler at alle bidrar med noe.
+*   Kommunikasjonen: fungerer veldig bra, hvis det er noe som må avklares er alle lett tilgjengelig på Slack.
+*   Retrospektiv: hva har vi klart, hva kan forbedres (prosjektstruktur, ikke kode)
+*   (legge til hvis det er stor forskjell i commits - hvorfor?)  
 *   (bli enige om maks tre forbedringspunkter fra retrospektivet, som skal følges opp under neste sprint) 
 
 ## Deloppgave 2 - Krav
