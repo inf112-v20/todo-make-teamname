@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.*;
+
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 
@@ -22,6 +24,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Thread phase;
     private Semaphore isReadySem;
     private boolean gameIsDone;
+    private int cardBoxLeft;
+    private int cardBoxRight;
 
     private Texture background;
     private Texture tempMap;
@@ -43,12 +47,8 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         background = new Texture("assets/pink_background.png");
         tempMap = new Texture("assets/maps/riskyexchange.png");
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        isReady();
+        cardBoxLeft = (Settings.SCREEN_WIDTH/2) - (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
+        cardBoxRight = (Settings.SCREEN_WIDTH/2) + (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
     }
 
     @Override
@@ -74,13 +74,23 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
-        for (IBoardObject o: board.getTile(screenX/32, Math.abs(15-(screenY/32))).getObjects()){
+        /*for (IBoardObject o: board.getTile(screenX/32, Math.abs(15-(screenY/32))).getObjects()){
             if (o instanceof Robot){
                 board.setSelected((Robot) o);
                 return true;
             }
+        }*/
+        if (screenX > cardBoxLeft &&
+                screenX < cardBoxRight &&
+                screenY > Settings.SCREEN_HEIGHT-Settings.CARD_HEIGHT &&
+                screenY < Settings.SCREEN_HEIGHT){
+            int card = (screenX - cardBoxLeft)/Settings.CARD_WIDTH;
+            myPlayer.addSelectedCard(card);
+
         }
         return false;
+
+
     }
 
     @Override
@@ -115,6 +125,12 @@ public class Game extends InputAdapter implements ApplicationListener {
         for (Robot r : board.getRobots()){
             batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
         }
+        for (int i = 0; i < myPlayer.getCards().length; i++){
+            batch.draw(myPlayer.getCards()[i].getImage(), (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+            if (myPlayer.getCards()[i].getSelected()){
+                batch.draw((new Texture("assets/cards/card_selected.png")), (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+            }
+        }
 
         /*
         BoardTile[][] grid = board.getGrid();
@@ -147,11 +163,12 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     //Call this when cards have been selected to be played
     private void isReady(){
+
         isReadySem.release();
     }
 
 
-    private void doTurn(){
+    private void doTurn() {
         while (!gameIsDone) {
             try {
                 isReadySem.acquire();
@@ -166,11 +183,6 @@ public class Game extends InputAdapter implements ApplicationListener {
                 if (card.getValue() > 0) {
                     for (int i = 0; i < card.getValue(); i++) {
                         board.moveObject(robot, robot.getDirection());
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }
                 if (card.getRotate()) {
@@ -193,33 +205,17 @@ public class Game extends InputAdapter implements ApplicationListener {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.getExpress()) {
                             board.moveObject(robot, conveyorBelt.getDirection());
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                         }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                        System.out.println("" + conveyorBelt.getDirection());
                         board.moveObject(robot, conveyorBelt.getDirection());
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Pusher) {
                         Pusher pusher = (Pusher) currentTile.getObjects()[0];
                         board.moveObject(robot, pusher.getDirection());
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
 
@@ -251,13 +247,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                         }
                     }
                 }
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
             }
-            isReady();
             //TODO clean up phase, respawning, remove register etc...
         }
     }
