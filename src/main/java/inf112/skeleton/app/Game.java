@@ -189,7 +189,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                 card.flip(); // flips the texture from back to front
                 if (card.getValue() > 0) {
                     for (int i = 0; i < card.getValue(); i++) {
+                        if(robot.isDestroyed()) break;
                         board.moveObject(robot, robot.getDirection());
+                        if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                            board.removeObject(robot);
+                        }
                         try {
                             Thread.sleep(300);
                         } catch (InterruptedException e) {
@@ -197,7 +201,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                         }
                     }
                 }
-                if (card.getRotate()) {
+                else if (card.getRotate()) {
                     if (card.getRotateLeft()) {
                         robot.rotateLeft();
                     } else if (card.getRotateRight()) {
@@ -208,11 +212,8 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                 }
                 BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                if (currentTile.getObjects()[0] instanceof Pit) {
-                    //TODO Destroy robot;
-                    board.removeObject(robot);
-
-                } else {
+                if(robot.isDestroyed()){}
+                else {
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
@@ -270,6 +271,9 @@ public class Game extends InputAdapter implements ApplicationListener {
                             myPlayer.giveOptionCard();
                         }
                     }
+                }
+                if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                    board.removeObject(robot);
                 }
                 try {
                     Thread.sleep(400);

@@ -37,7 +37,7 @@ public class BoardParser {
                     itemLayer[i] = row;
                 }
 
-                addLayer(board, itemLayer);
+//                addLayer(board, itemLayer);
                 return board;
             }
         }
