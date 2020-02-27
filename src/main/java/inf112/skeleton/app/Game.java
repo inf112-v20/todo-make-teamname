@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.*;
 
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
 
@@ -51,8 +52,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
-        cardBoxLeft = (Settings.SCREEN_WIDTH/2) - (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
-        cardBoxRight = (Settings.SCREEN_WIDTH/2) + (((myPlayer.getCards().length)/2)*Settings.CARD_WIDTH);
+        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-myPlayer.getCards().length);
+        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+myPlayer.getCards().length);
     }
 
     @Override
@@ -96,10 +97,8 @@ public class Game extends InputAdapter implements ApplicationListener {
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
-            System.out.println("button pressed");
             isReady();
         }
-        System.out.println(screenX + ", " + screenY);
 
 
 
@@ -141,9 +140,9 @@ public class Game extends InputAdapter implements ApplicationListener {
             batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
         }
         for (int i = 0; i < myPlayer.getCards().length; i++){
-            batch.draw(myPlayer.getCards()[i].getImage(), (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+            batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             if (myPlayer.getCards()[i].getSelected()){
-                batch.draw(selectedFrame, (Settings.SCREEN_WIDTH/2)-(((myPlayer.getCards().length)/2-i)*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
         }
         batch.draw(buttonReady, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3   , 64, 32);
@@ -181,7 +180,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 e.printStackTrace();
             }
             if(Thread.interrupted()) return;
-            ProgramCard[] cards = myPlayer.getSelectedCards();
+            ArrayList<ProgramCard> cards = myPlayer.getSelectedCards();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
                 if(card == null || robot.isDestroyed()) continue;
