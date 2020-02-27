@@ -8,6 +8,10 @@ gjøre dette så har vi et mye klarere bilde av akkurat hva vi skal gjøre og hv
 *   Gruppedynamikk: er god, vi samarbeider godt og føler at alle bidrar med noe.
 *   Kommunikasjonen: fungerer veldig bra, hvis det er noe som må avklares er alle lett tilgjengelig på Slack.
 *   Retrospektiv: hva har vi klart, hva kan forbedres (prosjektstruktur, ikke kode)
+*   Vi planlagte å jobbe mer strukturert og forebyggende med å skrive opp krav og mer konkret hvilke arbeidsoppgaver som
+må gjøres for å få til dette kravet. Vi har blitt mye bedre med dette siden forrige sprint, og merket hva det har gjort
+med jobbingen, det har vært lettere å se hva som må implementeres for å oppnå kravet. Vi føler at vi kan bli enda bedre
+med denne typen å jobbe på og dette vil være et mål fram mot neste sprint.
 *   (legge til hvis det er stor forskjell i commits - hvorfor?)  
 *   (bli enige om maks tre forbedringspunkter fra retrospektivet, som skal følges opp under neste sprint) 
 
@@ -36,6 +40,6 @@ hva som er gitt fra kunde, hvofor er dette gjort?)
 
 ## Deloppgave 3
 Kode
-*   (replace)
-*   (replace)
-*   (replace)
+*   (Dokumentere hvordan prosjektet bygger, testes og kjøres)
+*   (ha med klassediagram)
+*   (testene dere skriver skal brukes!)
