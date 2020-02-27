@@ -5,7 +5,6 @@ import inf112.skeleton.app.objects.BoardLaser;
 import inf112.skeleton.app.objects.IBoardObject;
 import inf112.skeleton.app.objects.Robot;
 
-import java.util.ArrayList;
 
 public class BoardTile {
     private Texture sprite;
@@ -23,7 +22,6 @@ public class BoardTile {
 
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
-        //TODO fix for all IBoardObjects
         if(object instanceof Robot) items[ROBOT] = object;
         else if(object instanceof BoardLaser) items[WALLLAYER] = object;
         else items[BOTTOMLAYER] = object;
