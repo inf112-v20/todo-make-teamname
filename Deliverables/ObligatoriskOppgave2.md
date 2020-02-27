@@ -11,7 +11,11 @@ gjøre dette så har vi et mye klarere bilde av akkurat hva vi skal gjøre og hv
 *   Vi planlagte å jobbe mer strukturert og forebyggende med å skrive opp krav og mer konkret hvilke arbeidsoppgaver som
 må gjøres for å få til dette kravet. Vi har blitt mye bedre med dette siden forrige sprint, og merket hva det har gjort
 med jobbingen, det har vært lettere å se hva som må implementeres for å oppnå kravet. Vi føler at vi kan bli enda bedre
-med denne typen å jobbe på og dette vil være et mål fram mot neste sprint.
+med denne måten å jobbe på og dette vil være et mål fram mot neste sprint.
+Å bruke møter til bare å planlegge detaljene for neste leveranse før vi begynner å kode har revolusjonert arbeidsprosessen.
+Da alle begynte å arbeide hver for seg ble det mye lettere å gjennomføre kravene ettersom vi alle hadde det samme bildet
+ i hodet av hvordan det skulle henge sammen for den endelige leveransen.
+
 *   (legge til hvis det er stor forskjell i commits - hvorfor?)  
 *   (bli enige om maks tre forbedringspunkter fra retrospektivet, som skal følges opp under neste sprint) 
 
@@ -40,6 +44,9 @@ hva som er gitt fra kunde, hvofor er dette gjort?)
 
 ## Deloppgave 3
 Kode
-*   (Dokumentere hvordan prosjektet bygger, testes og kjøres)
+*   Bygges: 
+*   Testes: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
+testet "i vakum", for seg selv.
+*   Kjøres: RoboRally kjøres av Main() klassen.
 *   (ha med klassediagram)
 *   (testene dere skriver skal brukes!)
