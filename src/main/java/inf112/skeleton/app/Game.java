@@ -190,6 +190,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                 if (card.getValue() > 0) {
                     for (int i = 0; i < card.getValue(); i++) {
                         board.moveObject(robot, robot.getDirection());
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 if (card.getRotate()) {
@@ -213,12 +218,23 @@ public class Game extends InputAdapter implements ApplicationListener {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.getExpress()) {
                             board.moveObject(robot, conveyorBelt.getDirection());
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
+
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         board.moveObject(robot, conveyorBelt.getDirection());
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Pusher) {
@@ -254,6 +270,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                             myPlayer.giveOptionCard();
                         }
                     }
+                }
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
             //TODO clean up phase, remove register etc...
