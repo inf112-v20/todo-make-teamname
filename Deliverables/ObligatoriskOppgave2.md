@@ -1,7 +1,10 @@
 # Obligatorisk Oppgave 2
 
 ## Deloppgave 1 - Prosjekt og prosjektstruktur
-*   (Hva innebærer de ulike rollene (faktisk))
+*   Rollene innenfor gruppen har blitt fulgt avhengig av tilgjenlighet, hvor to medlemmer har vært bortreist en periode mellom oblig 1 og 2. Rollene er ikke fastsatte,
+slik at alle kan jobbe på det de har lyst til. Teamleader rollen har tatt godt ansvar på å styre møter sammen med gruppen. Test rollen har de fleste bidratt med. En rolle som
+ikke har vært brukt er AI ansvarlig, det ligger veldig langt bak på listen, og er noe vi lager dersom vi har tid. Frontend, logikk, design ansvarlig og input har vært fordelt 
+mellom flere i gruppen. 
 *   **Erfaringer**: Vi har merket at det å planlegge krav og hva de innebærer på forhånd tar tid, men vi merker at ved å 
 gjøre dette så har vi et mye klarere bilde av akkurat hva vi skal gjøre og hvordan.
 *   Valgene vi har tatt synes vi har vært gode og har passet med hva vi tenkte vi kunne få til i denne sprinten.
@@ -85,3 +88,4 @@ Kode
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
 testet "i vakum", for seg selv.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
+    *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
