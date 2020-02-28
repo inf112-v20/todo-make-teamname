@@ -130,6 +130,7 @@ public class Robot implements IBoardObject {
 
     public void destroy() {
         isDestroyed = true;
+        health = 0;
         life--;
         setTileX(-1);
         setTileY(-1);
