@@ -44,7 +44,7 @@ public class Player {
 
     public void addSelectedCard(int card) {
         boolean sel = false;
-
+        //checks if the card has been selected and in that case unselects it
         for (ProgramCard selectedCard : selectedCards) {
             if (cards[card].equals(selectedCard)){
                 if (selectedCard.getSelected()){
@@ -53,11 +53,13 @@ public class Player {
                 }
             }
         }
+        //removes unselected cards from selectedCards
         for (int i = 0; i < selectedCards.size; i++){
             if (!selectedCards.get(i).getSelected()){
                 selectedCards.removeIndex(i);
             }
         }
+        //if it hasnt been unselected then it must be selected
         if(!sel){
             selectedCards.addLast(cards[card]);
             cards[card].setSelected(true);
