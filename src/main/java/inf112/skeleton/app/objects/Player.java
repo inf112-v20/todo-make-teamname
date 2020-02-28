@@ -69,4 +69,12 @@ public class Player {
     public int getLife(){
         return robot.getLife();
     }
+
+    public Queue<ProgramCard> copySelected() {
+        Queue<ProgramCard> newHand = new Queue<>();
+        for (ProgramCard card : selectedCards) {
+            newHand.addLast(card);
+        }
+        return newHand;
+    }
 }
