@@ -11,4 +11,6 @@ public interface ICard {
     Texture getImage();
 
     Integer getValue();
+
+    
 }
