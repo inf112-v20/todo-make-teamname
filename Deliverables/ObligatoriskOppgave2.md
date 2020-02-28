@@ -49,9 +49,15 @@ damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon 
     *   Som spiller skal man se en representasjon av hvor mye liv roboten til spilleren har - kalt Life Tokens
     *   Som spiller skal man se en representasjon av hvor mye skade roboten til spilleren har tatt - kalt Damage Tokens
 *   Akseptansekriterier:
-    *   asd
+    *   Visuell representasjon av kort 
+    *   Visuell representasjon av "klar", brukeren låst inn sitt valg av kort
+    *   Visuell representasjon av  hvor mye liv og skade roboten har og har tatt.
 *   Arbeidsoppgaver:
-    *   asd
+    *   Tegne kort
+    *   Tegne markering av kort
+    *   Tegne powerdown knapp 
+    *   Tegne liv til robot
+    *   Tegne skade til robot
 
 ### Krav: Spillfasene
 *   Brukerhistorier:
@@ -59,6 +65,9 @@ damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon 
     *   Som spiller kunne trykke på en knapp som sier at spilleren er klar og ferdig med å velge kort
     *   Som spiller kunne se at spillet utføres på den måten kortene tilsier og gjøre det 5 ganger (5 kort)
 *   Akseptansekriterier:
+    *   Velge og avvelge kort ved å trykke kortene på skjermen
+    *   "Låse inn" valg av kort ved å trykke på ready knappen på skjermen
+    *    Se roboten bevege seg etter hva kortene programmerte den til
 *   Arbeidsoppgaver:
     *   Registrere input og ved valg av kort gi beskjed om at du er klar
     *   Programmere rekkefølgen i spillfasene
