@@ -42,7 +42,7 @@ public class Player {
     public void addSelectedCard(int card) {
         boolean sel = false;
         for (int i = 0; i < selectedCards.size(); i++){
-            if (selectedCards.get(i).getSelected()){
+            if (selectedCards.get(i).equals(cards[card]) && selectedCards.get(i).getSelected()){
                 selectedCards.get(i).setSelected(false);
                 selectedCards.remove(i);
                 sel = true;

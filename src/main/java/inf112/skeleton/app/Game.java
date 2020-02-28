@@ -27,6 +27,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     private boolean gameIsDone;
     private int cardBoxLeft;
     private int cardBoxRight;
+    private int buttonReadyLeftX;
+    private int buttonReadyLeftY;
 
     private Texture background;
     private Texture tempMap;
@@ -54,6 +56,8 @@ public class Game extends InputAdapter implements ApplicationListener {
         buttonReady = new Texture("assets/button_ready.png");
         cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-myPlayer.getCards().length);
         cardBoxRight = (Settings.CARD_WIDTH/2) * (10+myPlayer.getCards().length);
+        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
+        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
     }
 
     @Override
@@ -79,12 +83,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
-        /*for (IBoardObject o: board.getTile(screenX/32, Math.abs(15-(screenY/32))).getObjects()){
-            if (o instanceof Robot){
-                board.setSelected((Robot) o);
-                return true;
-            }
-        }*/
+        //checks if the click occurs in the "cardbox"
         if (screenX > cardBoxLeft &&
                 screenX < cardBoxRight &&
                 screenY > Settings.SCREEN_HEIGHT-Settings.CARD_HEIGHT &&
@@ -93,6 +92,7 @@ public class Game extends InputAdapter implements ApplicationListener {
             myPlayer.addSelectedCard(card);
 
         }
+        //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
@@ -137,7 +137,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch.draw(background, 0, 0);
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
         for (Robot r : board.getRobots()){
-            batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
+            if(r.getTileX() != -1 && r.getTileY() != -1){
+                batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
+            }
         }
         for (int i = 0; i < myPlayer.getCards().length; i++){
             batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
@@ -145,7 +147,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
         }
-        batch.draw(buttonReady, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3   , 64, 32);
+        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         batch.end();
     }
 
