@@ -25,10 +25,11 @@ ikke gjort så mye, men resten av gruppen har veldig jevnt med commits.
 
 ## Deloppgave 2 - Krav
 *   Nå fremover har vi prioriert å få brettet og brettets elementer på plass, i tillegg til å få implementert noen
-statiske kort som vi kan bruke til å teste funksjonalitet med. Fram til neste levering har vi lyst å få på plass liv og 
+statiske kort som vi kan bruke til å teste funksjonalitet med. Turn-order er noe vi har jobbet mye med å kommet lengre fremover med det. 
+Fram til neste levering har vi lyst å få på plass liv og 
 damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon ved å legge til kort-deck.
 * Hovedkrav som del av MVP (og hvorfor): 
-*   Vi har prioritert å implementere kort i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
+*   Vi har prioritert å implementere kort og turn-order i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
 programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
 * Hva vi har gjort siden forrige gang:
     *   Lagt til på brettet; samlebånd, hull, rotering og reperasjonsTile
