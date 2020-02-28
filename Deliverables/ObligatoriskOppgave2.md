@@ -34,7 +34,7 @@ programmere roboten. Vi valgte å gå videre med kort først siden vi følte det
     *   Lagt til på brettet; samlebånd, hull, rotering og reperasjonsTile
     *   Lagt til spillerUI som viser noen kort og ready-knapp med funksjonalitet som fungerer
 *   Bugs:
-    *   
+    *   Har en ConcurrentModificationException som foreløbig er "fikset" med en try/catch må finne en bedre fix senere
 
 ### Krav: Kort
 *   Brukerhistorier:
