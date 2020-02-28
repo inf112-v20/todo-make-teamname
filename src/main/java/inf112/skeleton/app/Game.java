@@ -191,7 +191,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 e.printStackTrace();
             }
             if(Thread.interrupted()) return;
-            Queue<ProgramCard> cards = myPlayer.getSelectedCards();
+            Queue<ProgramCard> cards = myPlayer.copySelected();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
                 if(card == null || robot.isDestroyed()) continue;
