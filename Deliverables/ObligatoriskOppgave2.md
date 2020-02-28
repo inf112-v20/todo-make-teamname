@@ -29,7 +29,8 @@ damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon 
 programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
 * Hva vi har gjort siden forrige gang:
     *   tekst
-*   (husk å skrive hvilke bugs som finnes i de kravene dere har utført (hvis det finnes))
+*   Bugs:
+    *   
 
 ### Krav: Kort
 *   Brukerhistorier:
@@ -84,5 +85,3 @@ Kode
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
 testet "i vakum", for seg selv.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
-*   (ha med klassediagram)
-*   (testene dere skriver skal brukes!)
