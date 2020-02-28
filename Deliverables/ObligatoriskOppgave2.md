@@ -93,4 +93,4 @@ testet "i vakum", for seg selv. Game.doTurn har blitt testet manuelt, siden vi i
 game klassen. Player har også blitt testet manuelt på grunn av trøbbel med Textures.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
     *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
-    *   Obs: Networking mappen er ikke en del av innlevering
+    *   Obs: Networking mappen er ikke implementert og er ikke en del av innleveringen
