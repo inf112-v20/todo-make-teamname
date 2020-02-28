@@ -87,6 +87,7 @@ programmere roboten. Vi valgte å gå videre med kort først siden vi følte det
 Kode
 *   **Bygges**: Prosjektet bygges på vanlig vis
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
-testet "i vakum", for seg selv.
+testet "i vakum", for seg selv. Game.doTurn har blitt testet manuelt, siden vi ikke har funnet en god måte å teste hele 
+game klassen.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
     *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
