@@ -36,5 +36,6 @@ public class BoardTile {
         return object;
     }
 
+    //returns list of all objects on a tile
     public IBoardObject[] getObjects(){return this.items;}
 }

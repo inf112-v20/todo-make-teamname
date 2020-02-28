@@ -66,4 +66,7 @@ public class Player {
 
 
     }
+    public int getLife(){
+        return robot.getLife();
+    }
 }
