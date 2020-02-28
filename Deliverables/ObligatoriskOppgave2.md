@@ -91,6 +91,20 @@ Kode
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
 testet "i vakum", for seg selv. Game.doTurn har blitt testet manuelt, siden vi ikke har funnet en god måte å teste hele 
 game klassen. Player har også blitt testet manuelt på grunn av trøbbel med Textures.
+    *   Manuel testing:
+        *   doTurn
+            *   Ødelegg roboten 3 ganger, og spillet avslutter
+            *   Visst du lukker spillet så avslutter doTurn
+            *   Visst du ødelegger roboten så gjør ikke programmet noe med resten av kortene du har valgt
+            *   Roboten flytter seg slik som kortene vil tilsi, velger du "move 1" så flytter  roboten seg 1.
+            *   Visst roboten er på et conveyorbelt så blir det flyttet på i rett fase.(Stå på et conveyorbelt for å teste)
+            *   Stå på et gear og se at du går i en ny retning etterpå.(Texture vil ikke oppdateres)
+        *   Player
+            *   Får sin hånd representert rett på skjermen
+            *   Korrekt antall kort er på skjermen
+            *   Samme kort player velger blir sendt til doTurn og render
+        *   Programcard
+            *   Kortene viser samme verdi på skjermen som dei gir i klassen
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
     *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
-    *   Obs: Networking mappen er ikke implementert og er ikke en del av innleveringen
+    *   Obs: Networking mappen er ikke implementert og er ikke en del av innleveringen.
