@@ -17,7 +17,8 @@ Da alle begynte å arbeide hver for seg ble det mye lettere å gjennomføre krav
 *   **Forbedringspunkter**: Vi ble enige om at det vi kunne bli bedre på til neste sprint er testing og dokumentasjon. 
 Få på plass tester tidligere enn vi har gjort nå og å være flinkere til å dokumentere viktig / kompleks kode så det er 
 enklere for de andre på gruppen å skjønne hvordan koden fungerer.
-*   (legge til hvis det er stor forskjell i commits - hvorfor?)
+*   **Stor Forskjell i antall commits**: Gjennom denne obligatoriske innleveringen var Elias på ferie og fikk derfor
+ikke gjort så mye, men resten av gruppen har veldig jevnt med commits.
 
 ## Deloppgave 2 - Krav
 *   Nå fremover har vi prioriert å få brettet og brettets elementer på plass, i tillegg til å få implementert noen
@@ -42,8 +43,8 @@ programmere roboten. Vi valgte å gå videre med kort først siden vi følte det
 *   Akseptansekriterier:
     *   Kort skal kunne velges og avvelges
     *   Kort skal ha en funksjon som representerer hva det utfører i spillet
-    * 
 *   Arbeidsoppgaver:
+    *   Ha en verdi som forteller hvilket type kort det er.
 
 ### Krav: Spiller UI
 *   Brukerhistorier:
