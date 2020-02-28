@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Queue;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
@@ -140,10 +141,17 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         batch.draw(background, 0, 0);
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
-        for (Robot r : board.getRobots()){
-            if(r.getTileX() != -1 && r.getTileY() != -1){
-                batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
+        try {
+            for (Robot r : board.getRobots()) {
+                if (r.getTileX() != -1 && r.getTileY() != -1) {
+                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
+                }
             }
+        }catch (ConcurrentModificationException ex){
+            //TODO fjern gaffateip og lag en skikkelig løsning
+            //får en concurrentmodificationException i enkelte tilfeller, men ved å catche den er alt som skjer
+            //at render skipper en iterasjon som ikke er merkbart for bruker.
+
         }
         BitmapFont font = new BitmapFont();
 
