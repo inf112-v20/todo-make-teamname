@@ -9,7 +9,7 @@ s--------sn-----
 n-------RSn---1-
 n---eeeC-Sn-wwww
 nw-----n2Sn-S---
--n--nc-n-Sn-S--e
+-n--ec-n-Sn-S--e
 -n--rn-n-Sn-S-n-
 
 ------y-y--y-y--
