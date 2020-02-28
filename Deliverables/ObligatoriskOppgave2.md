@@ -7,7 +7,7 @@ gjøre dette så har vi et mye klarere bilde av akkurat hva vi skal gjøre og hv
 *   Valgene vi har tatt synes vi har vært gode og har passet med hva vi tenkte vi kunne få til i denne sprinten.
 *   Gruppedynamikk: er god, vi samarbeider godt og føler at alle bidrar med noe.
 *   Kommunikasjon: fungerer veldig bra, hvis det er noe som må avklares er alle lett tilgjengelig på Slack.
-*   Retrospektiv: Vi planlagte å jobbe mer strukturert og forebyggende med å skrive opp krav og mer konkret hvilke arbeidsoppgaver som
+*   **Retrospektiv**: Vi planlagte å jobbe mer strukturert og forebyggende med å skrive opp krav og mer konkret hvilke arbeidsoppgaver som
 må gjøres for å få til dette kravet. Vi har blitt mye bedre med dette siden forrige sprint, og merket hva det har gjort
 med jobbingen, det har vært lettere å se hva som må implementeres for å oppnå kravet. Vi føler at vi kan bli enda bedre
 med denne måten å jobbe på og dette vil være et mål fram mot neste sprint.
@@ -24,7 +24,10 @@ enklere for de andre på gruppen å skjønne hvordan koden fungerer.
 statiske kort som vi kan bruke til å teste funksjonalitet med. Fram til neste levering har vi lyst å få på plass liv og 
 damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon ved å legge til kort-deck.
 * Hovedkrav som del av MVP (og hvorfor): 
-*   (oppdater hvilke krav dere har prioritert, hvor lang dere har kommet og hva dere har gjort siden forrige gang)
+*   Vi har prioritert å implementere kort i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
+programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
+* Hva vi har gjort siden forrige gang:
+    *   tekst
 *   (husk å skrive hvilke bugs som finnes i de kravene dere har utført (hvis det finnes))
 
 ### Krav: Kort
