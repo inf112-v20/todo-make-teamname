@@ -176,7 +176,9 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     private void doTurn() {
         while (!gameIsDone) {
+            //Does a full register for each iteration of the while loop
             try {
+                //Waits until cards have been selected
                 isReadySem.acquire();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -191,9 +193,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                 if (card.getValue() > 0) {
                     for (int i = 0; i < card.getValue(); i++) {
                         if(robot.isDestroyed()) break;
+                        //Move robot
                         board.moveObject(robot, robot.getDirection());
                         if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                             board.removeObject(robot);
+                            robot.destroy();
                         }
                         try {
                             Thread.sleep(300);
@@ -213,12 +217,13 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                 }
                 BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                if(robot.isDestroyed()){}
-                else {
+                if(!robot.isDestroyed()){
+                    //Board elements do their things
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.getExpress()) {
+                            //Expressconveoyrbelt moves robot
                             board.moveObject(robot, conveyorBelt.getDirection());
                             try {
                                 Thread.sleep(100);
@@ -230,6 +235,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
+                        //Conveoyrbelt moves robot
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         board.moveObject(robot, conveyorBelt.getDirection());
                         try {
@@ -240,22 +246,26 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Pusher) {
+                        //Robot gets pushed
                         Pusher pusher = (Pusher) currentTile.getObjects()[0];
                         board.moveObject(robot, pusher.getDirection());
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
 
                     if (currentTile.getObjects()[0] instanceof GearClockwise) {
+                        //Rotate right
                         robot.rotateRight();
                     }
 
                     if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
+                        //Rotate left
                         robot.rotateLeft();
                     }
 
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[1] instanceof BoardLaser) {
                         //TODO Board does damage to robot
+                        robot.takeDamage();
                     }
                     //TODO Robots hit each other
 
@@ -265,16 +275,21 @@ public class Game extends InputAdapter implements ApplicationListener {
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof RepairSite) {
+                        //Heals a damage token if robot
                         robot.healDamage();
                         robot.setRespawn(robot.getTileX(), robot.getTileY());
                         RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
                         if (repairSite.getHammer()) {
+                            //Player gets an option card
+                            //TODO implement optioCards
                             myPlayer.giveOptionCard();
                         }
                     }
                 }
                 if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                    //Robot falls into pit
                     board.removeObject(robot);
+                    robot.destroy();
                 }
                 try {
                     Thread.sleep(400);
@@ -284,8 +299,15 @@ public class Game extends InputAdapter implements ApplicationListener {
             }
             //TODO clean up phase, remove register etc...
             if(robot.isDestroyed()){
-                board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
-                robot.respawn();
+                if(myPlayer.getLife() > 0) {
+                    //Respawn robot if player has more life left
+                    board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
+                    robot.respawn();
+                    System.out.println("respawn");
+                }else{
+                    //Not the case if there are more players
+                    gameIsDone = true;
+                }
             }
 
         }
