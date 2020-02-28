@@ -44,6 +44,9 @@ public class ProgramCard implements ICard{
     public boolean getSelected(){
         return this.selected;
     }
+    public boolean getNotSelected(){
+        return !this.selected;
+    }
     @Override
     public String getName() {
         return this.name;

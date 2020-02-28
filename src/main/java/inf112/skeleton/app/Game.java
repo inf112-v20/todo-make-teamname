@@ -9,8 +9,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.objects.*;
+import inf112.skeleton.app.objects.Robot;
+import com.badlogic.gdx.utils.Queue;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.concurrent.Semaphore;
 
@@ -141,9 +145,12 @@ public class Game extends InputAdapter implements ApplicationListener {
                 batch.draw(r.getTexture(), (Settings.BOARD_LOC_X)+(r.getTileX()*Settings.TILE_WIDTH),(Settings.BOARD_LOC_Y)+(r.getTileY()*Settings.TILE_HEIGHT));
             }
         }
+        BitmapFont font = new BitmapFont();
+
         for (int i = 0; i < myPlayer.getCards().length; i++){
             batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             if (myPlayer.getCards()[i].getSelected()){
+                font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i*Settings.CARD_WIDTH) + (Settings.CARD_WIDTH/5), Settings.CARD_HEIGHT- (Settings.CARD_HEIGHT/10));
                 batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
         }
@@ -182,7 +189,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 e.printStackTrace();
             }
             if(Thread.interrupted()) return;
-            ArrayList<ProgramCard> cards = myPlayer.getSelectedCards();
+            Queue<ProgramCard> cards = myPlayer.getSelectedCards();
             Robot robot = myPlayer.getRobot();
             for (ProgramCard card : cards) {
                 if(card == null || robot.isDestroyed()) continue;

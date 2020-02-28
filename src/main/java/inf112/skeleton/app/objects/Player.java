@@ -1,20 +1,23 @@
 package inf112.skeleton.app.objects;
 
+import com.badlogic.gdx.utils.Queue;
 import inf112.skeleton.app.Settings;
 
 import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.function.Predicate;
 
 public class Player {
     private Robot robot;
     public ProgramCard[] cards;
-    private ArrayList<ProgramCard> selectedCards;
+    private Queue<ProgramCard> selectedCards;
 
     public Player(){
         robot = new Robot();
         robot.setTexture();
         robot.setTileX(0);
         robot.setTileY(0);
-        selectedCards  = new ArrayList<ProgramCard>();
+        selectedCards  = new Queue<ProgramCard>();
     }
 
     public boolean hasWon(){return true;}
@@ -32,7 +35,7 @@ public class Player {
     public ProgramCard[] getCards(){return cards;}
     public Robot getRobot(){return robot;}
 
-    public ArrayList<ProgramCard> getSelectedCards(){
+    public Queue<ProgramCard> getSelectedCards(){
         return selectedCards;
     }
     public void giveOptionCard() {
@@ -41,17 +44,26 @@ public class Player {
 
     public void addSelectedCard(int card) {
         boolean sel = false;
-        for (int i = 0; i < selectedCards.size(); i++){
-            if (selectedCards.get(i).equals(cards[card]) && selectedCards.get(i).getSelected()){
-                selectedCards.get(i).setSelected(false);
-                selectedCards.remove(i);
-                sel = true;
+
+        for (ProgramCard selectedCard : selectedCards) {
+            if (cards[card].equals(selectedCard)){
+                if (selectedCard.getSelected()){
+                    cards[card].setSelected(false);
+                    sel = true;
+                }
             }
         }
-        if (!sel){
-            selectedCards.add(cards[card]);
-            cards[card].setSelected(true);
+        for (int i = 0; i < selectedCards.size; i++){
+            if (!selectedCards.get(i).getSelected()){
+                selectedCards.removeIndex(i);
+            }
         }
+        if(!sel){
+            selectedCards.addLast(cards[card]);
+            cards[card].setSelected(true);
+
+        }
+
 
     }
 }
