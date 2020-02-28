@@ -52,6 +52,4 @@ public class RobotTest {
         testBot.setTileY(5);
         assertEquals(5, testBot.getTileY());
     }
-
-
 }
