@@ -210,9 +210,11 @@ public class Game extends InputAdapter implements ApplicationListener {
                         if(robot.isDestroyed()) break;
                         //Move robot
                         board.moveObject(robot, robot.getDirection());
-                        if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                            board.removeObject(robot);
-                            robot.destroy();
+                        if (!robot.isDestroyed()){
+                            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                                board.removeObject(robot);
+                                robot.destroy();
+                            }
                         }
                         try {
                             Thread.sleep(300);
@@ -231,10 +233,9 @@ public class Game extends InputAdapter implements ApplicationListener {
                         robot.rotateRight();
                     }
                 }
-                BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                 if(!robot.isDestroyed()){
+                    BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     //Board elements do their things
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.getExpress()) {
@@ -248,7 +249,9 @@ public class Game extends InputAdapter implements ApplicationListener {
                         }
 
                     }
+                    if (robot.isDestroyed())break;
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                         //Conveoyrbelt moves robot
                         ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
@@ -259,6 +262,8 @@ public class Game extends InputAdapter implements ApplicationListener {
                             e.printStackTrace();
                         }
                     }
+                    if (robot.isDestroyed())break;
+
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Pusher) {
                         //Robot gets pushed
@@ -301,10 +306,12 @@ public class Game extends InputAdapter implements ApplicationListener {
                         }
                     }
                 }
-                if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                    //Robot falls into pit
-                    board.removeObject(robot);
-                    robot.destroy();
+                if (!robot.isDestroyed()){
+                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                        //Robot falls into pit
+                        board.removeObject(robot);
+                        robot.destroy();
+                    }
                 }
                 try {
                     Thread.sleep(400);

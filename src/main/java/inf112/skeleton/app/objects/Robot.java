@@ -10,7 +10,7 @@ public class Robot implements IBoardObject {
     private Texture sprite;
     private int health = 9;
     private int respawnX, respawnY;
-    private boolean destroy = false;
+    private boolean isDestroyed = false;
     private int life = 3;
 
 
@@ -129,18 +129,18 @@ public class Robot implements IBoardObject {
     }
 
     public void destroy() {
-        destroy = true;
+        isDestroyed = true;
         life--;
         setTileX(-1);
         setTileY(-1);
     }
 
     public boolean isDestroyed() {
-        return destroy;
+        return isDestroyed || getTileX() == -1 || getTileY() == -1;
     }
 
     public void respawn(){
-        destroy = false;
+        isDestroyed = false;
         fullHealth();
         setTileY(respawnY);
         setTileX(respawnX);
