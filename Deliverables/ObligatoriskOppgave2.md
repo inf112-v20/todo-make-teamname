@@ -85,3 +85,4 @@ Kode
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
 testet "i vakum", for seg selv.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
+    *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
