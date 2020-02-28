@@ -11,6 +11,12 @@ import java.util.Scanner;
 
 public class BoardParser {
 
+    /**
+     * Parses a text file name given into a Board object with
+     * the values in the text file.
+     * @param boardName Name of the textfile (without .txt)
+     * @return The Board object that corresponts to the textfile
+     */
     public static Board parse(String boardName) {
         try {
             File map = new File("assets/maps/" + boardName.toLowerCase() + ".txt");
@@ -48,6 +54,11 @@ public class BoardParser {
         return null;
     }
 
+    /**
+     * Adds a layer of objects. Puts at most 1 item at each tile.
+     * @param board The board to add items to
+     * @param map The string array representing the layer
+     */
     private static void addLayer(Board board, String [] map) {
         for (int y=0; y < map.length; y++) {
             for (int x=0; x < map[y].length(); x++) {
