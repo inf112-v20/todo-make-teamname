@@ -24,7 +24,10 @@ enklere for de andre på gruppen å skjønne hvordan koden fungerer.
 statiske kort som vi kan bruke til å teste funksjonalitet med. Fram til neste levering har vi lyst å få på plass liv og 
 damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon ved å legge til kort-deck.
 * Hovedkrav som del av MVP (og hvorfor): 
-*   (oppdater hvilke krav dere har prioritert, hvor lang dere har kommet og hva dere har gjort siden forrige gang)
+*   Vi har prioritert å implementere kort i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
+programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
+* Hva vi har gjort siden forrige gang:
+    *   tekst
 *   (husk å skrive hvilke bugs som finnes i de kravene dere har utført (hvis det finnes))
 
 ### Krav: Kort
