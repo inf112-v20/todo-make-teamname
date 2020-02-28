@@ -47,7 +47,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         font.setColor(Color.BLACK);
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
-        isReadySem = new Semaphore(0);
+        isReadySem = new Semaphore(1);
         gameIsDone = false;
         myPlayer = new Player();
         myPlayer.deal();
