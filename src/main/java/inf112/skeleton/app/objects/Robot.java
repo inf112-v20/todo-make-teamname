@@ -103,7 +103,8 @@ public class Robot implements IBoardObject {
             case NORTH:
                 dir = Direction.EAST;
                 break;
-
+            default:
+                System.out.println("Wrong input");
         }
     }
 
@@ -121,6 +122,8 @@ public class Robot implements IBoardObject {
             case NORTH:
                 dir = Direction.WEST;
                 break;
+            default:
+                System.out.println("Wrong input");
 
         }
     }
