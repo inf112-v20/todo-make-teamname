@@ -31,7 +31,8 @@ damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon 
 *   Vi har prioritert å implementere kort i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
 programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
 * Hva vi har gjort siden forrige gang:
-    *   tekst
+    *   Lagt til på brettet; samlebånd, hull, rotering og reperasjonsTile
+    *   Lagt til spillerUI som viser noen kort og ready-knapp med funksjonalitet som fungerer
 *   Bugs:
     *   
 
