@@ -76,7 +76,7 @@ public class BoardParser {
      * @param object what char to parse
      * @return the object requested
      */
-    private static IBoardObject factory(char object) {
+    public static IBoardObject factory(char object) {
         switch(object) {
             case 'c':
                 return new GearCounterClockwise();
