@@ -34,6 +34,7 @@ programmere roboten. Vi valgte å gå videre med kort først siden vi følte det
 * Hva vi har gjort siden forrige gang:
     *   Lagt til på brettet; samlebånd, hull, rotering og reperasjonsTile
     *   Lagt til spillerUI som viser noen kort og ready-knapp med funksjonalitet som fungerer
+    *   Lagt til en doTurn som flytter roboten rundt på brettet i henhold til kort som blir spilt og objekter på brettet
 *   Bugs:
     *   Har en ConcurrentModificationException som foreløbig er "fikset" med en try/catch må finne en bedre fix senere
 
@@ -89,6 +90,6 @@ Kode
 *   **Bygges**: Prosjektet bygges på vanlig vis
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
 testet "i vakum", for seg selv. Game.doTurn har blitt testet manuelt, siden vi ikke har funnet en god måte å teste hele 
-game klassen.
+game klassen. Player har også blitt testet manuelt på grunn av trøbbel med Textures.
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
     *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
