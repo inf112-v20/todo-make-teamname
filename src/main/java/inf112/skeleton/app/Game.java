@@ -114,13 +114,7 @@ public class Game extends InputAdapter implements ApplicationListener {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer){
-        if ((screenX < board.getWidth()*32 || screenY < board.getHeight()*32)){
-            int x = screenX/32;
-            int y = Math.abs(15-(screenY/32));
-            board.moveSelected(x, y);
-            return true;
-        }
-        else return false;
+        return false;
     }
 
     @Override
