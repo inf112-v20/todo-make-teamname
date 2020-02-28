@@ -2,14 +2,14 @@
 -s---P-n--n-s-wr
 -s-----n-sn3s---
 sw-----n-sn-s-P-
-s---eeeC-sn-Cnnn
+s---eeeC-sn-Ceee
 s--------sn-----
 ----WWWWW--wwwww
 -----EEEE--eeeee
 n-------RSn---1-
-n---eeeC-Sn-wwww
+n---wwwC-Sn-wwww
 nw-----n2Sn-S---
--n--ec-n-Sn-S--e
+-n--ec-n-Sn-S-ce
 -n--rn-n-Sn-S-n-
 
 ------y-y--y-y--
