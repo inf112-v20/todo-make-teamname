@@ -174,6 +174,7 @@ public class Game extends InputAdapter implements ApplicationListener {
         batch.dispose();
         font.dispose();
         phase.interrupt();
+
     }
 
     //Call this when cards have been selected to be played
