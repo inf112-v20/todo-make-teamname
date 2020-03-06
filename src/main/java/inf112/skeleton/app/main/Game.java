@@ -1,10 +1,8 @@
 package inf112.skeleton.app.main;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,9 +20,7 @@ import java.util.ConcurrentModificationException;
 import java.util.concurrent.Semaphore;
 
 
-public class Game extends InputAdapter implements ApplicationListener {
-    private SpriteBatch batch;
-    private BitmapFont font;
+public class Game extends InputAdapter {
     private Board board;
     private int nrOfPlayers = 1;
     private Player[] players;
@@ -37,16 +33,11 @@ public class Game extends InputAdapter implements ApplicationListener {
     private int buttonReadyLeftX;
     private int buttonReadyLeftY;
 
-    private Texture background;
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
 
-    @Override
     public void create() {
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
         isReadySem = new Semaphore(1);
@@ -57,7 +48,6 @@ public class Game extends InputAdapter implements ApplicationListener {
         phase.start();
         board.addObject(myPlayer.getRobot(), myPlayer.getRobot().getTileX(), myPlayer.getRobot().getTileY());
 
-        background = new Texture("assets/pink_background.png");
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
@@ -97,7 +87,6 @@ public class Game extends InputAdapter implements ApplicationListener {
                 screenY < Settings.SCREEN_HEIGHT){
             int card = (screenX - cardBoxLeft)/Settings.CARD_WIDTH;
             myPlayer.addSelectedCard(card);
-
         }
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
@@ -106,12 +95,7 @@ public class Game extends InputAdapter implements ApplicationListener {
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
             isReady();
         }
-
-
-
         return false;
-
-
     }
 
     @Override
@@ -119,23 +103,9 @@ public class Game extends InputAdapter implements ApplicationListener {
         return false;
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
     //IMPORTANT
     //An object has to be initialized before being rendered
-    @Override
-    public void render() {
-        batch.begin();
-
-        batch.draw(background, 0, 0);
+    public void render(SpriteBatch batch, BitmapFont font) {
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
         try {
             for (Robot r : board.getRobots()) {
@@ -149,7 +119,6 @@ public class Game extends InputAdapter implements ApplicationListener {
             //at render skipper en iterasjon som ikke er merkbart for bruker.
 
         }
-        BitmapFont font = new BitmapFont();
 
         for (int i = 0; i < myPlayer.getCards().length; i++){
             batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
@@ -159,20 +128,9 @@ public class Game extends InputAdapter implements ApplicationListener {
             }
         }
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
-        batch.end();
     }
 
-    @Override
-    public void resume() {
-
-    }
-
-    /**
-     * Is called when application is destroyed
-     */
-    //TODO Randomly crashes when exiting application
-    @Override
-    public void dispose() {
+    public void dispose(SpriteBatch batch, BitmapFont font) {
         batch.dispose();
         font.dispose();
         phase.interrupt();
@@ -184,7 +142,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
         isReadySem.release();
     }
-
 
     private void doTurn() {
         while (!gameIsDone) {
