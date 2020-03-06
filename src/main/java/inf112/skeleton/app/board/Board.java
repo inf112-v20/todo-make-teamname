@@ -1,10 +1,7 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.board;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.objects.IBoardObject;
-import inf112.skeleton.app.objects.ICard;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.objects.boardObjects.IBoardObject;
+import inf112.skeleton.app.objects.player.Robot;
 
 import java.util.ArrayList;
 

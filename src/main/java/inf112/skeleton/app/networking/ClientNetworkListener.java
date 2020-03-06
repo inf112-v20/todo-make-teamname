@@ -1,9 +1,9 @@
-package networking;
+package inf112.skeleton.app.networking;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import inf112.skeleton.app.objects.ProgramCard;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 
 public class ClientNetworkListener extends Listener {
     private Client client;

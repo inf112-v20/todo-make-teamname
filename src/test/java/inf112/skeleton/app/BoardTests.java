@@ -2,8 +2,11 @@ package inf112.skeleton.app;
 
 import static org.junit.Assert.*;
 
-import inf112.skeleton.app.objects.IBoardObject;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.board.Board;
+import inf112.skeleton.app.board.BoardTile;
+import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.objects.boardObjects.IBoardObject;
+import inf112.skeleton.app.objects.player.Robot;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

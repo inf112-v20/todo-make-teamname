@@ -1,7 +1,8 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 
 public class Robot implements IBoardObject {
 

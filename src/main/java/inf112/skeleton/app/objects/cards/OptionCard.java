@@ -1,9 +1,8 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class Card implements ICard {
-
+public class OptionCard implements ICard {
     @Override
     public String getName() {
         return null;

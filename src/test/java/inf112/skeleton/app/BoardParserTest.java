@@ -2,10 +2,11 @@ package inf112.skeleton.app;
 
 import static org.junit.Assert.*;
 
-import inf112.skeleton.app.objects.ConveyorBelt;
-import inf112.skeleton.app.objects.GearClockwise;
-import inf112.skeleton.app.objects.GearCounterClockwise;
-import inf112.skeleton.app.objects.IBoardObject;
+import inf112.skeleton.app.board.BoardParser;
+import inf112.skeleton.app.objects.boardObjects.ConveyorBelt;
+import inf112.skeleton.app.objects.boardObjects.GearClockwise;
+import inf112.skeleton.app.objects.boardObjects.GearCounterClockwise;
+import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 import org.junit.Test;
 
 public class BoardParserTest {

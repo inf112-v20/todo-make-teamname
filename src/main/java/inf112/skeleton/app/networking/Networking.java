@@ -1,7 +1,6 @@
-package networking;
+package inf112.skeleton.app.networking;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class Networking implements ApplicationListener {
     //AKA Erik's LAN lab

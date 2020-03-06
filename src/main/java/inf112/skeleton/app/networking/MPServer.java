@@ -1,8 +1,7 @@
-package networking;
+package inf112.skeleton.app.networking;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
-import com.jcraft.jogg.Packet;
 
 import java.io.IOException;
 import java.net.InetAddress;

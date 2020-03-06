@@ -1,8 +1,8 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.boardObjects;
 
-import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.board.Direction;
 
-public class Pit implements IBoardObject {
+public class GearClockwise implements IBoardObject {
 
     @Override
     public Direction getDirection() {
@@ -26,7 +26,6 @@ public class Pit implements IBoardObject {
 
     @Override
     public void setTileX(int x) {
-
     }
 
     @Override

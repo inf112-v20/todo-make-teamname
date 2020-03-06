@@ -1,6 +1,6 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.boardObjects;
 
-import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.board.Direction;
 
 public interface IBoardObject {
 

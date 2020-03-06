@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.board;
 
 import java.util.Arrays;
 import java.util.List;

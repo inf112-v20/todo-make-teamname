@@ -1,9 +1,6 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.board;
 
-import inf112.skeleton.app.objects.ConveyorBelt;
-import inf112.skeleton.app.objects.GearClockwise;
-import inf112.skeleton.app.objects.GearCounterClockwise;
-import inf112.skeleton.app.objects.IBoardObject;
+import inf112.skeleton.app.objects.boardObjects.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -98,6 +95,8 @@ public class BoardParser {
                 return new ConveyorBelt(false, Direction.SOUTH);
             case 'S':
                 return new ConveyorBelt(true, Direction.SOUTH);
+            case 'F':
+                return new Flag();
             default:
                 return null;
         }
