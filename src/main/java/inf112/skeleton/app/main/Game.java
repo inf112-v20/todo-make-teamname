@@ -33,6 +33,7 @@ public class Game extends InputAdapter {
     private int buttonReadyLeftX;
     private int buttonReadyLeftY;
 
+
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
