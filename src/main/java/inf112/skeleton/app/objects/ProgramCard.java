@@ -1,8 +1,10 @@
 package inf112.skeleton.app.objects;
 
 import com.badlogic.gdx.graphics.Texture;
+import inf112.skeleton.app.CardParser;
 
-public class ProgramCard implements ICard{
+public class ProgramCard implements ICard {
+    CardParser cards = new CardParser();
     private boolean rotate;
     private boolean rotateLeft;
     private boolean rotateRight;
@@ -12,10 +14,12 @@ public class ProgramCard implements ICard{
     String text;
 
 
-    Texture [] images = {new Texture("assets/cards/card_move_1.png"),
-                new Texture("assets/cards/card_move_2.png"),
-                new Texture("assets/cards/card_turn_left.png"),
-                new Texture("assets/cards/card_turn_right.png")};
+    Texture [] images = {
+
+            new Texture("assets/cards/card_move_1.png"),
+            new Texture("assets/cards/card_move_2.png"),
+            new Texture("assets/cards/card_turn_left.png"),
+            new Texture("assets/cards/card_turn_right.png")};
 
 //    public void setImages(){
 //        images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
