@@ -59,11 +59,10 @@ public class Player {
         if(!sel){
             selectedCards.addLast(cards[card]);
             cards[card].setSelected(true);
-
         }
 
-
     }
+
     public int getLife(){
         return robot.getLife();
     }
