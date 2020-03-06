@@ -10,10 +10,6 @@ import java.util.Scanner;
 public class CardParser {
     static Card[] cards = new Card[0];
 
-    public static void main(String[] args) {
-        cards();
-    }
-
     public static void cards() {
         try{
             Scanner scanner = new Scanner(new File("assets/cards/cards.txt"));
