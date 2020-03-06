@@ -41,6 +41,8 @@ public class Game extends InputAdapter implements ApplicationListener {
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
+    private Texture[] damageTokens;
+    private Texture[] lifeTokens;
 
     @Override
     public void create() {
@@ -61,6 +63,14 @@ public class Game extends InputAdapter implements ApplicationListener {
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
+        damageTokens = new Texture[3];
+        damageTokens[0] = new Texture("assets/damage-dead.png");
+        damageTokens[1] = new Texture("assets/Damage-not-taken.png");
+        damageTokens[2] = new Texture("assets/damage-taken.png");
+        lifeTokens = new Texture[2];
+        lifeTokens[0] = new Texture("assets/life-token-lost.png");
+        lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
+
         cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-myPlayer.getCards().length);
         cardBoxRight = (Settings.CARD_WIDTH/2) * (10+myPlayer.getCards().length);
         buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
@@ -157,6 +167,15 @@ public class Game extends InputAdapter implements ApplicationListener {
                 font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i*Settings.CARD_WIDTH) + (Settings.CARD_WIDTH/5), Settings.CARD_HEIGHT- (Settings.CARD_HEIGHT/10));
                 batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
+        }
+        for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
+            batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+        }
+        for (int i = myPlayer.getRobot().getHealth() ; i < 9; i++){
+            batch.draw(damageTokens[2], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+        }
+        for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
+            batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
         }
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         batch.end();
