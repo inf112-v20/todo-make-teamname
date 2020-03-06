@@ -300,7 +300,6 @@ public class Game extends InputAdapter implements ApplicationListener {
 
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[1] instanceof BoardLaser) {
-                        //TODO Board does damage to robot
                         robot.takeDamage();
                     }
                     //TODO Robots hit each other
@@ -347,8 +346,6 @@ public class Game extends InputAdapter implements ApplicationListener {
                     gameIsDone = true;
                 }
             }
-
         }
     }
-
 }
