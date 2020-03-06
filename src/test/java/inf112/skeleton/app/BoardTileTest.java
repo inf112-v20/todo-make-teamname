@@ -1,7 +1,7 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.board.BoardTile;
+import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
 import org.junit.Test;
 

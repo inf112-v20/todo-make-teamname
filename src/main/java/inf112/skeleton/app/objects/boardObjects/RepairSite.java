@@ -1,9 +1,8 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.boardObjects;
 
-import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.board.Direction;
 
-public class RepairSite implements IBoardObject{
+public class RepairSite implements IBoardObject {
     private boolean hammer;
 
     public RepairSite(boolean hammer){

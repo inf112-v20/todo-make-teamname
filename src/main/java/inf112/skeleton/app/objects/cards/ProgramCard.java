@@ -1,8 +1,9 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
+import inf112.skeleton.app.objects.cards.ICard;
 
-public class ProgramCard implements ICard{
+public class ProgramCard implements ICard {
     private boolean rotate;
     private boolean rotateLeft;
     private boolean rotateRight;

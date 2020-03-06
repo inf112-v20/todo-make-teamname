@@ -1,11 +1,7 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.utils.Queue;
-import inf112.skeleton.app.Settings;
-
-import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.function.Predicate;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 
 public class Player {
     private Robot robot;

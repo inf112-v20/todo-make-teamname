@@ -1,4 +1,4 @@
-package networking;
+package inf112.skeleton.app.networking;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;

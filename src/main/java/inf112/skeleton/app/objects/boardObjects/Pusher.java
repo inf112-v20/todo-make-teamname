@@ -1,9 +1,8 @@
-package inf112.skeleton.app.objects;
+package inf112.skeleton.app.objects.boardObjects;
 
-import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.board.Direction;
 
-public class GearClockwise implements IBoardObject {
+public class Pusher implements IBoardObject {
 
     @Override
     public Direction getDirection() {
@@ -27,6 +26,7 @@ public class GearClockwise implements IBoardObject {
 
     @Override
     public void setTileX(int x) {
+
     }
 
     @Override

@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -8,15 +8,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.objects.*;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.board.Board;
+import inf112.skeleton.app.board.BoardParser;
+import inf112.skeleton.app.board.BoardTile;
+import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.objects.player.Player;
+import inf112.skeleton.app.objects.player.Robot;
 import com.badlogic.gdx.utils.Queue;
+import inf112.skeleton.app.objects.boardObjects.*;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-import java.util.PriorityQueue;
-import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 
