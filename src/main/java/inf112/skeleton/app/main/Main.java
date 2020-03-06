@@ -11,6 +11,6 @@ public class Main {
         cfg.height = Settings.SCREEN_HEIGHT;
         cfg.resizable = false; //temporarly
         //new LwjglApplication(new HelloWorld());
-        new LwjglApplication(new Game(), cfg);
+        new LwjglApplication(new ScreenHandler(), cfg);
     }
 }
