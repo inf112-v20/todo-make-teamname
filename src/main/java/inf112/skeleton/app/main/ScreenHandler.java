@@ -59,7 +59,7 @@ public class ScreenHandler implements ApplicationListener {
 
     @Override
     public void dispose() {
-        game.dispose(batch, font);
+        game.dispose();
         batch.dispose();
         font.dispose();
     }

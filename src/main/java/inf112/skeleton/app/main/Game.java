@@ -130,9 +130,7 @@ public class Game extends InputAdapter {
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
     }
 
-    public void dispose(SpriteBatch batch, BitmapFont font) {
-        batch.dispose();
-        font.dispose();
+    public void dispose() {
         phase.interrupt();
 
     }
