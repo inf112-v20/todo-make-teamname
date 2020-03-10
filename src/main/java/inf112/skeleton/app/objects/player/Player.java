@@ -1,12 +1,16 @@
 package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.utils.Queue;
+import inf112.skeleton.app.objects.boardObjects.Flag;
 import inf112.skeleton.app.objects.cards.ProgramCard;
+
+import java.util.ArrayList;
 
 public class Player {
     private Robot robot;
     public ProgramCard[] cards;
     private Queue<ProgramCard> selectedCards;
+    private ArrayList<Flag> flags;
 
     public Player(){
         robot = new Robot();
@@ -73,5 +77,12 @@ public class Player {
             newHand.addLast(card);
         }
         return newHand;
+    }
+
+    public ArrayList<Flag> getFlags() {
+        return flags;
+    }
+    public void addFlag(Flag flag){
+        flags.add(flag);
     }
 }

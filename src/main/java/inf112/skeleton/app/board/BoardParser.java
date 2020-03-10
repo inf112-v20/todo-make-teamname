@@ -23,7 +23,8 @@ public class BoardParser {
                 String [] dimensions = size.split(",");
                 int height = Integer.parseInt(dimensions[0]);
                 int width = Integer.parseInt(dimensions[1]);
-                Board board = new Board(width, height);
+                int flags = Integer.parseInt(dimensions[2]);
+                Board board = new Board(width, height, flags);
 
                 String [] itemLayer = new String [height];
 
@@ -95,10 +96,8 @@ public class BoardParser {
                 return new ConveyorBelt(false, Direction.SOUTH);
             case 'S':
                 return new ConveyorBelt(true, Direction.SOUTH);
-            case 'F':
-                return new Flag();
             default:
-                return null;
+                return new Flag(Character.getNumericValue(object));
         }
     }
 }
