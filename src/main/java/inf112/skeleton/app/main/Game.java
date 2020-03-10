@@ -262,7 +262,15 @@ public class Game extends InputAdapter {
 
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof Flag) {
-                        //TODO pick up flag, player or robot?
+                        Flag flag = (Flag) currentTile.getObjects()[0];
+                        if(!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()){
+                            myPlayer.addFlag(flag);
+                            if(myPlayer.getFlags().size() == board.getFlagNr()){
+                                //TODO endscreen
+                                gameIsDone = true;
+                                continue;
+                            }
+                        }
                     }
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof RepairSite) {
