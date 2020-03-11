@@ -18,7 +18,7 @@ public class BoardTests {
 
     @Before
     public void setUp(){
-        board = new Board(12, 12);
+        board = new Board(12, 12, 1);
         robot = new Robot(Direction.NORTH);
         board.removeObject(0, 0);
 

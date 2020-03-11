@@ -96,6 +96,14 @@ public class BoardParser {
                 return new ConveyorBelt(false, Direction.SOUTH);
             case 'S':
                 return new ConveyorBelt(true, Direction.SOUTH);
+            case 'R':
+                return new RepairSite(true);
+            case 'r':
+                return new RepairSite(false);
+            case 'P':
+                return new Pit();
+            case '-':
+                return null;
             default:
                 return new Flag(Character.getNumericValue(object));
         }
