@@ -267,6 +267,7 @@ public class Game extends InputAdapter {
                             myPlayer.addFlag(flag);
                             if(myPlayer.getFlags().size() == board.getFlagNr()){
                                 //TODO endscreen
+                                ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                                 gameIsDone = true;
                                 continue;
                             }

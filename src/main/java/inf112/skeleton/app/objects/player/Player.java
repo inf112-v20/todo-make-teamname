@@ -18,6 +18,7 @@ public class Player {
         robot.setTileX(0);
         robot.setTileY(0);
         selectedCards  = new Queue<ProgramCard>();
+        flags = new ArrayList<>();
     }
 
     public boolean hasWon(){return true;}
