@@ -177,122 +177,23 @@ public class Game extends InputAdapter {
                 if(card == null || robot.isDestroyed()) continue;
                 //TODO: later do each step for all players too
                 card.flip(); // flips the texture from back to front
-                if (card.getValue() > 0) {
-                    for (int i = 0; i < card.getValue(); i++) {
-                        if(robot.isDestroyed()) break;
-                        //Move robot
-                        board.moveObject(robot, robot.getDirection());
-                        if (!robot.isDestroyed()){
-                            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                                board.removeObject(robot);
-                                robot.destroy();
-                            }
-                        }
-                        try {
-                            Thread.sleep(300);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-                else if (card.getRotate()) {
-                    if (card.getRotateLeft()) {
-                        robot.rotateLeft();
-                    } else if (card.getRotateRight()) {
-                        robot.rotateRight();
-                    } else {
-                        robot.rotateRight();
-                        robot.rotateRight();
-                    }
-                }
+
+                cardMove(card); // moves robot
                 if(!robot.isDestroyed()){
-                    BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                    //Board elements do their things
-                    if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-                        ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                        if (conveyorBelt.getExpress()) {
-                            //Expressconveoyrbelt moves robot
-                            board.moveObject(robot, conveyorBelt.getDirection());
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
 
-                    }
+                    conveyorMove(); // conveyorbelt moves
                     if (robot.isDestroyed())break;
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-
-                    if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-                        //Conveoyrbelt moves robot
-                        ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                        board.moveObject(robot, conveyorBelt.getDirection());
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (robot.isDestroyed())break;
-
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                    if (currentTile.getObjects()[0] instanceof Pusher) {
-                        //Robot gets pushed
-                        Pusher pusher = (Pusher) currentTile.getObjects()[0];
-                        board.moveObject(robot, pusher.getDirection());
-                    }
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-
-                    if (currentTile.getObjects()[0] instanceof GearClockwise) {
-                        //Rotate right
-                        robot.rotateRight();
-                    }
-
-                    if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
-                        //Rotate left
-                        robot.rotateLeft();
-                    }
-
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                    if (currentTile.getObjects()[1] instanceof BoardLaser) {
-                        robot.takeDamage();
-                    }
+                    pushersMove();
+                    gearsMove();
+                    boardLasersShoot();
                     //TODO Robots hit each other
 
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                    if (currentTile.getObjects()[0] instanceof Flag) {
-                        Flag flag = (Flag) currentTile.getObjects()[0];
-                        if(!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()){
-                            myPlayer.addFlag(flag);
-                            if(myPlayer.getFlags().size() == board.getFlagNr()){
-                                //TODO endscreen
-                                ScreenHandler.changeScreenState(ScreenState.MAINMENU);
-                                gameIsDone = true;
-                                continue;
-                            }
-                        }
+                    if(pickUpFlag()){
+                        continue;
                     }
-                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                    if (currentTile.getObjects()[0] instanceof RepairSite) {
-                        //Heals a damage token if robot
-                        robot.healDamage();
-                        robot.setRespawn(robot.getTileX(), robot.getTileY());
-                        RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-                        if (repairSite.getHammer()) {
-                            //Player gets an option card
-                            //TODO implement optioCards
-                            myPlayer.giveOptionCard();
-                        }
-                    }
+                    repair();
                 }
-                if (!robot.isDestroyed()){
-                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                        //Robot falls into pit
-                        board.removeObject(robot);
-                        robot.destroy();
-                    }
-                }
+                pitFall();
                 try {
                     Thread.sleep(400);
                 } catch (InterruptedException e) {
@@ -300,16 +201,161 @@ public class Game extends InputAdapter {
                 }
             }
             //TODO clean up phase, remove register etc...
-            if(robot.isDestroyed()){
-                if(myPlayer.getLife() > 0) {
-                    //Respawn robot if player has more life left
-                    board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
-                    robot.respawn();
-                    System.out.println("respawn");
-                }else{
-                    //Not the case if there are more players
+            cleanUp();
+
+        }
+    }
+
+    private void pitFall() {
+        Robot robot = myPlayer.getRobot();
+        if (!robot.isDestroyed()){
+            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                //Robot falls into pit
+                board.removeObject(robot);
+                robot.destroy();
+            }
+        }
+    }
+
+    private void cleanUp() {
+        Robot robot = myPlayer.getRobot();
+        if(robot.isDestroyed()){
+            if(myPlayer.getLife() > 0) {
+                //Respawn robot if player has more life left
+                board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
+                robot.respawn();
+                System.out.println("respawn");
+            }else{
+                //Not the case if there are more players
+                gameIsDone = true;
+            }
+        }
+    }
+
+    private void repair() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof RepairSite) {
+            //Heals a damage token if robot
+            robot.healDamage();
+            robot.setRespawn(robot.getTileX(), robot.getTileY());
+            RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
+            if (repairSite.getHammer()) {
+                //Player gets an option card
+                //TODO implement optioCards
+                myPlayer.giveOptionCard();
+            }
+        }
+    }
+
+    private boolean pickUpFlag() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof Flag) {
+            Flag flag = (Flag) currentTile.getObjects()[0];
+            if(!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()){
+                myPlayer.addFlag(flag);
+                if(myPlayer.getFlags().size() == board.getFlagNr()){
+                    //TODO endscreen
+                    ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                     gameIsDone = true;
+                    return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private void boardLasersShoot() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[1] instanceof BoardLaser) {
+            robot.takeDamage();
+        }
+    }
+
+    private void gearsMove() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof GearClockwise) {
+            //Rotate right
+            robot.rotateRight();
+        }
+
+        if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
+            //Rotate left
+            robot.rotateLeft();
+        }
+    }
+
+    private void pushersMove() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof Pusher) {
+            //Robot gets pushed
+            Pusher pusher = (Pusher) currentTile.getObjects()[0];
+            board.moveObject(robot, pusher.getDirection());
+        }
+    }
+
+    private void conveyorMove() {
+        Robot robot = myPlayer.getRobot();
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        //Board elements do their things
+        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
+            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+            if (conveyorBelt.getExpress()) {
+                //Expressconveoyrbelt moves robot
+                board.moveObject(robot, conveyorBelt.getDirection());
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
+            //Conveoyrbelt moves robot
+            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+            board.moveObject(robot, conveyorBelt.getDirection());
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void cardMove(ProgramCard card){
+        Robot robot = myPlayer.getRobot();
+        if (card.getValue() > 0) {
+            for (int i = 0; i < card.getValue(); i++) {
+                if(robot.isDestroyed()) break;
+                //Move robot
+                board.moveObject(robot, robot.getDirection());
+                if (!robot.isDestroyed()){
+                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                        board.removeObject(robot);
+                        robot.destroy();
+                    }
+                }
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else if (card.getRotate()) {
+            if (card.getRotateLeft()) {
+                robot.rotateLeft();
+            } else if (card.getRotateRight()) {
+                robot.rotateRight();
+            } else {
+                robot.rotateRight();
+                robot.rotateRight();
             }
         }
     }
