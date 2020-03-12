@@ -30,6 +30,8 @@ public class ServerNetworkListener extends Listener {
             Packets.Packet01Message p = (Packets.Packet01Message) o;
             System.out.println("[" + p.clientName +"] >> " + p.message);
             server.sendToAllExceptTCP(c.getID(), p);
+        }else if (o instanceof Packets.Packet02Cards){
+            server.sendToAllTCP(o);
         }
     }
 }
