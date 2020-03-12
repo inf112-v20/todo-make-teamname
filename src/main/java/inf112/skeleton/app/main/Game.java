@@ -10,6 +10,10 @@ import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.networking.MPClient;
+import inf112.skeleton.app.networking.MPServer;
+import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import com.badlogic.gdx.utils.Queue;
@@ -22,8 +26,7 @@ import java.util.concurrent.Semaphore;
 
 public class Game extends InputAdapter {
     private Board board;
-    private int nrOfPlayers = 1;
-    private Player[] players;
+    private MPClient client;
     private Player myPlayer;
     private Thread phase;
     private Semaphore isReadySem;
@@ -39,11 +42,15 @@ public class Game extends InputAdapter {
     private Texture buttonReady;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
+    private ProgramCard[] allCards;
 
     public void create() {
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
-        isReadySem = new Semaphore(1);
+        MPServer server = new MPServer();
+        server.run();
+        client = new MPClient(server.getAddress(),this);
+        isReadySem = new Semaphore(0);
         gameIsDone = false;
         myPlayer = new Player();
         myPlayer.deal();
@@ -104,7 +111,7 @@ public class Game extends InputAdapter {
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
-            isReady();
+            client.sendCards(myPlayer.getArrayCards());
         }
         return false;
     }
@@ -156,7 +163,13 @@ public class Game extends InputAdapter {
     }
 
     //Call this when cards have been selected to be played
-    private void isReady(){
+    public void isReady(Packets.Packet02Cards p){
+        allCards = new ProgramCard[p.programCards.length];
+        for (int i = 0; i < p.programCards.length; i++) {
+            if(p.programCards[i] != null) {
+                allCards[i] = CardTranslator.intToProgramCard(p.programCards[i]);
+            }
+        }
 
         isReadySem.release();
     }
@@ -171,9 +184,8 @@ public class Game extends InputAdapter {
                 e.printStackTrace();
             }
             if(Thread.interrupted()) return;
-            Queue<ProgramCard> cards = myPlayer.copySelected();
             Robot robot = myPlayer.getRobot();
-            for (ProgramCard card : cards) {
+            for (ProgramCard card : allCards) {
                 if(card == null || robot.isDestroyed()) continue;
                 //TODO: later do each step for all players too
                 card.flip(); // flips the texture from back to front
