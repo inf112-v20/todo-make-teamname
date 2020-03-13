@@ -1,16 +1,12 @@
 package inf112.skeleton.app.networking;
 
-import com.badlogic.gdx.Files;
-import com.badlogic.gdx.backends.lwjgl.LwjglFileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.FileTextureData;
-import com.badlogic.gdx.utils.Queue;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
-import java.io.File;
+
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -30,7 +26,6 @@ public class MPClient {
         registerPackets();
         client.addListener(cnl);
 
-        System.out.println("Whats the ip to your host?");
 
         new Thread(client).start();
 
