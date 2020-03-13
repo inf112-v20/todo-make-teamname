@@ -25,15 +25,18 @@ ikke gjort så mye, men resten av gruppen har veldig jevnt med commits.
 
 ## Deloppgave 2 - Krav
 *   Nå fremover har vi prioriert å få brettet og brettets elementer på plass, i tillegg til å få implementert noen
-statiske kort som vi kan bruke til å teste funksjonalitet med. Fram til neste levering har vi lyst å få på plass liv og 
+statiske kort som vi kan bruke til å teste funksjonalitet med. Turn-order er noe vi har jobbet mye med å kommet lengre fremover med det. 
+Fram til neste levering har vi lyst å få på plass liv og 
 damage til roboten, i tillegg til å få kortene nærmere ferdig implementasjon ved å legge til kort-deck.
 * Hovedkrav som del av MVP (og hvorfor): 
-*   Vi har prioritert å implementere kort i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
+*   Vi har prioritert å implementere kort og turn-order i denne sprinten, og har begynt med å få på plass noen statiske kort som kan
 programmere roboten. Vi valgte å gå videre med kort først siden vi følte det var et viktig steg å få på plass i prosjektet.
 * Hva vi har gjort siden forrige gang:
-    *   tekst
+    *   Lagt til på brettet; samlebånd, hull, rotering og reperasjonsTile
+    *   Lagt til spillerUI som viser noen kort og ready-knapp med funksjonalitet som fungerer
+    *   Lagt til en doTurn som flytter roboten rundt på brettet i henhold til kort som blir spilt og objekter på brettet
 *   Bugs:
-    *   
+    *   Har en ConcurrentModificationException som foreløbig er "fikset" med en try/catch må finne en bedre fix senere
 
 ### Krav: Kort
 *   Brukerhistorier:
@@ -86,6 +89,22 @@ programmere roboten. Vi valgte å gå videre med kort først siden vi følte det
 Kode
 *   **Bygges**: Prosjektet bygges på vanlig vis
 *   **Testes**: vi har brukt for det meste JUnit for å teste koden, men begynt nå å bruke Mockito slik at klasser kan bli 
-testet "i vakum", for seg selv.
+testet "i vakum", for seg selv. Game.doTurn har blitt testet manuelt, siden vi ikke har funnet en god måte å teste hele 
+game klassen. Player har også blitt testet manuelt på grunn av trøbbel med Textures.
+    *   Manuel testing:
+        *   doTurn
+            *   Ødelegg roboten 3 ganger, og spillet avslutter
+            *   Visst du lukker spillet så avslutter doTurn
+            *   Visst du ødelegger roboten så gjør ikke programmet noe med resten av kortene du har valgt
+            *   Roboten flytter seg slik som kortene vil tilsi, velger du "move 1" så flytter  roboten seg 1.
+            *   Visst roboten er på et conveyorbelt så blir det flyttet på i rett fase.(Stå på et conveyorbelt for å teste)
+            *   Stå på et gear og se at du går i en ny retning etterpå.(Texture vil ikke oppdateres)
+        *   Player
+            *   Får sin hånd representert rett på skjermen
+            *   Korrekt antall kort er på skjermen
+            *   Samme kort player velger blir sendt til doTurn og render
+        *   Programcard
+            *   Kortene viser samme verdi på skjermen som dei gir i klassen
 *   **Kjøres**: RoboRally kjøres av Main() klassen.
     *   Obs: Roboten begynner å se mot EAST, vi har ikke implementert retningen visuelt enda.
+    *   Obs: Networking mappen er ikke implementert og er ikke en del av innleveringen.

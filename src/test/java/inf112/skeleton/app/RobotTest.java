@@ -1,8 +1,10 @@
 package inf112.skeleton.app;
-import inf112.skeleton.app.objects.Robot;
+import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -11,13 +13,6 @@ public class RobotTest {
 
     Robot mockRobot;
     Robot mockRobotClass;
-
-    public static void main(String[] args) {
-        RobotTest tester = new RobotTest();
-        tester.setUp();
-        System.out.println(tester.testX()?"pass":"fail");
-
-    }
 
 
     @Before
@@ -29,13 +24,13 @@ public class RobotTest {
     }
 
     @Test
-    public boolean testX(){
+    public void testX(){
         Robot aRobot = new Robot();
         aRobot.setTileX(5);
 
         when(mockRobotClass.getTileX()).thenReturn(5);
         int getRobotX = aRobot.getTileX();
-        return getRobotX == 5;
+        assertEquals(getRobotX, 5);
     }
 
     @Test
@@ -53,5 +48,35 @@ public class RobotTest {
         assertEquals(5, testBot.getTileY());
     }
 
+    @Test
+    public void testTakeDamage(){
+        assertEquals(9, testBot.getHealth());
+        testBot.takeDamage();
+        assertEquals(8, testBot.getHealth());
+    }
+
+    @Test
+    public void testHealDamage(){
+        assertEquals(9, testBot.getHealth());
+        testBot.healDamage();
+        assertEquals(10, testBot.getHealth());
+    }
+
+    @Test
+    public void testDestroy(){
+        assertFalse(testBot.isDestroyed());
+        testBot.destroy();
+        assertTrue(testBot.isDestroyed());
+    }
+
+    @Test
+    public void testRespawn(){
+        testBot.destroy();
+        assertTrue(testBot.isDestroyed());
+        assertEquals(0, testBot.getHealth());
+        testBot.respawn();
+        assertFalse(testBot.isDestroyed());
+        assertEquals(9, testBot.getHealth());
+    }
 
 }
