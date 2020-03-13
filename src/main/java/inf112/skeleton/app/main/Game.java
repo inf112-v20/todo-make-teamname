@@ -371,4 +371,8 @@ public class Game extends InputAdapter {
             }
         }
     }
+
+    public void hostGame(){}
+
+    public void joinGame(){}
 }

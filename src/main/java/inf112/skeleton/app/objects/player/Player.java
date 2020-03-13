@@ -76,13 +76,6 @@ public class Player {
         return robot.getLife();
     }
 
-    public Queue<ProgramCard> copySelected() {
-        Queue<ProgramCard> newHand = new Queue<>();
-        for (ProgramCard card : selectedCards) {
-            newHand.addLast(card);
-        }
-        return newHand;
-    }
 
     public ProgramCard[] getArrayCards(){
         ProgramCard[] newHand = new ProgramCard[selectedCards.size];
