@@ -47,9 +47,7 @@ public class Game extends InputAdapter {
     public void create() {
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
-        MPServer server = new MPServer();
-        server.run();
-        client = new MPClient(server.getAddress(),this);
+        hostGame();
         isReadySem = new Semaphore(0);
         gameIsDone = false;
         myPlayer = new Player();
@@ -111,6 +109,7 @@ public class Game extends InputAdapter {
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
+            //Her starter LAN
             client.sendCards(myPlayer.getArrayCards());
         }
         return false;
@@ -372,7 +371,13 @@ public class Game extends InputAdapter {
         }
     }
 
-    public void hostGame(){}
+    public void hostGame(){
+        MPServer server = new MPServer();
+        server.run();
+        client = new MPClient(server.getAddress(),this);
+    }
 
-    public void joinGame(){}
+    public void joinGame(String ipAddress){
+        client = new MPClient(ipAddress, this);
+    }
 }
