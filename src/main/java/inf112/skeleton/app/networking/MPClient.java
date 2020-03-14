@@ -4,6 +4,7 @@ package inf112.skeleton.app.networking;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import inf112.skeleton.app.main.Game;
+import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
 
@@ -56,6 +57,7 @@ public class MPClient {
         Kryo kryo = client.getKryo();
         kryo.register(Packets.Packet01Message.class);
         kryo.register(Packets.Packet02Cards.class);
+        kryo.register(Packets.Packet03PlayerNr.class);
         kryo.register(int.class);
         kryo.register(int[].class);
         kryo.register(int[][].class);
@@ -68,4 +70,13 @@ public class MPClient {
     public void sendCards(ProgramCard[] programCards){
         cnl.sendCards(programCards);
     }
+
+    public ProgramCard[] getLastCardTransfer(){
+        ProgramCard[] cards = new ProgramCard[cnl.getCards().programCards.length];
+        for (int i = 0; i < cnl.getCards().programCards.length; i++) {
+            cards[i] = CardTranslator.intToProgramCard(cnl.getCards().programCards[i]);
+        }
+        return cards;
+    }
+
 }
