@@ -6,16 +6,17 @@ import com.esotericsoftware.kryonet.Server;
 
 public class ServerNetworkListener extends Listener {
     private Server server;
-    public int[] players;
-    public int playerNr = 0;
+    private int[] players;
+    private int receviedCards;
+    private int playerNr = 0;
 
     public ServerNetworkListener(Server server){
         this.server = server;
-        players = new int[8];
+        players = new int[2];
     }
 
     public void connected(Connection c){
-        System.out.println("Someone has connected");
+        System.out.println("Player: " + playerNr + " has connected");
         players[playerNr] = c.getID();
         server.sendToTCP(c.getID(), playerNr++);
 
@@ -31,6 +32,7 @@ public class ServerNetworkListener extends Listener {
             System.out.println("[" + p.clientName +"] >> " + p.message);
             server.sendToAllExceptTCP(c.getID(), p);
         }else if (o instanceof Packets.Packet02Cards){
+            receviedCards++;
             server.sendToAllTCP(o);
         }
     }

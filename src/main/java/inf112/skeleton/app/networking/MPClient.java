@@ -35,6 +35,23 @@ public class MPClient {
             e.printStackTrace();
         }
     }
+    public MPClient(String ipAddress, Game game){
+        client = new Client();
+        cnl = new ClientNetworkListener();
+
+        cnl.init(client, game);
+        registerPackets();
+        client.addListener(cnl);
+
+
+        new Thread(client).start();
+
+        try {
+            client.connect(5000, ipAddress, 54555, 54777);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
     private void registerPackets(){
         Kryo kryo = client.getKryo();
         kryo.register(Packets.Packet01Message.class);
