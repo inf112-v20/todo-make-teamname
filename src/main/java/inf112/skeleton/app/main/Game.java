@@ -14,6 +14,7 @@ import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.cards.CardTranslator;
+import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import inf112.skeleton.app.objects.boardObjects.*;
@@ -22,6 +23,7 @@ import inf112.skeleton.app.objects.cards.ProgramCard;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
@@ -31,6 +33,7 @@ public class Game extends InputAdapter {
     private MPClient client;
     private Player myPlayer;
     private int nrOfPlayers;
+    private HashMap<Integer, Player> idPlayerHash;
     private Thread phase;
     private Semaphore isReadySem;
     private boolean gameIsDone;
@@ -53,6 +56,16 @@ public class Game extends InputAdapter {
     public void create() {
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
+
+        isReadySem = new Semaphore(0);
+        gameIsDone = false;
+        idPlayerHash = new HashMap<>();
+        for (int i = 1; i < 5; i++) {
+            Player player = new Player();
+            player.deal();
+            board.addObject(player.getRobot(), i, 0);
+            idPlayerHash.put(i, player);
+        }
         Scanner scanner = new Scanner(System.in);
         if(scanner.nextBoolean()){
             hosting = false;
@@ -66,14 +79,11 @@ public class Game extends InputAdapter {
             System.out.println("Joining");
             joinGame("192.168.1.31");
         }
-        isReadySem = new Semaphore(0);
-        gameIsDone = false;
-        myPlayer = new Player();
-        myPlayer.deal();
+
+
+        allCards = new ArrayList<>();
         phase = new Thread(this::doTurn);
         phase.start();
-        board.addObject(myPlayer.getRobot(), myPlayer.getRobot().getTileX(), myPlayer.getRobot().getTileY());
-        allCards = new ArrayList<>();
 
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
@@ -129,7 +139,7 @@ public class Game extends InputAdapter {
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
             //Her starter LAN
-            client.sendCards(myPlayer.getArrayCards());
+            if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }
         return false;
     }
@@ -177,6 +187,10 @@ public class Game extends InputAdapter {
 
     public void dispose() {
         phase.interrupt();
+//        client.dispose();
+//        if(hosting){
+//            server.dispose();
+//        }
 
     }
 
@@ -185,6 +199,13 @@ public class Game extends InputAdapter {
         allCards.add(p);
 
         if(allCards.size() == nrOfPlayers){
+            while(nrOfPlayers < idPlayerHash.size()){
+                int j = idPlayerHash.size();
+                board.removeObject(idPlayerHash.get(j).getRobot());
+                idPlayerHash.get(j).getRobot().setTileX(-1);
+                idPlayerHash.get(j).getRobot().setTileY(-1);
+                idPlayerHash.remove(j);
+            }
             isReadySem.release();
         }
 
@@ -200,18 +221,19 @@ public class Game extends InputAdapter {
                 e.printStackTrace();
             }
             if(Thread.interrupted()) return;
-            Robot robot = myPlayer.getRobot();
-            for (int i = 0; i < 5; i++) {
-                ArrayList<ProgramCard> cards = new ArrayList<>();
-                for (Packets.Packet02Cards packet: allCards) {
-                    cards.add(CardTranslator.intToProgramCard(packet.programCards[i]));
-                }
-                ProgramCard card = new ProgramCard(1,false,false,false);
-                if(card == null || robot.isDestroyed()) continue;
-                //TODO: later do each step for all players too
-                card.flip(); // flips the texture from back to front
 
-                cardMove(card); // moves robot
+
+            for (int i = 0; i < 5; i++) {
+                Robot robot = myPlayer.getRobot();
+                HashMap<NonTextureProgramCard, Integer> cards = new HashMap<>();
+                for (Packets.Packet02Cards packet: allCards) {
+                    cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                }
+                for (NonTextureProgramCard card: cards.keySet()) {
+                    if(card == null || robot.isDestroyed()) continue;
+                    //TODO: later do each step for all players too
+                    cardMove(card); // moves robot
+                }
                 if(!robot.isDestroyed()){
 
                     conveyorMove(); // conveyorbelt moves
@@ -362,7 +384,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void cardMove(ProgramCard card){
+    private void cardMove(NonTextureProgramCard card){
         Robot robot = myPlayer.getRobot();
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
@@ -398,10 +420,12 @@ public class Game extends InputAdapter {
         server = new MPServer();
         server.run();
         client = new MPClient(server.getAddress(),this);
+        myPlayer = idPlayerHash.get(client.getId());
     }
 
     private void joinGame(String ipAddress){
         client = new MPClient(ipAddress, this);
+        myPlayer = idPlayerHash.get(client.getId());
     }
 
     public void setNrOfPlayers(int i){

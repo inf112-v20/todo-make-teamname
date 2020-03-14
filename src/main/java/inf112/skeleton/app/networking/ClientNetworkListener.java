@@ -13,6 +13,7 @@ public class ClientNetworkListener extends Listener {
     private Game game;
     private Packets.Packet01Message firstMessage;
     private Packets.Packet02Cards cards;
+    private boolean connection = false;
 
     public void init(Client client, Game game){
         this.client = client;
@@ -27,6 +28,7 @@ public class ClientNetworkListener extends Listener {
 
         firstMessage.message = "Hello, Server. How are you?";
         client.sendTCP(firstMessage);
+        connection = true;
     }
 
     public void sendInfo(String message){
@@ -46,6 +48,7 @@ public class ClientNetworkListener extends Listener {
     }
 
     public void disconnected(Connection c){
+        connection = false;
         System.out.println("[CLIENT] >> You have disconnected.");
     }
 
@@ -66,5 +69,9 @@ public class ClientNetworkListener extends Listener {
     public Packets.Packet02Cards getCards() {
         //For testing purposes
         return cards;
+    }
+
+    public boolean getConnection(){
+        return connection;
     }
 }

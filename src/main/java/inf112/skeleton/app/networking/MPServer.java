@@ -73,4 +73,13 @@ public class MPServer implements Runnable{
         }
         return result;
     }
+
+    public void dispose(){
+        try {
+            server.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

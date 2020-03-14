@@ -1,10 +1,12 @@
 package inf112.skeleton.app.networkTests;
 
+
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.ProgramCard;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,7 +14,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class networkTest {
+public class NetworkCardTest {
     private static MPServer server;
     private static MPClient client;
     private static Game game;
@@ -36,7 +38,7 @@ public class networkTest {
         client.sendCards(cards);
         try {
             //This thread sleeps so the server gets some time to receive the cards
-            Thread.sleep(1000);
+            Thread.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -60,7 +62,7 @@ public class networkTest {
         client.sendCards(cards);
         try {
             //This thread sleeps so the server gets some time to receive the cards
-            Thread.sleep(1000);
+            Thread.sleep(10);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -71,4 +73,5 @@ public class networkTest {
             assertEquals(cards[i].getRotateRight(), client.getLastCardTransfer()[i].getRotateRight());
         }
     }
+
 }

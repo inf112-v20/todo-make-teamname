@@ -11,12 +11,14 @@ public class ServerNetworkListener extends Listener {
     private Server server;
     private int[] players;
     private ArrayList<Packets.Packet02Cards> receivedCards;
+    private ArrayList<Packets.Packet02Cards> copyReceivedCards;
     private int playerNr = 0;
 
     public ServerNetworkListener(Server server){
         this.server = server;
-        players = new int[2];
+        players = new int[4];
         receivedCards = new ArrayList<>();
+        copyReceivedCards = new ArrayList<>();
     }
 
     public void connected(Connection c){
@@ -41,17 +43,18 @@ public class ServerNetworkListener extends Listener {
         }else if (o instanceof Packets.Packet02Cards){
             Packets.Packet02Cards cards = (Packets.Packet02Cards) o;
             receivedCards.add(cards);
+            copyReceivedCards.add(cards);
             if(receivedCards.size() == playerNr){
                 for (Packets.Packet02Cards packet: receivedCards) {
                     server.sendToAllTCP(packet);
                 }
-                //receivedCards.clear();
+                receivedCards.clear();
             }
         }
     }
 
     public ArrayList<Packets.Packet02Cards> getReceivedCards(){
         //For testing purposes
-        return receivedCards;
+        return copyReceivedCards;
     }
 }
