@@ -30,11 +30,6 @@ public class Player {
         cards[2]= (new ProgramCard(2,false,false,false));
         cards[3] = (new ProgramCard(0,true,true,false));
         cards[4] = (new ProgramCard(0,true,false,true));
-        cards[0].setImages();
-        cards[1].setImages();
-        cards[2].setImages();
-        cards[3].setImages();
-        cards[4].setImages();
     }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}

@@ -13,14 +13,10 @@ public class ProgramCard implements ICard {
     String text;
 
 
-    Texture [] images;
-
-    public void setImages(){
-        images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
-                new Texture("assets/cards/card_move_2.png"),
-                new Texture("assets/cards/card_turn_left.png"),
-                new Texture("assets/cards/card_turn_right.png")};
-    }
+    Texture [] images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
+            new Texture("assets/cards/card_move_2.png"),
+            new Texture("assets/cards/card_turn_left.png"),
+            new Texture("assets/cards/card_turn_right.png")};
 
     private int type;
 
