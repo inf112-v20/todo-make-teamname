@@ -34,7 +34,7 @@ public class ScreenHandler implements ApplicationListener {
     @Override
     public void render() {
         batch.begin();
-        batch.draw(background, 0, 0);
+        batch.draw(background, 0, 0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
         //Changes what's getting rendered based on the ScreenState Enum
         switch (screenState) {
             case GAME:
