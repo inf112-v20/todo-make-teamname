@@ -16,11 +16,13 @@ import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import com.badlogic.gdx.utils.Queue;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 
@@ -28,6 +30,7 @@ public class Game extends InputAdapter {
     private Board board;
     private MPClient client;
     private Player myPlayer;
+    private int nrOfPlayers;
     private Thread phase;
     private Semaphore isReadySem;
     private boolean gameIsDone;
@@ -35,19 +38,34 @@ public class Game extends InputAdapter {
     private int cardBoxRight;
     private int buttonReadyLeftX;
     private int buttonReadyLeftY;
-
+    private boolean hosting = true;
+    private ArrayList<Packets.Packet02Cards> allCards;
+    private MPServer server;
 
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
-    private ProgramCard[] allCards;
+
+
 
     public void create() {
         board = BoardParser.parse("riskyexchange");
         Gdx.input.setInputProcessor(this);
-        hostGame();
+        Scanner scanner = new Scanner(System.in);
+        if(scanner.nextBoolean()){
+            hosting = false;
+        }
+        if(hosting){
+            System.out.println("Hosting");
+            hostGame();
+            System.out.println("Server address: " + server.getAddress());
+        }
+        else {
+            System.out.println("Joining");
+            joinGame("192.168.1.31");
+        }
         isReadySem = new Semaphore(0);
         gameIsDone = false;
         myPlayer = new Player();
@@ -55,6 +73,7 @@ public class Game extends InputAdapter {
         phase = new Thread(this::doTurn);
         phase.start();
         board.addObject(myPlayer.getRobot(), myPlayer.getRobot().getTileX(), myPlayer.getRobot().getTileY());
+        allCards = new ArrayList<>();
 
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
@@ -163,14 +182,12 @@ public class Game extends InputAdapter {
 
     //Call this when cards have been selected to be played
     public void isReady(Packets.Packet02Cards p){
-        allCards = new ProgramCard[p.programCards.length];
-        for (int i = 0; i < p.programCards.length; i++) {
-            if(p.programCards[i] != null) {
-                allCards[i] = CardTranslator.intToProgramCard(p.programCards[i]);
-            }
+        allCards.add(p);
+
+        if(allCards.size() == nrOfPlayers){
+            isReadySem.release();
         }
 
-        isReadySem.release();
     }
 
     private void doTurn() {
@@ -184,7 +201,12 @@ public class Game extends InputAdapter {
             }
             if(Thread.interrupted()) return;
             Robot robot = myPlayer.getRobot();
-            for (ProgramCard card : allCards) {
+            for (int i = 0; i < 5; i++) {
+                ArrayList<ProgramCard> cards = new ArrayList<>();
+                for (Packets.Packet02Cards packet: allCards) {
+                    cards.add(CardTranslator.intToProgramCard(packet.programCards[i]));
+                }
+                ProgramCard card = new ProgramCard(1,false,false,false);
                 if(card == null || robot.isDestroyed()) continue;
                 //TODO: later do each step for all players too
                 card.flip(); // flips the texture from back to front
@@ -241,6 +263,7 @@ public class Game extends InputAdapter {
                 gameIsDone = true;
             }
         }
+        allCards.clear();
     }
 
     private void repair() {
@@ -371,13 +394,18 @@ public class Game extends InputAdapter {
         }
     }
 
-    public void hostGame(){
-        MPServer server = new MPServer();
+    private void hostGame(){
+        server = new MPServer();
         server.run();
         client = new MPClient(server.getAddress(),this);
     }
 
-    public void joinGame(String ipAddress){
+    private void joinGame(String ipAddress){
         client = new MPClient(ipAddress, this);
+    }
+
+    public void setNrOfPlayers(int i){
+        nrOfPlayers = i;
+        System.out.println(nrOfPlayers);
     }
 }

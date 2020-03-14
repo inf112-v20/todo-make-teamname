@@ -11,12 +11,14 @@ import inf112.skeleton.app.objects.cards.ProgramCard;
 public class ClientNetworkListener extends Listener {
     private Client client;
     private Game game;
-    Packets.Packet01Message firstMessage;
+    private Packets.Packet01Message firstMessage;
+    private Packets.Packet02Cards cards;
 
     public void init(Client client, Game game){
         this.client = client;
         this.game = game;
         firstMessage = new Packets.Packet01Message();
+        cards = new Packets.Packet02Cards();
         firstMessage.clientName = "Erik";
     }
 
@@ -39,7 +41,7 @@ public class ClientNetworkListener extends Listener {
         for (int i = 0; i < programCards.length; i++) {
             newCards.programCards[i] = CardTranslator.programCardsToInt(programCards[i]);
         }
-        newCards.playerNr = client.getID();
+        newCards.playerId = client.getID();
         client.sendTCP(newCards);
     }
 
@@ -49,11 +51,20 @@ public class ClientNetworkListener extends Listener {
 
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
-            Packets.Packet01Message p = (Packets.Packet01Message) o;
-            System.out.println("["+ p.clientName +"] << " + p.message);
-        }else if(o instanceof Packets.Packet02Cards){
-            Packets.Packet02Cards p = (Packets.Packet02Cards) o;
-            game.isReady(p);
+            Packets.Packet01Message packet = (Packets.Packet01Message) o;
+            System.out.println("["+ packet.clientName +"] << " + packet.message);
+        }else if(o instanceof Packets.Packet02Cards) {
+            Packets.Packet02Cards packet = (Packets.Packet02Cards) o;
+            cards = packet;
+            game.isReady(packet);
+        }else if(o instanceof Packets.Packet03PlayerNr){
+            Packets.Packet03PlayerNr packet = (Packets.Packet03PlayerNr) o;
+            game.setNrOfPlayers(packet.playerNr);
         }
+    }
+
+    public Packets.Packet02Cards getCards() {
+        //For testing purposes
+        return cards;
     }
 }
