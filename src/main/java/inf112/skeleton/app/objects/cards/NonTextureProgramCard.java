@@ -1,6 +1,6 @@
 package inf112.skeleton.app.objects.cards;
 
-public class NonTextureProgramCard extends ProgramCard {
+public class NonTextureProgramCard {
 
     private boolean rotate;
     private boolean rotateLeft;
@@ -9,10 +9,12 @@ public class NonTextureProgramCard extends ProgramCard {
 
 
     public NonTextureProgramCard(int value, boolean rotate, boolean rotateLeft, boolean rotateRight) {
-        super(value, rotate, rotateLeft, rotateRight);
+        this.value = value;
+        this.rotate = rotate;
+        this.rotateLeft = rotateLeft;
+        this.rotateRight = rotateRight;
     }
 
-    @Override
     public Integer getValue() {
         return value;
     }
