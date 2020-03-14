@@ -111,7 +111,7 @@ public class Game extends InputAdapter {
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
-            client.sendCards(myPlayer.getArrayCards());
+            if (myPlayer.getArrayCards().length == 5)client.sendCards(myPlayer.getArrayCards());
         }
         return false;
     }
