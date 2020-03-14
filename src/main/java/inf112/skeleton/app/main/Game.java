@@ -109,7 +109,7 @@ public class Game extends InputAdapter {
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
-                screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
+                screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-Settings.TILE_HEIGHT&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
             if (myPlayer.getArrayCards().length == 5)client.sendCards(myPlayer.getArrayCards());
         }
@@ -146,15 +146,15 @@ public class Game extends InputAdapter {
             }
         }
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
-            batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+            batch.draw(damageTokens[1], i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
         }
         for (int i = myPlayer.getRobot().getHealth() ; i < 9; i++){
-            batch.draw(damageTokens[2], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+            batch.draw(damageTokens[2], i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
         }
         for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
-            batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
+            batch.draw(lifeTokens[1],i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT*2, Settings.TILE_WIDTH, Settings.TILE_HEIGHT );
         }
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , Settings.TILE_WIDTH*2, Settings.TILE_HEIGHT);
     }
 
     public void dispose() {
