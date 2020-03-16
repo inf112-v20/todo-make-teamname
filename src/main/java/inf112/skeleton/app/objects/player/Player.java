@@ -1,12 +1,16 @@
 package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.utils.Queue;
+import inf112.skeleton.app.objects.boardObjects.Flag;
 import inf112.skeleton.app.objects.cards.ProgramCard;
+
+import java.util.ArrayList;
 
 public class Player {
     private Robot robot;
     public ProgramCard[] cards;
     private Queue<ProgramCard> selectedCards;
+    private ArrayList<Flag> flags;
 
     public Player(){
         robot = new Robot();
@@ -14,6 +18,7 @@ public class Player {
         robot.setTileX(0);
         robot.setTileY(0);
         selectedCards  = new Queue<ProgramCard>();
+        flags = new ArrayList<>();
     }
 
     public boolean hasWon(){return true;}
@@ -21,11 +26,15 @@ public class Player {
         //TODO:: change so that players get random cards
         cards = new ProgramCard[5];
         cards[0] = (new ProgramCard(1,false,false,false));
-
         cards[1] = (new ProgramCard(1,false,false,false));
         cards[2]= (new ProgramCard(2,false,false,false));
         cards[3] = (new ProgramCard(0,true,true,false));
         cards[4] = (new ProgramCard(0,true,false,true));
+        cards[0].setImages();
+        cards[1].setImages();
+        cards[2].setImages();
+        cards[3].setImages();
+        cards[4].setImages();
     }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
@@ -67,11 +76,19 @@ public class Player {
         return robot.getLife();
     }
 
-    public Queue<ProgramCard> copySelected() {
-        Queue<ProgramCard> newHand = new Queue<>();
-        for (ProgramCard card : selectedCards) {
-            newHand.addLast(card);
+
+    public ProgramCard[] getArrayCards(){
+        ProgramCard[] newHand = new ProgramCard[selectedCards.size];
+        for (int i = 0; i < selectedCards.size; i++) {
+            newHand[i] = selectedCards.get(i);
         }
         return newHand;
+    }
+
+    public ArrayList<Flag> getFlags() {
+        return flags;
+    }
+    public void addFlag(Flag flag){
+        flags.add(flag);
     }
 }

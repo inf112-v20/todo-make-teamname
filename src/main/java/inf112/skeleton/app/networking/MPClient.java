@@ -1,45 +1,36 @@
 package inf112.skeleton.app.networking;
 
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.objects.cards.ProgramCard;
+
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Scanner;
+
 
 public class MPClient {
-    //Connection Stuff
-    int portSocket = 54777;
-    InetAddress IPAddress;
 
     public Client client;
     private ClientNetworkListener cnl;
 
-    private Scanner sc = new Scanner(System.in);
 
-    public MPClient(){
+
+    public MPClient(InetAddress ipAddress, Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
 
-        cnl.init(client);
+        cnl.init(client, game);
         registerPackets();
         client.addListener(cnl);
 
-        String ip;
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Whats the ip to your host?");
-        ip = sc.nextLine();
 
-        client.start();
+        new Thread(client).start();
+
         try {
-            System.out.println(InetAddress.getLocalHost());
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        try {
-            client.connect(5000, ip, 54555, 54777);
+            client.connect(5000, ipAddress, 54555, 54777);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -49,17 +40,15 @@ public class MPClient {
         kryo.register(Packets.Packet01Message.class);
         kryo.register(Packets.Packet02Cards.class);
         kryo.register(int.class);
+        kryo.register(int[].class);
+        kryo.register(int[][].class);
     }
 
     public void sendMessage(String message){
             cnl.sendInfo(message);
     }
 
-    public void sendCards(ProgramCard[] programCards, int playerNr){
-        cnl.sendCards(programCards, playerNr);
-    }
-
-    public static void main(String[] args) {
-        new MPClient();
+    public void sendCards(ProgramCard[] programCards){
+        cnl.sendCards(programCards);
     }
 }
