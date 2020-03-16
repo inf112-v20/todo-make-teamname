@@ -4,8 +4,10 @@ import inf112.skeleton.app.board.Direction;
 
 public class Wall implements IBoardObject {
     private Direction direction;
-    String tileX;
-    String tileY;
+
+    public Wall(Direction dir){
+        direction = dir;
+    }
 
     @Override
     public Direction getDirection() {
