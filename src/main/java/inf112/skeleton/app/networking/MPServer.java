@@ -36,6 +36,7 @@ public class MPServer implements Runnable{
         kryo.register(int[][].class);
 
     }
+
     @Override
     public void run() {
         server = new Server();
@@ -70,12 +71,5 @@ public class MPServer implements Runnable{
         return result;
     }
 
-    public void dispose(){
-        try {
-            server.dispose();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 }

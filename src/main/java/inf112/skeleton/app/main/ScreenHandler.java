@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inf112.skeleton.app.main.menuScreens.HostGameMenu;
+import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
+import inf112.skeleton.app.main.menuScreens.LobbyMenu;
+import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
