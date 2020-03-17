@@ -19,6 +19,7 @@ import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import inf112.skeleton.app.objects.boardObjects.*;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class Game extends InputAdapter {
     private Player myPlayer;
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
+    private String[] names;
     private Thread phase;
     private Semaphore isReadySem;
     private boolean gameIsDone;
@@ -55,8 +57,8 @@ public class Game extends InputAdapter {
         boardSetUp("riskyexchange");
         Gdx.input.setInputProcessor(this);
         playerSetup();
-        lanStartUp();
-        gamePhasesSetUp();
+//        lanStartUp();
+//       gamePhasesSetUp();
         textureSetUp();
         cardBoxSetUp();
     }
@@ -99,7 +101,7 @@ public class Game extends InputAdapter {
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
-            //Her starter LAN
+            //TODO fix so that one player cant send multiple sets of cards
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }
         return false;
@@ -155,7 +157,6 @@ public class Game extends InputAdapter {
         allCards.add(p);
 
         if(allCards.size() == nrOfPlayers){
-            deleteUnconnectedPlayers(); //TODO move this to the start of the game
             isReadySem.release();
         }
     }
@@ -228,7 +229,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void pitFall(Robot robot) {
+    public void pitFall(Robot robot) {
         if (!robot.isDestroyed()) {
             if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                 //Robot falls into pit
@@ -238,7 +239,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void cleanUp(Robot robot) {
+    public void cleanUp(Robot robot) {
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -253,7 +254,7 @@ public class Game extends InputAdapter {
         allCards.clear();
     }
 
-    private void repair(Robot robot) {
+    public void repair(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof RepairSite) {
@@ -263,13 +264,13 @@ public class Game extends InputAdapter {
             RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
             if (repairSite.getHammer()) {
                 //Player gets an option card
-                //TODO implement optioCards
+                //TODO implement optionCards
                 myPlayer.giveOptionCard();
             }
         }
     }
 
-    private void pickUpFlag(Robot robot) {
+    public void pickUpFlag(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof Flag) {
@@ -285,7 +286,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void boardLasersShoot(Robot robot) {
+    public void boardLasersShoot(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof BoardLaser) {
@@ -293,7 +294,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void gearsMove(Robot robot) {
+    public void gearsMove(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof GearClockwise) {
@@ -307,7 +308,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void pushersMove(Robot robot) {
+    public void pushersMove(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof Pusher) {
@@ -317,7 +318,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void expressConveyorMove(Robot robot) {
+    public void expressConveyorMove(Robot robot) {
         if (robot.isDestroyed()) return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         //Board elements do their things
@@ -335,7 +336,7 @@ public class Game extends InputAdapter {
 
         }
     }
-    private void conveyorMove(Robot robot) {
+    public void conveyorMove(Robot robot) {
 
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -351,7 +352,7 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void cardMove(NonTextureProgramCard card, Robot robot){
+    public void cardMove(NonTextureProgramCard card, Robot robot){
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
@@ -382,36 +383,26 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void hostGame(){
-        server = new MPServer();
-        server.run();
-        client = new MPClient(server.getAddress(),this);
-        myPlayer = idPlayerHash.get(client.getId());
-    }
-
-    private void joinGame(String ipAddress){
-        client = new MPClient(ipAddress, this);
-        myPlayer = idPlayerHash.get(client.getId());
-    }
-
-    public void setNrOfPlayers(int i){
-        nrOfPlayers = i;
-        System.out.println(nrOfPlayers);
-    }
-
-    private void gamePhasesSetUp() {
+    public void gamePhasesSetUp() {
         phase = new Thread(this::doTurn);
         phase.start();
     }
 
-    private void boardSetUp(String boardName) {
-        board = BoardParser.parse(boardName);
+    public void boardSetUp(String boardName) {
+        setBoard(BoardParser.parse(boardName));
+    }
+    public void setBoard(Board board){
+        this.board = board;
+    }
+    public Board getBoard(){
+        return board;
     }
 
-    private void playerSetup() {
+    public void playerSetup() {
         isReadySem = new Semaphore(0);
         gameIsDone = false;
         idPlayerHash = new HashMap<>();
+        names = new String[4];
         allCards = new ArrayList<>();
         for (int i = 1; i < 5; i++) {
             Player player = new Player();
@@ -422,8 +413,8 @@ public class Game extends InputAdapter {
     }
 
     private void cardBoxSetUp() {
-        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-myPlayer.getCards().length);
-        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+myPlayer.getCards().length);
+        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
+        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
         buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
         buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
     }
@@ -441,7 +432,7 @@ public class Game extends InputAdapter {
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
     }
 
-    private void lanStartUp() {
+    public void lanStartUp() {
         Scanner scanner = new Scanner(System.in);
         if(scanner.nextBoolean()){
             hosting = false;
@@ -456,6 +447,30 @@ public class Game extends InputAdapter {
             joinGame("10.0.0.59"); //Set to own ip
         }
     }
+    public InetAddress hostGame(){
+        server = new MPServer();
+        server.run();
+        client = new MPClient(server.getAddress(),this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        return server.getAddress();
+    }
+
+    public void joinGame(String ipAddress){
+        client = new MPClient(ipAddress, this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+    }
+
+    public int getId(){
+        return client.getId();
+    }
+    public void setMyPlayer(Player player){
+        myPlayer = player;
+    }
+
+    public void setNrOfPlayers(int i){
+        nrOfPlayers = i;
+        System.out.println(nrOfPlayers);
+    }
     public void deleteUnconnectedPlayers(){
         while(nrOfPlayers < idPlayerHash.size()){
             int j = idPlayerHash.size();
@@ -464,5 +479,26 @@ public class Game extends InputAdapter {
             idPlayerHash.get(j).getRobot().setTileY(-1);
             idPlayerHash.remove(j);
         }
+    }
+
+    public void sendStartSignal(){
+        client.sendStartSignal();
+    }
+
+    public void receiveStart() {
+        gamePhasesSetUp();
+        deleteUnconnectedPlayers();
+        ScreenHandler.changeScreenState(ScreenState.GAME);
+    }
+
+    public void sendName(String text) {
+        client.sendName(text);
+    }
+
+    public void receiveNames(Packets.Packet05Name name) {
+        names = name.name;
+    }
+    public String[] getNames(){
+        return names;
     }
 }
