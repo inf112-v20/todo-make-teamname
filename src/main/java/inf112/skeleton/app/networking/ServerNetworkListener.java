@@ -12,11 +12,13 @@ public class ServerNetworkListener extends Listener {
     private int[] players;
     private ArrayList<Packets.Packet02Cards> receivedCards;
     private ArrayList<Packets.Packet02Cards> copyReceivedCards;
+    private String[] names;
     private int playerNr = 0;
 
     public ServerNetworkListener(Server server){
         this.server = server;
         players = new int[4];
+        names = new String[4];
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
     }
@@ -32,13 +34,12 @@ public class ServerNetworkListener extends Listener {
     }
 
     public void disconnected(Connection c){
-        System.out.println("Someone has disconnected");
+        System.out.println("Player: " + c.getID() + " has disconnected");
     }
 
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
-            System.out.println("[" + p.clientName +"] >> " + p.message);
             server.sendToAllExceptTCP(c.getID(), p);
         }else if (o instanceof Packets.Packet02Cards){
             Packets.Packet02Cards cards = (Packets.Packet02Cards) o;
@@ -50,6 +51,14 @@ public class ServerNetworkListener extends Listener {
                 }
                 receivedCards.clear();
             }
+        }else if(o instanceof Packets.Packet04StartSignal){
+            Packets.Packet04StartSignal packet04StartSignal = (Packets.Packet04StartSignal) o;
+            server.sendToAllTCP(packet04StartSignal);
+        }else if (o instanceof Packets.Packet05Name){
+            Packets.Packet05Name name = (Packets.Packet05Name) o;
+            names[c.getID()] = name.name[0];
+            name.name = names;
+            server.sendToAllTCP(name);
         }
     }
 
