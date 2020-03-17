@@ -183,6 +183,10 @@ public class Game extends InputAdapter {
         return allCards;
     }
 
+    public TurnHandler getTurnHandler() {
+        return turnHandler;
+    }
+
     public void playerSetup() {
         isReadySem = new Semaphore(0);
         idPlayerHash = new HashMap<>();
