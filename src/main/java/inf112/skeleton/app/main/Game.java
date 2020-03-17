@@ -8,23 +8,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
-import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
-import inf112.skeleton.app.main.menuScreens.TurnHandler;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
-import inf112.skeleton.app.objects.cards.CardTranslator;
-import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import inf112.skeleton.app.objects.boardObjects.*;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 
@@ -35,8 +29,6 @@ public class Game extends InputAdapter {
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
     private String[] names;
-    private Semaphore isReadySem;
-    private boolean gameIsDone;
     private int cardBoxLeft;
     private int cardBoxRight;
     private int buttonReadyLeftX;
@@ -155,7 +147,6 @@ public class Game extends InputAdapter {
         allCards.add(p);
 
         if(allCards.size() == nrOfPlayers){
-            isReadySem.release();
             turnHandler.isReady();
         }
     }
@@ -188,7 +179,6 @@ public class Game extends InputAdapter {
     }
 
     public void playerSetup() {
-        isReadySem = new Semaphore(0);
         idPlayerHash = new HashMap<>();
         names = new String[4];
         allCards = new ArrayList<>();
@@ -234,6 +224,10 @@ public class Game extends InputAdapter {
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
     }
+    public void joinGame(InetAddress ipAddress){
+        client = new MPClient(ipAddress, this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+    }
 
     public int getId(){
         return client.getId();
@@ -246,6 +240,11 @@ public class Game extends InputAdapter {
         nrOfPlayers = i;
         System.out.println(nrOfPlayers);
     }
+
+    public int getNrOfPlayers() {
+        return nrOfPlayers;
+    }
+
     public void deleteUnconnectedPlayers(){
         while(nrOfPlayers < idPlayerHash.size()){
             int j = idPlayerHash.size();
@@ -279,5 +278,9 @@ public class Game extends InputAdapter {
 
     public void clearAllCards() {
         allCards.clear();
+    }
+
+    public boolean getConnection(){
+        return client.getConnection();
     }
 }
