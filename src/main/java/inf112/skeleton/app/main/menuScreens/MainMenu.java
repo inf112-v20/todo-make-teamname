@@ -46,10 +46,10 @@ public class MainMenu {
 
     public static void input() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            selected = selected == 0 ? 1 : selected - 1;
+            selected = selected == 0 ? 2 : selected - 1;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            selected = selected == 1 ? 0 : selected + 1;
+            selected = selected == 2 ? 0 : selected + 1;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (selected == 0) {
