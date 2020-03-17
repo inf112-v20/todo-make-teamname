@@ -1,13 +1,12 @@
 package inf112.skeleton.app.networkTests;
 
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.ProgramCard;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -29,11 +28,13 @@ public class NetworkCardTest {
 
     @Test
     public void serverReceivedCardsTest(){
-        ProgramCard card0 = new ProgramCard(1, false, false, false);
-        ProgramCard card1 = new ProgramCard(2, false, false, false);
-        ProgramCard card2 = new ProgramCard(0, true, false, false);
-        ProgramCard card3 = new ProgramCard(0, true, true, false);
-        ProgramCard card4 = new ProgramCard(0, true, false, true);
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        ProgramCard card0 = new ProgramCard(1, false, false, false, mockImages);
+        ProgramCard card1 = new ProgramCard(2, false, false, false, mockImages);
+        ProgramCard card2 = new ProgramCard(0, true, false, false, mockImages);
+        ProgramCard card3 = new ProgramCard(0, true, true, false, mockImages);
+        ProgramCard card4 = new ProgramCard(0, true, false, true, mockImages);
         ProgramCard[] cards = {card0, card1, card2, card3, card4};
         client.sendCards(cards);
         try {
@@ -53,11 +54,13 @@ public class NetworkCardTest {
 
     @Test
     public void clientReceivedCardsTest(){
-        ProgramCard card0 = new ProgramCard(1, false, false, false);
-        ProgramCard card1 = new ProgramCard(2, false, false, false);
-        ProgramCard card2 = new ProgramCard(0, true, false, false);
-        ProgramCard card3 = new ProgramCard(0, true, true, false);
-        ProgramCard card4 = new ProgramCard(0, true, false, true);
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        ProgramCard card0 = new ProgramCard(1, false, false, false, mockImages);
+        ProgramCard card1 = new ProgramCard(2, false, false, false, mockImages);
+        ProgramCard card2 = new ProgramCard(0, true, false, false, mockImages);
+        ProgramCard card3 = new ProgramCard(0, true, true, false, mockImages);
+        ProgramCard card4 = new ProgramCard(0, true, false, true, mockImages);
         ProgramCard[] cards = {card0, card1, card2, card3, card4};
         client.sendCards(cards);
         try {
