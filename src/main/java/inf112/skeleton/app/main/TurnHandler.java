@@ -1,12 +1,8 @@
 package inf112.skeleton.app.main;
 
-import com.jcraft.jogg.Packet;
-import com.sun.deploy.cache.BaseLocalApplicationProperties;
+
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
-import inf112.skeleton.app.main.Game;
-import inf112.skeleton.app.main.ScreenHandler;
-import inf112.skeleton.app.main.ScreenState;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.CardTranslator;
