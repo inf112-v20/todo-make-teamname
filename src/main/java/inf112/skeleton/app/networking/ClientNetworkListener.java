@@ -20,7 +20,6 @@ public class ClientNetworkListener extends Listener {
         this.game = game;
         firstMessage = new Packets.Packet01Message();
         cards = new Packets.Packet02Cards();
-        firstMessage.clientName = "Erik";
     }
 
     public void connected(Connection c){
@@ -34,7 +33,6 @@ public class ClientNetworkListener extends Listener {
     public void sendInfo(String message){
         firstMessage.message = message;
         client.sendTCP(firstMessage);
-        System.out.println("["+ firstMessage.clientName + "] >> Sent : [" + message +"] to server.");
     }
 
     public void sendCards(ProgramCard[] programCards){
@@ -46,6 +44,11 @@ public class ClientNetworkListener extends Listener {
         newCards.playerId = client.getID();
         client.sendTCP(newCards);
     }
+    public void sendStartSignal() {
+        Packets.Packet04StartSignal startSignal = new Packets.Packet04StartSignal();
+        startSignal.start = true;
+        client.sendTCP(startSignal);
+    }
 
     public void disconnected(Connection c){
         connection = false;
@@ -55,7 +58,6 @@ public class ClientNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message packet = (Packets.Packet01Message) o;
-            System.out.println("["+ packet.clientName +"] << " + packet.message);
         }else if(o instanceof Packets.Packet02Cards) {
             Packets.Packet02Cards packet = (Packets.Packet02Cards) o;
             cards = packet;
@@ -63,6 +65,12 @@ public class ClientNetworkListener extends Listener {
         }else if(o instanceof Packets.Packet03PlayerNr){
             Packets.Packet03PlayerNr packet = (Packets.Packet03PlayerNr) o;
             game.setNrOfPlayers(packet.playerNr);
+        }else if(o instanceof Packets.Packet04StartSignal){
+            game.receiveStart();
+        }
+        else if(o instanceof Packets.Packet05Name){
+            Packets.Packet05Name name = (Packets.Packet05Name) o;
+            game.receiveNames(name);
         }
     }
 
@@ -73,5 +81,10 @@ public class ClientNetworkListener extends Listener {
 
     public boolean getConnection(){
         return connection;
+    }
+
+
+    public void sendName(Packets.Packet05Name name) {
+        client.sendTCP(name);
     }
 }
