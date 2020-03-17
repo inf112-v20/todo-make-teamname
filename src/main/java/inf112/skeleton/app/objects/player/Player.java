@@ -1,5 +1,6 @@
 package inf112.skeleton.app.objects.player;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Queue;
 import inf112.skeleton.app.objects.boardObjects.Flag;
 import inf112.skeleton.app.objects.cards.ProgramCard;
@@ -24,12 +25,16 @@ public class Player {
     public boolean hasWon(){return true;}
     public void deal(){
         //TODO:: change so that players get random cards
+        Texture[] images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
+                new Texture("assets/cards/card_move_2.png"),
+                new Texture("assets/cards/card_turn_left.png"),
+                new Texture("assets/cards/card_turn_right.png")};
         cards = new ProgramCard[5];
-        cards[0] = (new ProgramCard(1,false,false,false));
-        cards[1] = (new ProgramCard(1,false,false,false));
-        cards[2]= (new ProgramCard(2,false,false,false));
-        cards[3] = (new ProgramCard(0,true,true,false));
-        cards[4] = (new ProgramCard(0,true,false,true));
+        cards[0] = (new ProgramCard(1,false,false,false, images));
+        cards[1] = (new ProgramCard(1,false,false,false, images));
+        cards[2]= (new ProgramCard(2,false,false,false, images));
+        cards[3] = (new ProgramCard(0,true,true,false, images));
+        cards[4] = (new ProgramCard(0,true,false,true, images));
     }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
