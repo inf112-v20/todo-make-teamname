@@ -1,8 +1,8 @@
-package inf112.skeleton.app.boardObjectsTests;
+package inf112.skeleton.app.TurnHandlerTests;
 
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
-import inf112.skeleton.app.main.menuScreens.TurnHandler;
+import inf112.skeleton.app.main.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;

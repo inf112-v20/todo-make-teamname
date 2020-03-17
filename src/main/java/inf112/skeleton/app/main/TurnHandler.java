@@ -1,4 +1,4 @@
-package inf112.skeleton.app.main.menuScreens;
+package inf112.skeleton.app.main;
 
 import com.jcraft.jogg.Packet;
 import com.sun.deploy.cache.BaseLocalApplicationProperties;
