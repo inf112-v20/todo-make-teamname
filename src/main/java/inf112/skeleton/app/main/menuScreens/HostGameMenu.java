@@ -19,9 +19,11 @@ public class HostGameMenu {
     public HostGameMenu(Game game){
         this.game = game;
     }
+
     public void create(){
         ipAddress = game.hostGame();
     }
+
     public void render(SpriteBatch batch, BitmapFont font) {
         font.setColor(Color.BLACK);
         font.draw(batch, "IP address: " + ipAddress, Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
@@ -29,6 +31,7 @@ public class HostGameMenu {
         font.draw(batch, "Go to lobby", Settings.SCREEN_WIDTH / 6 * 5, Settings.SCREEN_HEIGHT / 18);
         input();
     }
+
     public void input() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);

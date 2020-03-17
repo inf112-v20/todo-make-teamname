@@ -10,6 +10,7 @@ import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.main.menuScreens.TurnHandler;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
@@ -34,16 +35,15 @@ public class Game extends InputAdapter {
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
     private String[] names;
-    private Thread phase;
     private Semaphore isReadySem;
     private boolean gameIsDone;
     private int cardBoxLeft;
     private int cardBoxRight;
     private int buttonReadyLeftX;
     private int buttonReadyLeftY;
-    private boolean hosting = true;
     private ArrayList<Packets.Packet02Cards> allCards;
     private MPServer server;
+    private TurnHandler turnHandler;
 
     private Texture tempMap;
     private Texture selectedFrame;
@@ -57,8 +57,6 @@ public class Game extends InputAdapter {
         boardSetUp("riskyexchange");
         Gdx.input.setInputProcessor(this);
         playerSetup();
-//        lanStartUp();
-//       gamePhasesSetUp();
         textureSetUp();
         cardBoxSetUp();
     }
@@ -149,7 +147,7 @@ public class Game extends InputAdapter {
     }
 
     public void dispose() {
-        phase.interrupt();
+        turnHandler.dispose();
     }
 
     //Call this when cards have been selected to be played
@@ -158,234 +156,13 @@ public class Game extends InputAdapter {
 
         if(allCards.size() == nrOfPlayers){
             isReadySem.release();
-        }
-    }
-
-    private void doTurn() {
-        while (!gameIsDone) {
-            //Does a full register for each iteration of the while loop
-            try {
-                //Waits until cards have been selected
-                isReadySem.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(Thread.interrupted()) return;
-
-
-            for (int i = 0; i < 5; i++) {
-                HashMap<NonTextureProgramCard, Integer> cards = new HashMap<>();
-                for (Packets.Packet02Cards packet: allCards) {
-                    cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
-                }
-                for (NonTextureProgramCard card: cards.keySet()) {
-                    cardMove(card, idPlayerHash.get(cards.get(card)).getRobot()); // moves robot
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    expressConveyorMove(robot);
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    conveyorMove(robot); // conveyorbelt moves
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    pushersMove(robot);
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    gearsMove(robot);
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    boardLasersShoot(robot);
-                }
-                //TODO Robots hit each other
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    pickUpFlag(robot);
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    repair(robot);
-                }
-                for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    pitFall(robot);
-                }
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            //TODO remove register etc...
-            for (int id: idPlayerHash.keySet()) {
-                Robot robot = idPlayerHash.get(id).getRobot();
-                cleanUp(robot);
-            }
-
-        }
-    }
-
-    public void pitFall(Robot robot) {
-        if (!robot.isDestroyed()) {
-            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                //Robot falls into pit
-                board.removeObject(robot);
-                robot.destroy();
-            }
-        }
-    }
-
-    public void cleanUp(Robot robot) {
-        if (robot.isDestroyed()) {
-            if (myPlayer.getLife() > 0) {
-                //Respawn robot if player has more life left
-                board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
-                robot.respawn();
-                System.out.println("respawn");
-            } else {
-                //Not the case if there are more players
-                gameIsDone = true;
-            }
-        }
-        allCards.clear();
-    }
-
-    public void repair(Robot robot) {
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof RepairSite) {
-            //Heals a damage token if robot
-            robot.healDamage();
-            robot.setRespawn(robot.getTileX(), robot.getTileY());
-            RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-            if (repairSite.getHammer()) {
-                //Player gets an option card
-                //TODO implement optionCards
-                myPlayer.giveOptionCard();
-            }
-        }
-    }
-
-    public void pickUpFlag(Robot robot) {
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Flag) {
-            Flag flag = (Flag) currentTile.getObjects()[0];
-            if (!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()) {
-                myPlayer.addFlag(flag);
-                if (myPlayer.getFlags().size() == board.getFlagNr()) {
-                    //TODO endscreen
-                    ScreenHandler.changeScreenState(ScreenState.MAINMENU);
-                    gameIsDone = true;
-                }
-            }
-        }
-    }
-
-    public void boardLasersShoot(Robot robot) {
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[1] instanceof BoardLaser) {
-            robot.takeDamage();
-        }
-    }
-
-    public void gearsMove(Robot robot) {
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof GearClockwise) {
-            //Rotate right
-            robot.rotateRight();
-        }
-
-        if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
-            //Rotate left
-            robot.rotateLeft();
-        }
-    }
-
-    public void pushersMove(Robot robot) {
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Pusher) {
-            //Robot gets pushed
-            Pusher pusher = (Pusher) currentTile.getObjects()[0];
-            board.moveObject(robot, pusher.getDirection());
-        }
-    }
-
-    public void expressConveyorMove(Robot robot) {
-        if (robot.isDestroyed()) return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        //Board elements do their things
-        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            if (conveyorBelt.getExpress()) {
-                //Expressconveoyrbelt moves robot
-                board.moveObject(robot, conveyorBelt.getDirection());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-    }
-    public void conveyorMove(Robot robot) {
-
-        if(robot.isDestroyed())return;
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-            //Conveoyrbelt moves robot
-            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            board.moveObject(robot, conveyorBelt.getDirection());
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void cardMove(NonTextureProgramCard card, Robot robot){
-        if (card.getValue() > 0) {
-            for (int i = 0; i < card.getValue(); i++) {
-                if(robot.isDestroyed()) break;
-                //Move robot
-                board.moveObject(robot, robot.getDirection());
-                if (!robot.isDestroyed()){
-                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                        board.removeObject(robot);
-                        robot.destroy();
-                    }
-                }
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else if (card.getRotate()) {
-            if (card.getRotateLeft()) {
-                robot.rotateLeft();
-            } else if (card.getRotateRight()) {
-                robot.rotateRight();
-            } else {
-                robot.rotateRight();
-                robot.rotateRight();
-            }
+            turnHandler.isReady();
         }
     }
 
     public void gamePhasesSetUp() {
-        phase = new Thread(this::doTurn);
-        phase.start();
+        turnHandler = new TurnHandler();
+        turnHandler.create(this);
     }
 
     public void boardSetUp(String boardName) {
@@ -398,9 +175,16 @@ public class Game extends InputAdapter {
         return board;
     }
 
+    public HashMap<Integer, Player> getIdPlayerHash() {
+        return idPlayerHash;
+    }
+
+    public ArrayList<Packets.Packet02Cards> getAllCards() {
+        return allCards;
+    }
+
     public void playerSetup() {
         isReadySem = new Semaphore(0);
-        gameIsDone = false;
         idPlayerHash = new HashMap<>();
         names = new String[4];
         allCards = new ArrayList<>();
@@ -432,21 +216,8 @@ public class Game extends InputAdapter {
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
     }
 
-    public void lanStartUp() {
-        Scanner scanner = new Scanner(System.in);
-        if(scanner.nextBoolean()){
-            hosting = false;
-        }
-        if(hosting){
-            System.out.println("Hosting");
-            hostGame();
-            System.out.println("Server address: " + server.getAddress());
-        }
-        else {
-            System.out.println("Joining");
-            joinGame("10.0.0.59"); //Set to own ip
-        }
-    }
+
+
     public InetAddress hostGame(){
         server = new MPServer();
         server.run();
@@ -500,5 +271,9 @@ public class Game extends InputAdapter {
     }
     public String[] getNames(){
         return names;
+    }
+
+    public void clearAllCards() {
+        allCards.clear();
     }
 }
