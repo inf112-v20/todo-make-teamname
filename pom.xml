@@ -32,6 +32,12 @@
       <version>1.9.10</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.badlogicgames.gdx/gdx-backend-headless -->
+    <dependency>
+      <groupId>com.badlogicgames.gdx</groupId>
+      <artifactId>gdx-backend-headless</artifactId>
+      <version>1.9.10</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/com.esotericsoftware/kryonet -->
     <dependency>
       <groupId>com.esotericsoftware</groupId>
