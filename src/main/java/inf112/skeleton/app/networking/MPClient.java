@@ -87,13 +87,7 @@ public class MPClient {
     public int getId(){
         return client.getID();
     }
-    public void dispose(){
-        try {
-            client.dispose();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+
     public boolean getConnection(){
         return cnl.getConnection();
     }
