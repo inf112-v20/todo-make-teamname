@@ -1,21 +1,25 @@
 package inf112.skeleton.app.CardTests;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class CardTranslatorTest {
 
     @Test
     public void programCardsToIntCards(){
-        ProgramCard card0 = new ProgramCard(1, false, false, false);
-        ProgramCard card1 = new ProgramCard(2, false, false, false);
-        ProgramCard card2 = new ProgramCard(0, true, false, false);
-        ProgramCard card3 = new ProgramCard(0, true, true, false);
-        ProgramCard card4 = new ProgramCard(0, true, false, true);
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        ProgramCard card0 = new ProgramCard(1, false, false, false, mockImages);
+        ProgramCard card1 = new ProgramCard(2, false, false, false, mockImages);
+        ProgramCard card2 = new ProgramCard(0, true, false, false, mockImages);
+        ProgramCard card3 = new ProgramCard(0, true, true, false, mockImages);
+        ProgramCard card4 = new ProgramCard(0, true, false, true, mockImages);
         ProgramCard[] cards = {card0, card1, card2, card3, card4};
         int[][] intCards = new int[cards.length][4];
         for (int i = 0; i < cards.length; i++) {
