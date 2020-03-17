@@ -3,6 +3,7 @@ package inf112.skeleton.app.boardObjectsTests;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
+import inf112.skeleton.app.main.menuScreens.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.Pit;
 import inf112.skeleton.app.objects.boardObjects.Pusher;
 import inf112.skeleton.app.objects.player.Robot;
@@ -16,12 +17,15 @@ public class PitTest {
     private static Game game;
     private static Robot robot;
     private static Board board;
+    private static TurnHandler turnHandler;
 
 
     @BeforeClass
     public static void setUp(){
         game = new Game();
         game.setBoard(new Board(2,1,1));
+        game.gamePhasesSetUp();
+        turnHandler = game.getTurnHandler();
         board = game.getBoard();
         robot = new Robot();
         Pit pit = new Pit();
@@ -32,7 +36,7 @@ public class PitTest {
     @Test
     public void pitTest(){
         assertFalse(robot.isDestroyed());
-        game.pitFall(robot);
+        turnHandler.pitFall(robot);
         assertTrue(robot.isDestroyed());
     }
 }

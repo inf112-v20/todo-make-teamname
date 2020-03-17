@@ -3,24 +3,30 @@ package inf112.skeleton.app.boardObjectsTests;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
+import inf112.skeleton.app.main.menuScreens.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.Pusher;
 import inf112.skeleton.app.objects.boardObjects.RepairSite;
+import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class RepairSiteTest {
     private static Game game;
     private static Robot robot;
     private static Board board;
+    private static TurnHandler turnHandler;
 
 
     @BeforeClass
     public static void setUp(){
         game = new Game();
         game.setBoard(new Board(2,1,1));
+        game.gamePhasesSetUp();
+        turnHandler = game.getTurnHandler();
         board = game.getBoard();
         robot = new Robot();
         RepairSite repairSite = new RepairSite(false);
@@ -32,7 +38,7 @@ public class RepairSiteTest {
     public void repairSiteTest(){
         robot.takeDamage();
         assertEquals(robot.getHealth(), 8);
-        game.repair(robot);
+        turnHandler.repair(robot, mock(Player.class));
         assertEquals(robot.getHealth(), 9);
     }
 }

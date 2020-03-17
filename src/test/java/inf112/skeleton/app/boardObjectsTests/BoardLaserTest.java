@@ -2,6 +2,7 @@ package inf112.skeleton.app.boardObjectsTests;
 
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
+import inf112.skeleton.app.main.menuScreens.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
@@ -14,12 +15,15 @@ public class BoardLaserTest {
     private static Game game;
     private static Robot robot;
     private static Board board;
+    private static TurnHandler turnHandler;
 
 
     @BeforeClass
     public static void setUp(){
         game = new Game();
         game.setBoard(new Board(2,1,1));
+        game.gamePhasesSetUp();
+        turnHandler = game.getTurnHandler();
         board = game.getBoard();
         BoardLaser laser = new BoardLaser();
         board.addObject(laser,1,0);
@@ -35,7 +39,7 @@ public class BoardLaserTest {
     public void boardLaserDamageTest(){
         assertEquals(robot.getHealth(), 9);
         assertFalse(robot.isDestroyed());
-        game.boardLasersShoot(robot);
+        turnHandler.boardLasersShoot(robot);
         assertEquals(robot.getHealth(), 8);
     }
 
@@ -44,7 +48,7 @@ public class BoardLaserTest {
         assertEquals(robot.getHealth(), 9);
         assertFalse(robot.isDestroyed());
         for (int i = 0; i < 9; i++) {
-            game.boardLasersShoot(robot);
+            turnHandler.boardLasersShoot(robot);
         }
         assertEquals(robot.getHealth(), 0);
         assertTrue(robot.isDestroyed());
