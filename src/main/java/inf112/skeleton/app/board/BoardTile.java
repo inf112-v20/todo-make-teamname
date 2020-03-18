@@ -1,13 +1,11 @@
 package inf112.skeleton.app.board;
 
-import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 import inf112.skeleton.app.objects.player.Robot;
 
 
 public class BoardTile {
-    private Texture sprite;
 
     public final static int BOTTOMLAYER = 0; //CONVEYORBELT
     public final static int WALLLAYER = 1; //CONVEYORBELT

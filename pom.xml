@@ -38,6 +38,7 @@
       <artifactId>gdx-backend-headless</artifactId>
       <version>1.9.10</version>
     </dependency>
+
     <!-- https://mvnrepository.com/artifact/com.esotericsoftware/kryonet -->
     <dependency>
       <groupId>com.esotericsoftware</groupId>
