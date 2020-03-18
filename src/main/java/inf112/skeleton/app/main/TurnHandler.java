@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 /**
- * The TurnHandler class handles the turn from after the program registers phase and until the end of the turn.
+ * The TurnHandler class handles the turn from after the program registers phase and until the end of the turn. <BR>
  * You wil only need to use one TurnHandler for the program as it will wait on new cards from the  Game class between
- * each turn.
+ * each turn.<BR>
  * When it gets the cards from Game it then plays them out on the board according to the value of cards and elements on
  * the board.
  */
@@ -57,18 +57,18 @@ public class TurnHandler {
     }
 
     /**
-     * This method handles all the parts of the phases after the Program Register phase. It starts when is ready is
-     * called, you should not call this method.
-     * First it gets the released and acquires the semaphore again.
-     * Then it gets the new cards form Game's allCards, and makes a HashMap for each of the 5 turns of the program cards.
-     * It does the following 5 times, one time for each card per player:
-     *  The method pairs the cards with the playerId so that the correct robot moves when a card i played.
-     *  After that each robot does the move the card had.
-     *  Then express conveyor belts move once, followed by express conveyor belts and conveyor belts moving once.
-     *  Pushers push robots, and gears then rotate them.
-     *  Robots gets shot by lasers, first the boards lasers, then the other robots.
-     *  Then the robots pick up flags if possible, and win the game if they got all the flags.
-     *  Afterwards repair sites repair robots, and finally if the robot is on a pit it falls into it.
+     * This method handles all the parts of the phases after the Program Register phase.<BR> It starts when is ready is
+     * called, you should not call this method.<BR>
+     * First it gets the released and acquires the semaphore again.<BR>
+     * Then it gets the new cards form Game's allCards, and makes a HashMap for each of the 5 turns of the program cards.<BR>
+     * It does the following 5 times, one time for each card per player: <ol>
+     *<li>  The method pairs the cards with the playerId so that the correct robot moves when a card i played.
+     *<li>  After that each robot does the move the card had.
+     *<li>  Then express conveyor belts move once, followed by express conveyor belts and conveyor belts moving once.
+     *<li>  Pushers push robots, and gears then rotate them.
+     *<li>  Robots gets shot by lasers, first the boards lasers, then the other robots.
+     *<li>  Then the robots pick up flags if possible, and win the game if they got all the flags.
+     *</ol>  Afterwards repair sites repair robots, and finally if the robot is on a pit it falls into it.
      * After doing this 5 times it clears the register and waits for new cards.
      */
     private void doTurn() {

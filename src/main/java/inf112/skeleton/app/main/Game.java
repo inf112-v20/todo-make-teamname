@@ -23,8 +23,8 @@ import java.util.concurrent.Semaphore;
 
 
 /**
- * The Game class is the centerpiece that ties all the different parts of the game together. It sends information to the
- * MPClient which sends it to the server. It creates all the player and board objects, and then keeps control of
+ * The Game class is the centerpiece that ties all the different parts of the game together.<BR> It sends information to the
+ * MPClient which sends it to the server.<BR> It creates all the player and board objects, and then keeps control of
  * it.
  */
 public class Game extends InputAdapter {
@@ -286,7 +286,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * This method updates how many player there are connected to the game. It gets called on by the client each time
+     * This method updates how many player there are connected to the game.<BR> It gets called on by the client each time
      * a new client connects to the server, and the server then tells all the clients.
      * @param i Number of people in the game.
      */

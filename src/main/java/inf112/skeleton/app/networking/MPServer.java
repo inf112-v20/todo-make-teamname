@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * The MultiPlayerServer class creates a Kryonet server that can receive and send data from and to clients.
+ * The MultiPlayerServer class creates a Kryonet server that can receive and send data from and to clients.<BR>
  * Use run() to start the server
  */
 public class MPServer implements Runnable{
