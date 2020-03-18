@@ -3,10 +3,11 @@ package inf112.skeleton.app.networking;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 
+/**
+ * This listener class receives data from clients and then sends it to all clients.
+ */
 public class ServerNetworkListener extends Listener {
     private Server server;
     private int[] players;
@@ -15,6 +16,10 @@ public class ServerNetworkListener extends Listener {
     private String[] names;
     private int playerNr = 0;
 
+    /**
+     * Sets the field variable server to the Kryonet server, then initializes some lists for storing data.
+     * @param server The Kryonet server being used
+     */
     public ServerNetworkListener(Server server){
         this.server = server;
         players = new int[4];
@@ -23,6 +28,11 @@ public class ServerNetworkListener extends Listener {
         copyReceivedCards = new ArrayList<>();
     }
 
+    /**
+     * When a client connects to the Kryonet server the method gets called, and then prints a message to the console.
+     * Afterwards it updates which players are on the server, and sends that number to all clients.
+     * @param c
+     */
     public void connected(Connection c){
         System.out.println("Player: " + playerNr + " has connected");
         players[playerNr] = c.getID();
@@ -33,10 +43,21 @@ public class ServerNetworkListener extends Listener {
 
     }
 
+    /**
+     * Whenever a client disconnects from the server this method gets called, prints to console which player
+     * disconnected.
+     * @param c
+     */
     public void disconnected(Connection c){
         System.out.println("Player: " + c.getID() + " has disconnected");
     }
 
+    /**
+     * This method gets called by the Kryonet server whenever something is sent to the server, this method then
+     * sort out what type of message was sent and sends it to all clients.
+     * @param c
+     * @param o
+     */
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
@@ -62,8 +83,14 @@ public class ServerNetworkListener extends Listener {
         }
     }
 
+    /**
+     * For now only used in testing, to confirm that the right cards where sent, and received.
+     * @return Returns up to the last 5 sets of cards sent.
+     */
     public ArrayList<Packets.Packet02Cards> getReceivedCards(){
-        //For testing purposes
+        if(copyReceivedCards.size() > 4){
+            copyReceivedCards.clear();
+        }
         return copyReceivedCards;
     }
 }

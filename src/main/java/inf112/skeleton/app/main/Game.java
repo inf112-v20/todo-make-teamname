@@ -22,6 +22,11 @@ import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 
+/**
+ * The Game class is the centerpiece that ties all the different parts of the game together. It sends information to the
+ * MPClient which sends it to the server. It creates all the player and board objects, and then keeps control of
+ * it.
+ */
 public class Game extends InputAdapter {
     private Board board;
     private MPClient client;
@@ -44,7 +49,9 @@ public class Game extends InputAdapter {
     private Texture[] lifeTokens;
 
 
-
+    /**
+     * This method calls all the methods needed to start the "playing" part of the game.
+     */
     public void create() {
         boardSetUp("riskyexchange");
         Gdx.input.setInputProcessor(this);
@@ -142,23 +149,36 @@ public class Game extends InputAdapter {
         turnHandler.dispose();
     }
 
-    //Call this when cards have been selected to be played
-    public void isReady(Packets.Packet02Cards p){
-        allCards.add(p);
+    /**
+     * The isReady method adds a new set of cards to allCards, and if all players have sent their cards it calls
+     * TurnHandler.isReady(), which then releases TurnHandler.doTurn(), and the Complete Registers phase starts.
+     * @param packet
+     */
+    public void isReady(Packets.Packet02Cards packet){
+        allCards.add(packet);
 
         if(allCards.size() == nrOfPlayers){
             turnHandler.isReady();
         }
     }
 
+    /**
+     * This method initializes a new TurnHandler.
+     */
     public void gamePhasesSetUp() {
         turnHandler = new TurnHandler();
         turnHandler.create(this);
     }
 
+    /**
+     * This method calls BoardParser.parse(String boardName) to make a new board matching the string name, it the
+     * calls setBoard to set the Game.board = BoardParser.parse(String boardName).
+     * @param boardName This parameter is the name of the board that will be played.
+     */
     public void boardSetUp(String boardName) {
         setBoard(BoardParser.parse(boardName));
     }
+
     public void setBoard(Board board){
         this.board = board;
     }
@@ -166,10 +186,18 @@ public class Game extends InputAdapter {
         return board;
     }
 
+    /**
+     * This HashMap is used to connect a player with a client on the server.
+     * @return This returns a HashMap with playerId(clientId) as a key and a player as value.
+     */
     public HashMap<Integer, Player> getIdPlayerHash() {
         return idPlayerHash;
     }
 
+    /**
+     * This ArrayList is used to store the newest set of cards from the server.
+     * @return This returns an ArrayList of Packets.Packet02Cards which contains cards and player id.
+     */
     public ArrayList<Packets.Packet02Cards> getAllCards() {
         return allCards;
     }
@@ -178,6 +206,10 @@ public class Game extends InputAdapter {
         return turnHandler;
     }
 
+    /**
+     * This method initializes idPlayerHash, names and allCards. Then it creates four new players and puts them into
+     * idPlayerHash.
+     */
     public void playerSetup() {
         idPlayerHash = new HashMap<>();
         names = new String[4];
@@ -190,6 +222,9 @@ public class Game extends InputAdapter {
         }
     }
 
+    /**
+     * This method sets the settings for the card boxes and button.
+     */
     private void cardBoxSetUp() {
         cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
         cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
@@ -197,6 +232,9 @@ public class Game extends InputAdapter {
         buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
     }
 
+    /**
+     * This method initializes the textures needed in the Game class.
+     */
     private void textureSetUp() {
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
@@ -210,8 +248,10 @@ public class Game extends InputAdapter {
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
     }
 
-
-
+    /**
+     * The hostGame method starts a new server and a client. This should only be called by the one hosting the game.
+     * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
+     */
     public InetAddress hostGame(){
         server = new MPServer();
         server.run();
@@ -220,10 +260,19 @@ public class Game extends InputAdapter {
         return server.getAddress();
     }
 
+    /**
+     * The joinGame method initializes a new client and tries to connect to the server on the IP Address given.
+     * @param ipAddress The IP Address for the server as a String.
+     */
     public void joinGame(String ipAddress){
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
     }
+
+    /**
+     * The joinGame method initializes a new client and tries to connect to the server on the IP Address given.
+     * @param ipAddress The IP Address for the server as a InetAddress.
+     */
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
@@ -236,15 +285,28 @@ public class Game extends InputAdapter {
         myPlayer = player;
     }
 
+    /**
+     * This method updates how many player there are connected to the game. It gets called on by the client each time
+     * a new client connects to the server, and the server then tells all the clients.
+     * @param i Number of people in the game.
+     */
     public void setNrOfPlayers(int i){
         nrOfPlayers = i;
         System.out.println(nrOfPlayers);
     }
 
+    /**
+     *
+     * @return Returns number of people in the game.
+     */
     public int getNrOfPlayers() {
         return nrOfPlayers;
     }
 
+    /**
+     * The game initializes with 4 players, this gets called the first time the Program Cards phase starts, and deletes
+     * the players that doesnt have a client connected to them.
+     */
     public void deleteUnconnectedPlayers(){
         while(nrOfPlayers < idPlayerHash.size()){
             int j = idPlayerHash.size();
@@ -255,31 +317,57 @@ public class Game extends InputAdapter {
         }
     }
 
+    /**
+     * Sends a startSignal from the host to all the players that them "playing" of the game starts now.
+     */
     public void sendStartSignal(){
         client.sendStartSignal();
     }
 
+    /**
+     * Gets called by the client when the server gets the start signal, then starts then "playing" part of the game.
+     */
     public void receiveStart() {
         gamePhasesSetUp();
         deleteUnconnectedPlayers();
         ScreenHandler.changeScreenState(ScreenState.GAME);
     }
 
-    public void sendName(String text) {
-        client.sendName(text);
+    /**
+     * Sends the players username to the server
+     * @param userName players username
+     */
+    public void sendName(String userName) {
+        client.sendName(userName);
     }
 
+    /**
+     * Receives the names of all the players form the server, updates each time a player sends its name to the server.
+     * @param name The names of the current players.
+     */
     public void receiveNames(Packets.Packet05Name name) {
         names = name.name;
     }
+
+    /**
+     *
+     * @return Returns all the usernames of players currently in the game.
+     */
     public String[] getNames(){
         return names;
     }
 
+    /**
+     * Deletes the cards of the last round played.
+     */
     public void clearAllCards() {
         allCards.clear();
     }
 
+    /**
+     *
+     * @return Returns true if the client is connected to a server.
+     */
     public boolean getConnection(){
         return client.getConnection();
     }

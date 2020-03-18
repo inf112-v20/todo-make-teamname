@@ -12,14 +12,21 @@ import inf112.skeleton.app.objects.cards.ProgramCard;
 import java.io.IOException;
 import java.net.InetAddress;
 
-
+/**
+ * A MultiPlayerClient that connects to a server, then is able to send and receive data from the server.
+ */
 public class MPClient {
 
     public Client client;
     private ClientNetworkListener cnl;
 
 
-
+    /**
+     * The constructor initializes a Kryonet client and a ClientNetworkListener, registers the classes sent over the
+     * server, starts the client and finally tries to connect to the server.
+     * @param ipAddress The server address
+     * @param game The game it wants to send data from to the server, and send data to from the server.
+     */
     public MPClient(InetAddress ipAddress, Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
@@ -37,6 +44,13 @@ public class MPClient {
             e.printStackTrace();
         }
     }
+
+    /**
+     * The constructor initializes a Kryonet client and a ClientNetworkListener, registers the classes sent over the
+     * server, starts the client and finally tries to connect to the server.
+     * @param ipAddress The server address
+     * @param game The game it wants to send data from to the server, and send data to from the server.
+     */
     public MPClient(String ipAddress, Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
@@ -54,6 +68,10 @@ public class MPClient {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Register the classes sent over the server.
+     */
     private void registerPackets(){
         Kryo kryo = client.getKryo();
         kryo.register(Packets.Packet01Message.class);
@@ -68,14 +86,26 @@ public class MPClient {
         kryo.register(int[][].class);
     }
 
+    /**
+     * Sends a message to the server
+     * @param message String message that will be sent to server and broadcast to everybody.
+     */
     public void sendMessage(String message){
             cnl.sendInfo(message);
     }
 
+    /**
+     * Sends an array of ProgramCards to the server.
+     * @param programCards The cards that the player wants to play.
+     */
     public void sendCards(ProgramCard[] programCards){
         cnl.sendCards(programCards);
     }
 
+    /**
+     *
+     * @return returns the last cards sent to the server.
+     */
     public NonTextureProgramCard[] getLastCardTransfer(){
         NonTextureProgramCard[] cards = new NonTextureProgramCard[cnl.getCards().programCards.length];
         for (int i = 0; i < cnl.getCards().programCards.length; i++) {
@@ -84,18 +114,33 @@ public class MPClient {
         return cards;
     }
 
+    /**
+     *
+     * @return Returns the client id
+     */
     public int getId(){
         return client.getID();
     }
 
+    /**
+     *
+     * @return Returns true if client is connected to a server, else false
+     */
     public boolean getConnection(){
         return cnl.getConnection();
     }
 
+    /**
+     * Sends a start signal to the server alerting all clients to start the game.
+     */
     public void sendStartSignal() {
         cnl.sendStartSignal();
     }
 
+    /**
+     * Sends the username of the player to the server
+     * @param text username of the player
+     */
     public void sendName(String text) {
         Packets.Packet05Name name = new Packets.Packet05Name();
         name.name = new String[]{text};
