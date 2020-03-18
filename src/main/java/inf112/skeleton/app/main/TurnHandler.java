@@ -14,6 +14,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
+/**
+ * The TurnHandler class handles the turn from after the program registers phase and until the end of the turn.
+ * You wil only need to use one TurnHandler for the program as it will wait on new cards from the  Game class between
+ * each turn.
+ * When it gets the cards from Game it then plays them out on the board according to the value of cards and elements on
+ * the board.
+ */
 public class TurnHandler {
 
     private boolean gameIsDone;
@@ -23,6 +30,14 @@ public class TurnHandler {
     private Thread phase;
     private Board board;
 
+
+    /**
+     * The create method is used for setting up the TurnHandler so that all field variables are initialized, or
+     * referenced from Game, it then finishes with starting a new Thread so that doTurn runs concurrently with the rest
+     * of the program. Making the backend run separately from the frontend.
+     * @param game1 This parameter links the TurnHandler class to the Game class so that they are referencing the same
+     *              object.
+     */
     public void create(Game game1){
         this.game = game1;
         isReadySem = new Semaphore(0);
@@ -32,9 +47,30 @@ public class TurnHandler {
         phase = new Thread(this::doTurn);
         phase.start();
     }
+
+    /**
+     * This method releases the semaphore that lets doTurn pass so that the Complete Registers phase can start.
+     * Call on this when the new cards have been saved in allCards in Game.
+     */
     public void isReady(){
         isReadySem.release();
     }
+
+    /**
+     * This method handles all the parts of the phases after the Program Register phase. It starts when is ready is
+     * called, you should not call this method.
+     * First it gets the released and acquires the semaphore again.
+     * Then it gets the new cards form Game's allCards, and makes a HashMap for each of the 5 turns of the program cards.
+     * It does the following 5 times, one time for each card per player:
+     *  The method pairs the cards with the playerId so that the correct robot moves when a card i played.
+     *  After that each robot does the move the card had.
+     *  Then express conveyor belts move once, followed by express conveyor belts and conveyor belts moving once.
+     *  Pushers push robots, and gears then rotate them.
+     *  Robots gets shot by lasers, first the boards lasers, then the other robots.
+     *  Then the robots pick up flags if possible, and win the game if they got all the flags.
+     *  Afterwards repair sites repair robots, and finally if the robot is on a pit it falls into it.
+     * After doing this 5 times it clears the register and waits for new cards.
+     */
     private void doTurn() {
         while (!gameIsDone) {
             //Does a full register for each iteration of the while loop
@@ -78,12 +114,11 @@ public class TurnHandler {
                 }
                 //TODO Robots hit each other
                 for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    pickUpFlag(robot, idPlayerHash.get(id));
+                    pickUpFlag(idPlayerHash.get(id));
                 }
                 for (int id: idPlayerHash.keySet()) {
-                    Robot robot = idPlayerHash.get(id).getRobot();
-                    repair(robot, idPlayerHash.get(id));
+
+                    repair(idPlayerHash.get(id));
                 }
                 for (int id: idPlayerHash.keySet()) {
                     Robot robot = idPlayerHash.get(id).getRobot();
@@ -97,13 +132,16 @@ public class TurnHandler {
             }
             //TODO remove register etc...
             for (int id: idPlayerHash.keySet()) {
-                Robot robot = idPlayerHash.get(id).getRobot();
-                cleanUp(robot, idPlayerHash.get(id));
+                cleanUp(idPlayerHash.get(id));
             }
-
+            game.clearAllCards();
         }
     }
 
+    /**
+     * The pitFall method checks if the robot falls into a pit, and if it does it destroys the robot
+     * @param robot This is the robot that gets check if it is on a pit.
+     */
     public void pitFall(Robot robot) {
         if (!robot.isDestroyed()) {
             if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
@@ -111,11 +149,18 @@ public class TurnHandler {
                 board.removeObject(robot);
                 robot.destroy();
             }
+
         }
 
     }
 
-    public void cleanUp(Robot robot, Player myPlayer) {
+    /**
+     * The cleanUp method respawn a robot if it is destroyed, or if the player is out of lives, that player is then out
+     * of the game.
+     * @param myPlayer This is the player and corresponding robot that gets checked.
+     */
+    public void cleanUp(Player myPlayer) {
+        Robot robot = myPlayer.getRobot();
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -127,10 +172,16 @@ public class TurnHandler {
                 gameIsDone = true;
             }
         }
-        game.clearAllCards();
+
     }
 
-    public void repair(Robot robot, Player myPlayer) {
+    /**
+     * The method repairs a robot and sets a new respawn location for it.
+     * If it is a wrench and hammer repair site it gives an option card to the player.
+     * @param myPlayer
+     */
+    public void repair(Player myPlayer) {
+        Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof RepairSite) {
@@ -146,7 +197,12 @@ public class TurnHandler {
         }
     }
 
-    public void pickUpFlag(Robot robot, Player myPlayer) {
+    /**
+     * pickUpFlag picks up flags for the player, and if the player has all the flags, wins the game.
+     * @param myPlayer This is the player that tries to pick up flags.
+     */
+    public void pickUpFlag(Player myPlayer) {
+        Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof Flag) {
@@ -162,15 +218,22 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * Board lasers shoot, if a robot is in the path of a laser it gets hit and takes damage.
+     * @param robot This is the robot that gets checked.
+     */
     public void boardLasersShoot(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof BoardLaser) {
             robot.takeDamage();
         }
-        game.setBoard(board);
     }
 
+    /**
+     * Gears rotate robots that are on top of them.
+     * @param robot This is the robot that gets checked.
+     */
     public void gearsMove(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -185,6 +248,10 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * Pushers move robots if the are on top of them.
+     * @param robot This is the robot that gets checked.
+     */
     public void pushersMove(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -195,6 +262,10 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * Express conveyor belts moves once, if a robot is on top it moves with it.
+     * @param robot This is the robot tha may get moved.
+     */
     public void expressConveyorMove(Robot robot) {
         if (robot.isDestroyed()) return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -213,6 +284,11 @@ public class TurnHandler {
 
         }
     }
+
+    /**
+     * Conveyor belts moves once, if a robot is on top it moves with it.
+     * @param robot This is the robot tha may get moved.
+     */
     public void conveyorMove(Robot robot) {
 
         if(robot.isDestroyed())return;
@@ -229,6 +305,12 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * This method moves or rotates robots according to the card given. If a card has value 3, the robot moves 3 tiles
+     * in the direction it's facing. If it has rotate value then it rotates.
+     * @param card A program card that determines how to move the robot.
+     * @param robot Robot that gets moved.
+     */
     public void cardMove(NonTextureProgramCard card, Robot robot){
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
@@ -260,6 +342,9 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * Interrupts the thread that doTurn runs on, so that the program manages to close.
+     */
     public void dispose() {
         phase.interrupt();
     }

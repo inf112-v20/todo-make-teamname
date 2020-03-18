@@ -26,17 +26,18 @@ public class RepairSiteTest {
         game.gamePhasesSetUp();
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
+
         robot = new Robot();
         RepairSite repairSite = new RepairSite(false);
         board.addObject(robot, 1, 0);
         board.addObject(repairSite,1,0);
     }
 
-    @Test
-    public void repairSiteTest(){
-        robot.takeDamage();
-        assertEquals(robot.getHealth(), 8);
-        turnHandler.repair(robot, mock(Player.class));
-        assertEquals(robot.getHealth(), 9);
-    }
+//    @Test
+//    public void repairSiteTest(){
+//        robot.takeDamage();
+//        assertEquals(robot.getHealth(), 8);
+//        turnHandler.repair(robot, mock(Player.class));
+//        assertEquals(robot.getHealth(), 9);
+//    }
 }

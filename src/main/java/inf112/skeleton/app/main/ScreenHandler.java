@@ -25,6 +25,7 @@ public class ScreenHandler implements ApplicationListener {
 
     @Override
     public void create() {
+        
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);

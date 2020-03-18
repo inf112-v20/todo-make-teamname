@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import inf112.skeleton.app.main.Game;
-import inf112.skeleton.app.objects.player.Robot;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -94,5 +93,10 @@ public class LanSetUpTest {
 
     @Test
     public void sendNameTest(){
+        game1.sendName("a");
+        game2.sendName("b");
+        for (int i = 0; i < 2; i++) {
+            assertEquals(game1.getNames()[i], game2.getNames()[i]);
+        }
     }
 }
