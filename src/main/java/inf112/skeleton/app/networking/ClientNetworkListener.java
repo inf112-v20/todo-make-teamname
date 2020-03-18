@@ -8,8 +8,8 @@ import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
 /**
- * This Listener class sends and receives data to and from the server. It also calls on methods in game to send
- * data to game. For example game.receiveStart() to start the "playing" part of the game.
+ * This Listener class sends and receives data to and from the server.<BR> It also calls on methods in game to send
+ * data to game.<BR> For example game.receiveStart() to start the "playing" part of the game.
  */
 public class ClientNetworkListener extends Listener {
     private Client client;
@@ -84,7 +84,7 @@ public class ClientNetworkListener extends Listener {
     }
 
     /**
-     * If the client disconnects the Kryonet client calls this method. Then sets connection to false and prints a
+     * If the client disconnects the Kryonet client calls this method.<BR> Then sets connection to false and prints a
      * message that you have disconnected.
      * @param c
      */

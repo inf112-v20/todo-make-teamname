@@ -29,7 +29,7 @@ public class ServerNetworkListener extends Listener {
     }
 
     /**
-     * When a client connects to the Kryonet server the method gets called, and then prints a message to the console.
+     * When a client connects to the Kryonet server the method gets called, and then prints a message to the console.<BR>
      * Afterwards it updates which players are on the server, and sends that number to all clients.
      * @param c
      */
@@ -84,7 +84,7 @@ public class ServerNetworkListener extends Listener {
     }
 
     /**
-     * For now only used in testing, to confirm that the right cards where sent, and received.
+     * For now only used in testing, to confirm that the right cards where sent, and received.<BR>
      * @return Returns up to the last 5 sets of cards sent.
      */
     public ArrayList<Packets.Packet02Cards> getReceivedCards(){
