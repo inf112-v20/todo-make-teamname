@@ -12,7 +12,7 @@ import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
-    private BitmapFont font;
+    private static BitmapFont font;
 
     private static ScreenState screenState = ScreenState.MAINMENU;
 

@@ -5,6 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.ScreenHandler;
 import inf112.skeleton.app.main.ScreenState;
@@ -41,11 +50,12 @@ public class HostGameMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
+        input();
         font.setColor(Color.BLACK);
         font.draw(batch, "IP address: " + ipAddress, Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
         font.setColor(Color.YELLOW);
         font.draw(batch, "Go to lobby", Settings.SCREEN_WIDTH / 6 * 5, Settings.SCREEN_HEIGHT / 18);
-        input();
+
     }
 
     /**
@@ -53,7 +63,11 @@ public class HostGameMenu {
      */
     public void input() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+            exitScreen();
         }
+    }
+
+    private void exitScreen() {
+        ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
     }
 }

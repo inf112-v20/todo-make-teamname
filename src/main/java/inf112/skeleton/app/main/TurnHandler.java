@@ -3,6 +3,7 @@ package inf112.skeleton.app.main;
 
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
+import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.CardTranslator;
@@ -16,7 +17,7 @@ import java.util.concurrent.Semaphore;
 
 /**
  * The TurnHandler class handles the turn from after the program registers phase and until the end of the turn. <BR>
- * You wil only need to use one TurnHandler for the program as it will wait on new cards from the  Game class between
+ * You wil only need to use one TurnHandler for the program as it will wait on new cards from the {@link Game}  class between
  * each turn.<BR>
  * When it gets the cards from Game it then plays them out on the board according to the value of cards and elements on
  * the board.
@@ -32,8 +33,9 @@ public class TurnHandler {
 
 
     /**
-     * The create method is used for setting up the TurnHandler so that all field variables are initialized, or
-     * referenced from Game, it then finishes with starting a new Thread so that doTurn runs concurrently with the rest
+     * The create method is used for setting up the TurnHandler so that all field variables are initialized,<BR> or
+     * referenced from {@link Game}, it then finishes with starting a new Thread so that doTurn runs
+     * concurrently with the rest
      * of the program. Making the backend run separately from the frontend.
      * @param game1 This parameter links the TurnHandler class to the Game class so that they are referencing the same
      *              object.
@@ -49,7 +51,8 @@ public class TurnHandler {
     }
 
     /**
-     * This method releases the semaphore that lets doTurn pass so that the Complete Registers phase can start.
+     * This method releases the semaphore that lets {@link TurnHandler#doTurn()}  pass so that the Complete Registers
+     * phase can start.
      * Call on this when the new cards have been saved in allCards in Game.
      */
     public void isReady(){
@@ -60,10 +63,12 @@ public class TurnHandler {
      * This method handles all the parts of the phases after the Program Register phase.<BR> It starts when is ready is
      * called, you should not call this method.<BR>
      * First it gets the released and acquires the semaphore again.<BR>
-     * Then it gets the new cards form Game's allCards, and makes a HashMap for each of the 5 turns of the program cards.<BR>
+     * Then it gets the new cards form {@link Game#getAllCards()} , <BR>
+     * and makes a HashMap for each of the 5 turns of the program cards.<BR>
      * It does the following 5 times, one time for each card per player: <ol>
-     *<li>  The method pairs the cards with the playerId so that the correct robot moves when a card i played.
-     *<li>  After that each robot does the move the card had.
+     *<li>  The method pairs the cards with the {@link TurnHandler#idPlayerHash}'s playerId  so that the correct robot
+     *  moves when a card is played.
+     *<li>  After that each robot does the move the card indicated.
      *<li>  Then express conveyor belts move once, followed by express conveyor belts and conveyor belts moving once.
      *<li>  Pushers push robots, and gears then rotate them.
      *<li>  Robots gets shot by lasers, first the boards lasers, then the other robots.
@@ -71,7 +76,7 @@ public class TurnHandler {
      *</ol>  Afterwards repair sites repair robots, and finally if the robot is on a pit it falls into it.
      * After doing this 5 times it clears the register and waits for new cards.
      */
-    private void doTurn() {
+    public void doTurn() {
         while (!gameIsDone) {
             //Does a full register for each iteration of the while loop
             try {
@@ -286,7 +291,7 @@ public class TurnHandler {
     }
 
     /**
-     * Conveyor belts moves once, if a robot is on top it moves with it.
+     * Conveyor belts and express conveyor belts moves once, if a robot is on top it moves with it.
      * @param robot This is the robot tha may get moved.
      */
     public void conveyorMove(Robot robot) {
@@ -343,7 +348,7 @@ public class TurnHandler {
     }
 
     /**
-     * Interrupts the thread that doTurn runs on, so that the program manages to close.
+     * Interrupts the thread that {@link TurnHandler#doTurn()} runs on, so that the program manages to close.
      */
     public void dispose() {
         phase.interrupt();

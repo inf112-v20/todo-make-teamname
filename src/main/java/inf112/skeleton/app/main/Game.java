@@ -151,7 +151,7 @@ public class Game extends InputAdapter {
 
     /**
      * The isReady method adds a new set of cards to allCards, and if all players have sent their cards it calls
-     * TurnHandler.isReady(), which then releases TurnHandler.doTurn(), and the Complete Registers phase starts.
+     * {@link TurnHandler#isReady()}, which then releases{@link TurnHandler#doTurn()}. and the Complete Registers phase starts.
      * @param packet
      */
     public void isReady(Packets.Packet02Cards packet){
@@ -163,7 +163,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * This method initializes a new TurnHandler.
+     * This method initializes a new {@link TurnHandler}.
      */
     public void gamePhasesSetUp() {
         turnHandler = new TurnHandler();
@@ -171,7 +171,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * This method calls BoardParser.parse(String boardName) to make a new board matching the string name, it the
+     * This method calls {@link BoardParser#parse(String boardName)} to make a new board matching the string name, it the
      * calls setBoard to set the Game.board = BoardParser.parse(String boardName).
      * @param boardName This parameter is the name of the board that will be played.
      */
@@ -188,7 +188,7 @@ public class Game extends InputAdapter {
 
     /**
      * This HashMap is used to connect a player with a client on the server.
-     * @return This returns a HashMap with playerId(clientId) as a key and a player as value.
+     * @return This returns a HashMap with playerId ( the Kryonet clientId) as a key and a player as value.
      */
     public HashMap<Integer, Player> getIdPlayerHash() {
         return idPlayerHash;
@@ -196,7 +196,7 @@ public class Game extends InputAdapter {
 
     /**
      * This ArrayList is used to store the newest set of cards from the server.
-     * @return This returns an ArrayList of Packets.Packet02Cards which contains cards and player id.
+     * @return This returns an ArrayList of {@link Packets.Packet02Cards} which contains cards and player id.
      */
     public ArrayList<Packets.Packet02Cards> getAllCards() {
         return allCards;
@@ -207,7 +207,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * This method initializes idPlayerHash, names and allCards. Then it creates four new players and puts them into
+     * This method initializes {@link Game#idPlayerHash}, names and allCards. Then it creates four new players and puts them into
      * idPlayerHash.
      */
     public void playerSetup() {
@@ -233,7 +233,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * This method initializes the textures needed in the Game class.
+     * This method initializes the textures needed in the {@link Game} class.
      */
     private void textureSetUp() {
         tempMap = new Texture("assets/maps/riskyexchange.png");
@@ -249,7 +249,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * The hostGame method starts a new server and a client. This should only be called by the one hosting the game.
+     * The hostGame method starts a new {@link MPServer} and a {@link MPClient}. This should only be called by the one hosting the game.
      * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
      */
     public InetAddress hostGame(){
@@ -261,7 +261,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * The joinGame method initializes a new client and tries to connect to the server on the IP Address given.
+     * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
      * @param ipAddress The IP Address for the server as a String.
      */
     public void joinGame(String ipAddress){
@@ -270,7 +270,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * The joinGame method initializes a new client and tries to connect to the server on the IP Address given.
+     * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
      * @param ipAddress The IP Address for the server as a InetAddress.
      */
     public void joinGame(InetAddress ipAddress){
@@ -287,7 +287,7 @@ public class Game extends InputAdapter {
 
     /**
      * This method updates how many player there are connected to the game.<BR> It gets called on by the client each time
-     * a new client connects to the server, and the server then tells all the clients.
+     * a new  {@link MPClient} connects to the {@link MPServer}, and the server then tells all the clients.
      * @param i Number of people in the game.
      */
     public void setNrOfPlayers(int i){
@@ -325,7 +325,7 @@ public class Game extends InputAdapter {
     }
 
     /**
-     * Gets called by the client when the server gets the start signal, then starts then "playing" part of the game.
+     * Gets called by the client when the {@link MPServer} gets the start signal, then starts then "playing" part of the game.
      */
     public void receiveStart() {
         gamePhasesSetUp();
@@ -351,7 +351,7 @@ public class Game extends InputAdapter {
 
     /**
      *
-     * @return Returns all the usernames of players currently in the game.
+     * @return Returns all the user names of players currently in the game.
      */
     public String[] getNames(){
         return names;
@@ -366,7 +366,7 @@ public class Game extends InputAdapter {
 
     /**
      *
-     * @return Returns true if the client is connected to a server.
+     * @return Returns true if the {@link MPClient} is connected to a server.
      */
     public boolean getConnection(){
         return client.getConnection();
