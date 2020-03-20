@@ -30,33 +30,18 @@ public class LanSetUpTest {
                 game1 = new Game();
                 game2 = new Game();
             }
-
             @Override
-            public void resize(int i, int i1) {
-
-            }
-
+            public void resize(int i, int i1) { }
             @Override
-            public void render() {
-
-            }
-
+            public void render() { }
             @Override
-            public void pause() {
-
-            }
-
+            public void pause() { }
             @Override
-            public void resume() {
-
-            }
-
+            public void resume() { }
             @Override
-            public void dispose() {
-
-            }
+            public void dispose() { }
         }, conf);
-        Gdx.gl = mock(GL20.class); // my improvement
+        Gdx.gl = mock(GL20.class);
         game1.boardSetUp("riskyexchange");
         game2.boardSetUp("riskyexchange");
         game1.playerSetup();
