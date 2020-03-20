@@ -50,6 +50,7 @@ public class ServerNetworkListener extends Listener {
      */
     public void disconnected(Connection c){
         System.out.println("Player: " + c.getID() + " has disconnected");
+        playerNr--;
     }
 
     /**

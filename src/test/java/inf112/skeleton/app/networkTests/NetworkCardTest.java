@@ -7,23 +7,28 @@ import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.ProgramCard;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 public class NetworkCardTest {
     private static MPServer server;
     private static MPClient client;
     private static Game game;
+    private static MPClient newClient;
 
     @BeforeClass
     public static void setUp(){
         game = mock(Game.class);
-        server = new MPServer();
+        server = new MPServer(40000, 42000);
         server.run();
-        client = new MPClient(server.getAddress(),game);
+        client = new MPClient(server.getAddress(), game, 40000, 42000);
+
+
     }
 
     @Test
@@ -39,7 +44,7 @@ public class NetworkCardTest {
         client.sendCards(cards);
         try {
             //This thread sleeps so the server gets some time to receive the cards
-            Thread.sleep(5);
+            Thread.sleep(50);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -77,4 +82,28 @@ public class NetworkCardTest {
         }
     }
 
+
+    @Test
+    public void idTest(){
+        assertEquals(client.getId(), 1);
+        newClient = new MPClient(server.getAddress(), game,40000, 42000);
+        try {
+            Thread.sleep(15);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        assertEquals(newClient.getId(), 2);
+        newClient.dispose();
+    }
+
+    @Test
+    public void connectTest(){
+        assertTrue(client.getConnection());
+    }
+
+    @AfterClass
+    public static void dispose(){
+        server.dispose();
+        client.dispose();
+    }
 }

@@ -67,7 +67,7 @@ public class TurnHandler {
      * and makes a HashMap for each of the 5 turns of the program cards.<BR>
      * It does the following 5 times, one time for each card per player: <ol>
      *<li>  The method pairs the cards with the {@link TurnHandler#idPlayerHash}'s playerId  so that the correct robot
-     *  moves when a card is played.
+     *      moves when a card is played.
      *<li>  After that each robot does the move the card indicated.
      *<li>  Then express conveyor belts move once, followed by express conveyor belts and conveyor belts moving once.
      *<li>  Pushers push robots, and gears then rotate them.

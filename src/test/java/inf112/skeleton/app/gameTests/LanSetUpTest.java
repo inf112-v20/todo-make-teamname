@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import inf112.skeleton.app.main.Game;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -18,7 +19,6 @@ import static org.mockito.Mockito.mock;
 
 public class LanSetUpTest {
     private static Game game1, game2;
-    private static InetAddress ip;
 
     @BeforeClass
     public static void setUp(){
@@ -26,10 +26,7 @@ public class LanSetUpTest {
         HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
         new HeadlessApplication(new ApplicationListener() {
             @Override
-            public void create() {
-                game1 = new Game();
-                game2 = new Game();
-            }
+            public void create() { }
             @Override
             public void resize(int i, int i1) { }
             @Override
@@ -42,11 +39,13 @@ public class LanSetUpTest {
             public void dispose() { }
         }, conf);
         Gdx.gl = mock(GL20.class);
+        game1 = new Game();
+        game2 = new Game();
         game1.boardSetUp("riskyexchange");
         game2.boardSetUp("riskyexchange");
         game1.playerSetup();
         game2.playerSetup();
-        ip = game1.hostGame();
+        InetAddress ip = game1.hostGame();
         game2.joinGame(ip);
     }
 
@@ -84,4 +83,5 @@ public class LanSetUpTest {
             assertEquals(game1.getNames()[i], game2.getNames()[i]);
         }
     }
+
 }

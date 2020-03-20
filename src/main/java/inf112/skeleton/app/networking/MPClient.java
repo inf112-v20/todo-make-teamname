@@ -19,6 +19,8 @@ public class MPClient {
 
     public Client client;
     private ClientNetworkListener cnl;
+    int udp;
+    int tcp;
 
 
     /**
@@ -30,6 +32,8 @@ public class MPClient {
     public MPClient(InetAddress ipAddress, Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
+        tcp = 54555;
+        udp = 54777;
 
         cnl.init(client, game);
         registerPackets();
@@ -39,12 +43,31 @@ public class MPClient {
         new Thread(client).start();
 
         try {
-            client.connect(5000, ipAddress, 54555, 54777);
+            client.connect(5000, ipAddress, tcp, udp);
         }catch (IOException e){
             e.printStackTrace();
         }
     }
 
+    public MPClient(InetAddress ipAddress, Game game, int udp, int tcp){
+        client = new Client();
+        cnl = new ClientNetworkListener();
+        this.udp = udp;
+        this.tcp = tcp;
+
+        cnl.init(client, game);
+        registerPackets();
+        client.addListener(cnl);
+
+
+        new Thread(client).start();
+
+        try {
+            client.connect(5000, ipAddress, tcp, udp);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
     /**
      * The constructor initializes a Kryonet client and a ClientNetworkListener, registers the classes sent over the
      * server, starts the client and finally tries to connect to the server.
@@ -54,6 +77,8 @@ public class MPClient {
     public MPClient(String ipAddress, Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
+        tcp = 54555;
+        udp = 54777;
 
         cnl.init(client, game);
         registerPackets();
@@ -63,7 +88,7 @@ public class MPClient {
         new Thread(client).start();
 
         try {
-            client.connect(5000, ipAddress, 54555, 54777);
+            client.connect(5000, ipAddress, tcp, udp);
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -146,5 +171,12 @@ public class MPClient {
         name.name = new String[]{text};
         name.playerId = client.getID();
         cnl.sendName(name);
+    }
+
+    public void dispose(){
+        try {
+            client.dispose();
+        } catch (IOException e) {
+        }
     }
 }
