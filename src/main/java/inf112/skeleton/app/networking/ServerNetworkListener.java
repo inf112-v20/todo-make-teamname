@@ -51,6 +51,9 @@ public class ServerNetworkListener extends Listener {
     public void disconnected(Connection c){
         System.out.println("Player: " + c.getID() + " has disconnected");
         playerNr--;
+        Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
+        nrOfPlayers.playerNr = playerNr;
+        server.sendToAllTCP(nrOfPlayers);
     }
 
     /**

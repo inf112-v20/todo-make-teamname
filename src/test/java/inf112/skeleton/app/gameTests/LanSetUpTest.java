@@ -62,11 +62,8 @@ public class LanSetUpTest {
     @Test
     public void deleteUnconnectedPlayersTest(){
         assertEquals(game1.getIdPlayerHash().size(), 4);
-        assertEquals(game2.getIdPlayerHash().size(), 4);
         game1.deleteUnconnectedPlayers();
-        game2.deleteUnconnectedPlayers();
         assertEquals(game1.getIdPlayerHash().size(), 2);
-        assertEquals(game2.getIdPlayerHash().size(), 2);
     }
 
     @Test
