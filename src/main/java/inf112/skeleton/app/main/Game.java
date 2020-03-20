@@ -149,8 +149,6 @@ public class Game extends InputAdapter {
 
     public void dispose() {
         turnHandler.dispose();
-        client.dispose();
-        if(host) server.dispose();
     }
 
     /**
