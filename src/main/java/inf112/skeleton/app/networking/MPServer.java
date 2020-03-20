@@ -15,12 +15,23 @@ import java.util.Arrays;
  */
 public class MPServer implements Runnable{
     //Connection info
-    int ServerPort = 54777;
+    int udp;
+    int tcp;
     private InetAddress address;
 
     //Kryonet server
     Server server;
     ServerNetworkListener snl;
+
+    public MPServer(int udp, int tcp){
+        this.udp = udp;
+        this.tcp = tcp;
+    }
+
+    public MPServer(){
+        tcp = 54555;
+        udp = 54777;
+    }
 
     /**
      * Register the classes sent over the server.
@@ -50,7 +61,7 @@ public class MPServer implements Runnable{
 
         server.addListener(snl);
         try {
-            server.bind(54555, 54777);
+            server.bind(tcp, udp);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,5 +92,11 @@ public class MPServer implements Runnable{
         return new ArrayList<>(Arrays.asList(snl.getReceivedCards().get(snl.getReceivedCards().size() - 1).programCards));
     }
 
+    public void dispose(){
+        try {
+            server.dispose();
+        } catch (Exception e) {
+        }
+    }
 
 }

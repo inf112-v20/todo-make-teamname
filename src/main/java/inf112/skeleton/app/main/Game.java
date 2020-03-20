@@ -41,12 +41,14 @@ public class Game extends InputAdapter {
     private ArrayList<Packets.Packet02Cards> allCards;
     private MPServer server;
     private TurnHandler turnHandler;
+    private boolean host;
 
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
+
 
 
     /**
@@ -147,6 +149,8 @@ public class Game extends InputAdapter {
 
     public void dispose() {
         turnHandler.dispose();
+        client.dispose();
+        if(host) server.dispose();
     }
 
     /**
@@ -257,6 +261,7 @@ public class Game extends InputAdapter {
         server.run();
         client = new MPClient(server.getAddress(),this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        host = true;
         return server.getAddress();
     }
 
@@ -267,6 +272,7 @@ public class Game extends InputAdapter {
     public void joinGame(String ipAddress){
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        host = false;
     }
 
     /**
