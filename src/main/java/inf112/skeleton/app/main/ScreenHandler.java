@@ -5,25 +5,37 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import inf112.skeleton.app.main.menuScreens.HostGameMenu;
+import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
+import inf112.skeleton.app.main.menuScreens.LobbyMenu;
+import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
-    private BitmapFont font;
+    private static BitmapFont font;
 
     private static ScreenState screenState = ScreenState.MAINMENU;
 
     private Game game;
-
+    private static JoinGameMenu joinGameMenu;
+    private static HostGameMenu hostGameMenu;
+    private static LobbyMenu lobbyMenu;
     private Texture background;
+
 
     @Override
     public void create() {
+        
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
         background = new Texture("assets/pink_background.png");
         game = new Game();
         game.create();
+        hostGameMenu = new HostGameMenu(game);
+        joinGameMenu = new JoinGameMenu(game);
+        lobbyMenu = new LobbyMenu(game);
+
     }
 
     @Override
@@ -39,6 +51,15 @@ public class ScreenHandler implements ApplicationListener {
         switch (screenState) {
             case GAME:
                 game.render(batch, font);
+                break;
+            case JOINGAME:
+                joinGameMenu.render(batch, font);
+                break;
+            case HOSTGAME:
+                hostGameMenu.render(batch, font);
+                break;
+            case LOBBYMENU:
+                lobbyMenu.render(batch, font);
                 break;
             default:
                 MainMenu.render(batch, font);
@@ -66,6 +87,17 @@ public class ScreenHandler implements ApplicationListener {
 
     public static void changeScreenState(ScreenState newState) {
         screenState = newState;
+        if(screenState == ScreenState.HOSTGAME) {
+            hostGameMenu.create();
+            lobbyMenu.setHost(true);
+        }
+        if(screenState == ScreenState.JOINGAME) joinGameMenu.create();
+        if(screenState == ScreenState.LOBBYMENU) lobbyMenu.create();
+        if(screenState == ScreenState.GAME){
+            hostGameMenu = null;
+            joinGameMenu = null;
+            lobbyMenu = null;
+        }
     }
 
 }

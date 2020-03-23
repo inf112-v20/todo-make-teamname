@@ -8,72 +8,61 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
-import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
-import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import com.badlogic.gdx.utils.Queue;
-import inf112.skeleton.app.objects.boardObjects.*;
-import inf112.skeleton.app.objects.cards.ProgramCard;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
+import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 
+/**
+ * The Game class is the centerpiece that ties all the different parts of the game together.<BR> It sends information to the
+ * MPClient which sends it to the server.<BR> It creates all the player and board objects, and then keeps control of
+ * it.
+ */
 public class Game extends InputAdapter {
     private Board board;
     private MPClient client;
     private Player myPlayer;
-    private Thread phase;
-    private Semaphore isReadySem;
-    private boolean gameIsDone;
+    private int nrOfPlayers;
+    private HashMap<Integer, Player> idPlayerHash;
+    private String[] names;
     private int cardBoxLeft;
     private int cardBoxRight;
     private int buttonReadyLeftX;
     private int buttonReadyLeftY;
-
+    private ArrayList<Packets.Packet02Cards> allCards;
+    private MPServer server;
+    private TurnHandler turnHandler;
+    private boolean host;
 
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
-    private ProgramCard[] allCards;
 
+
+
+    /**
+     * This method calls all the methods needed to start the "playing" part of the game.
+     */
     public void create() {
-        board = BoardParser.parse("riskyexchange");
+        boardSetUp("riskyexchange");
         Gdx.input.setInputProcessor(this);
-        MPServer server = new MPServer();
-        server.run();
-        client = new MPClient(server.getAddress(),this);
-        isReadySem = new Semaphore(0);
-        gameIsDone = false;
-        myPlayer = new Player();
-        myPlayer.deal();
-        phase = new Thread(this::doTurn);
-        phase.start();
-        board.addObject(myPlayer.getRobot(), myPlayer.getRobot().getTileX(), myPlayer.getRobot().getTileY());
-
-        tempMap = new Texture("assets/maps/riskyexchange.png");
-        selectedFrame = new Texture("assets/cards/card_selected.png");
-        buttonReady = new Texture("assets/button_ready.png");
-        damageTokens = new Texture[3];
-        damageTokens[0] = new Texture("assets/damage-dead.png");
-        damageTokens[1] = new Texture("assets/Damage-not-taken.png");
-        damageTokens[2] = new Texture("assets/damage-taken.png");
-        lifeTokens = new Texture[2];
-        lifeTokens[0] = new Texture("assets/life-token-lost.png");
-        lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
-
-        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-myPlayer.getCards().length);
-        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+myPlayer.getCards().length);
-        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
-        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
+        playerSetup();
+        textureSetUp();
+        cardBoxSetUp();
     }
+
+
 
     @Override
     public boolean keyUp(int keycode) {
@@ -109,9 +98,10 @@ public class Game extends InputAdapter {
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
-                screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-Settings.TILE_HEIGHT&&
+                screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
-            if (myPlayer.getArrayCards().length == 5)client.sendCards(myPlayer.getArrayCards());
+            //TODO fix so that one player cant send multiple sets of cards
+            if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }
         return false;
     }
@@ -146,245 +136,243 @@ public class Game extends InputAdapter {
             }
         }
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
-            batch.draw(damageTokens[1], i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+            batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
         }
         for (int i = myPlayer.getRobot().getHealth() ; i < 9; i++){
-            batch.draw(damageTokens[2], i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT, Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+            batch.draw(damageTokens[2], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
         }
         for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
-            batch.draw(lifeTokens[1],i*(Settings.TILE_WIDTH + 2), Settings.SCREEN_HEIGHT-Settings.TILE_HEIGHT*2, Settings.TILE_WIDTH, Settings.TILE_HEIGHT );
+            batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
         }
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , Settings.TILE_WIDTH*2, Settings.TILE_HEIGHT);
+        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
     }
 
     public void dispose() {
-        phase.interrupt();
-
+        turnHandler.dispose();
     }
 
-    //Call this when cards have been selected to be played
-    public void isReady(Packets.Packet02Cards p){
-        allCards = new ProgramCard[p.programCards.length];
-        for (int i = 0; i < p.programCards.length; i++) {
-            if(p.programCards[i] != null) {
-                allCards[i] = CardTranslator.intToProgramCard(p.programCards[i]);
-            }
-        }
+    /**
+     * The isReady method adds a new set of cards to allCards, and if all players have sent their cards it calls
+     * {@link TurnHandler#isReady()}, which then releases{@link TurnHandler#doTurn()}. and the Complete Registers phase starts.
+     * @param packet
+     */
+    public void isReady(Packets.Packet02Cards packet){
+        allCards.add(packet);
 
-        isReadySem.release();
-    }
-
-    private void doTurn() {
-        while (!gameIsDone) {
-            //Does a full register for each iteration of the while loop
-            try {
-                //Waits until cards have been selected
-                isReadySem.acquire();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(Thread.interrupted()) return;
-            Robot robot = myPlayer.getRobot();
-            for (ProgramCard card : allCards) {
-                if(card == null || robot.isDestroyed()) continue;
-                //TODO: later do each step for all players too
-                card.flip(); // flips the texture from back to front
-
-                cardMove(card); // moves robot
-                if(!robot.isDestroyed()){
-
-                    conveyorMove(); // conveyorbelt moves
-                    if (robot.isDestroyed())break;
-                    pushersMove();
-                    gearsMove();
-                    boardLasersShoot();
-                    //TODO Robots hit each other
-
-                    if(pickUpFlag()){
-                        continue;
-                    }
-                    repair();
-                }
-                pitFall();
-                try {
-                    Thread.sleep(400);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            //TODO clean up phase, remove register etc...
-            cleanUp();
-
+        if(allCards.size() == nrOfPlayers){
+            turnHandler.isReady();
         }
     }
 
-    private void pitFall() {
-        Robot robot = myPlayer.getRobot();
-        if (!robot.isDestroyed()){
-            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                //Robot falls into pit
-                board.removeObject(robot);
-                robot.destroy();
-            }
+    /**
+     * This method initializes a new {@link TurnHandler}.
+     */
+    public void gamePhasesSetUp() {
+        turnHandler = new TurnHandler();
+        turnHandler.create(this);
+    }
+
+    /**
+     * This method calls {@link BoardParser#parse(String boardName)} to make a new board matching the string name, it the
+     * calls setBoard to set the Game.board = BoardParser.parse(String boardName).
+     * @param boardName This parameter is the name of the board that will be played.
+     */
+    public void boardSetUp(String boardName) {
+        setBoard(BoardParser.parse(boardName));
+    }
+
+    public void setBoard(Board board){
+        this.board = board;
+    }
+    public Board getBoard(){
+        return board;
+    }
+
+    /**
+     * This HashMap is used to connect a player with a client on the server.
+     * @return This returns a HashMap with playerId ( the Kryonet clientId) as a key and a player as value.
+     */
+    public HashMap<Integer, Player> getIdPlayerHash() {
+        return idPlayerHash;
+    }
+
+    /**
+     * This ArrayList is used to store the newest set of cards from the server.
+     * @return This returns an ArrayList of {@link Packets.Packet02Cards} which contains cards and player id.
+     */
+    public ArrayList<Packets.Packet02Cards> getAllCards() {
+        return allCards;
+    }
+
+    public TurnHandler getTurnHandler() {
+        return turnHandler;
+    }
+
+    /**
+     * This method initializes {@link Game#idPlayerHash}, names and allCards. Then it creates four new players and puts them into
+     * idPlayerHash.
+     */
+    public void playerSetup() {
+        idPlayerHash = new HashMap<>();
+        names = new String[4];
+        allCards = new ArrayList<>();
+        for (int i = 1; i < 5; i++) {
+            Player player = new Player();
+            player.deal();
+            board.addObject(player.getRobot(), i, 0);
+            idPlayerHash.put(i, player);
         }
     }
 
-    private void cleanUp() {
-        Robot robot = myPlayer.getRobot();
-        if(robot.isDestroyed()){
-            if(myPlayer.getLife() > 0) {
-                //Respawn robot if player has more life left
-                board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
-                robot.respawn();
-                System.out.println("respawn");
-            }else{
-                //Not the case if there are more players
-                gameIsDone = true;
-            }
+    /**
+     * This method sets the settings for the card boxes and button.
+     */
+    private void cardBoxSetUp() {
+        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
+        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
+        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
+        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
+    }
+
+    /**
+     * This method initializes the textures needed in the {@link Game} class.
+     */
+    private void textureSetUp() {
+        tempMap = new Texture("assets/maps/riskyexchange.png");
+        selectedFrame = new Texture("assets/cards/card_selected.png");
+        buttonReady = new Texture("assets/button_ready.png");
+        damageTokens = new Texture[3];
+        damageTokens[0] = new Texture("assets/damage-dead.png");
+        damageTokens[1] = new Texture("assets/Damage-not-taken.png");
+        damageTokens[2] = new Texture("assets/damage-taken.png");
+        lifeTokens = new Texture[2];
+        lifeTokens[0] = new Texture("assets/life-token-lost.png");
+        lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
+    }
+
+    /**
+     * The hostGame method starts a new {@link MPServer} and a {@link MPClient}. This should only be called by the one hosting the game.
+     * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
+     */
+    public InetAddress hostGame(){
+        server = new MPServer();
+        server.run();
+        client = new MPClient(server.getAddress(),this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        host = true;
+        return server.getAddress();
+    }
+
+    /**
+     * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
+     * @param ipAddress The IP Address for the server as a String.
+     */
+    public void joinGame(String ipAddress){
+        client = new MPClient(ipAddress, this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        host = false;
+    }
+
+    /**
+     * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
+     * @param ipAddress The IP Address for the server as a InetAddress.
+     */
+    public void joinGame(InetAddress ipAddress){
+        client = new MPClient(ipAddress, this);
+        setMyPlayer(idPlayerHash.get(client.getId()));
+    }
+
+    public int getId(){
+        return client.getId();
+    }
+    public void setMyPlayer(Player player){
+        myPlayer = player;
+    }
+
+    /**
+     * This method updates how many player there are connected to the game.<BR> It gets called on by the client each time
+     * a new  {@link MPClient} connects to the {@link MPServer}, and the server then tells all the clients.
+     * @param i Number of people in the game.
+     */
+    public void setNrOfPlayers(int i){
+        nrOfPlayers = i;
+        System.out.println(nrOfPlayers);
+    }
+
+    /**
+     *
+     * @return Returns number of people in the game.
+     */
+    public int getNrOfPlayers() {
+        return nrOfPlayers;
+    }
+
+    /**
+     * The game initializes with 4 players, this gets called the first time the Program Cards phase starts, and deletes
+     * the players that doesnt have a client connected to them.
+     */
+    public void deleteUnconnectedPlayers(){
+        while(nrOfPlayers < idPlayerHash.size()){
+            int j = idPlayerHash.size();
+            board.removeObject(idPlayerHash.get(j).getRobot());
+            idPlayerHash.get(j).getRobot().setTileX(-1);
+            idPlayerHash.get(j).getRobot().setTileY(-1);
+            idPlayerHash.remove(j);
         }
     }
 
-    private void repair() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof RepairSite) {
-            //Heals a damage token if robot
-            robot.healDamage();
-            robot.setRespawn(robot.getTileX(), robot.getTileY());
-            RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-            if (repairSite.getHammer()) {
-                //Player gets an option card
-                //TODO implement optioCards
-                myPlayer.giveOptionCard();
-            }
-        }
+    /**
+     * Sends a startSignal from the host to all the players that them "playing" of the game starts now.
+     */
+    public void sendStartSignal(){
+        client.sendStartSignal();
     }
 
-    private boolean pickUpFlag() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Flag) {
-            Flag flag = (Flag) currentTile.getObjects()[0];
-            if(!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()){
-                myPlayer.addFlag(flag);
-                if(myPlayer.getFlags().size() == board.getFlagNr()){
-                    //TODO endscreen
-                    ScreenHandler.changeScreenState(ScreenState.MAINMENU);
-                    gameIsDone = true;
-                    return true;
-                }
-            }
-        }
-        return false;
+    /**
+     * Gets called by the client when the {@link MPServer} gets the start signal, then starts then "playing" part of the game.
+     */
+    public void receiveStart() {
+        gamePhasesSetUp();
+        deleteUnconnectedPlayers();
+        ScreenHandler.changeScreenState(ScreenState.GAME);
     }
 
-    private void boardLasersShoot() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[1] instanceof BoardLaser) {
-            robot.takeDamage();
-        }
+    /**
+     * Sends the players username to the server
+     * @param userName players username
+     */
+    public void sendName(String userName) {
+        client.sendName(userName);
     }
 
-    private void gearsMove() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof GearClockwise) {
-            //Rotate right
-            robot.rotateRight();
-        }
-
-        if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
-            //Rotate left
-            robot.rotateLeft();
-        }
+    /**
+     * Receives the names of all the players form the server, updates each time a player sends its name to the server.
+     * @param name The names of the current players.
+     */
+    public void receiveNames(Packets.Packet05Name name) {
+        names = name.name;
     }
 
-    private void pushersMove() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Pusher) {
-            //Robot gets pushed
-            Pusher pusher = (Pusher) currentTile.getObjects()[0];
-            board.moveObject(robot, pusher.getDirection());
-        }
+    /**
+     *
+     * @return Returns all the user names of players currently in the game.
+     */
+    public String[] getNames(){
+        return names;
     }
 
-    private void conveyorMove() {
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        //Board elements do their things
-        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            if (conveyorBelt.getExpress()) {
-                //Expressconveoyrbelt moves robot
-                board.moveObject(robot, conveyorBelt.getDirection());
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }
-        currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
-            //Conveoyrbelt moves robot
-            ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            board.moveObject(robot, conveyorBelt.getDirection());
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    /**
+     * Deletes the cards of the last round played.
+     */
+    public void clearAllCards() {
+        allCards.clear();
     }
 
-    private void cardMove(ProgramCard card){
-        Robot robot = myPlayer.getRobot();
-        if (card.getValue() > 0) {
-            for (int i = 0; i < card.getValue(); i++) {
-                if(robot.isDestroyed()) break;
-                //Move robot & check for a colliding wall before moving
-                if (!wallCollision())board.moveObject(robot, robot.getDirection());
-                if (!robot.isDestroyed()){
-                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                        board.removeObject(robot);
-                        robot.destroy();
-                    }
-                }
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else if (card.getRotate()) {
-            if (card.getRotateLeft()) {
-                robot.rotateLeft();
-            } else if (card.getRotateRight()) {
-                robot.rotateRight();
-            } else {
-                robot.rotateRight();
-                robot.rotateRight();
-            }
-        }
+    /**
+     *
+     * @return Returns true if the {@link MPClient} is connected to a server.
+     */
+    public boolean getConnection(){
+        return client.getConnection();
     }
-
-    private boolean wallCollision(){
-        Robot robot = myPlayer.getRobot();
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Wall) {
-            Wall wall = (Wall) currentTile.getObjects()[0];
-            if (wall.getDirection() == robot.getDirection()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void hostGame(){}
-
-    public void joinGame(){}
 }

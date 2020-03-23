@@ -4,9 +4,15 @@ import inf112.skeleton.app.board.Direction;
 
 public class Pusher implements IBoardObject {
 
+    private Direction direction;
+
+    public Pusher(Direction direction){
+        this.direction = direction;
+    }
+
     @Override
     public Direction getDirection() {
-        return null;
+        return direction;
     }
 
     @Override
