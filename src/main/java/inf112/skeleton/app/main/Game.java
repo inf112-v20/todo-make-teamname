@@ -345,8 +345,8 @@ public class Game extends InputAdapter {
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
-                //Move robot
-                board.moveObject(robot, robot.getDirection());
+                //Move robot & check for a colliding wall before moving
+                if (!wallCollision())board.moveObject(robot, robot.getDirection());
                 if (!robot.isDestroyed()){
                     if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                         board.removeObject(robot);
@@ -372,38 +372,16 @@ public class Game extends InputAdapter {
         }
     }
 
-    private void wallCollision(){
+    private boolean wallCollision(){
         Robot robot = myPlayer.getRobot();
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[0];
-            if (wall.getDirection() == Direction.NORTH){
-
+            if (wall.getDirection() == robot.getDirection()){
+                return true;
             }
-            else if (wall.getDirection() == Direction.SOUTH){
-
-            }
-            else if (wall.getDirection() == Direction.EAST){
-
-            }
-            else if (wall.getDirection() == Direction.WEST){
-
-            }
-            else if (wall.getDirection() == Direction.NORTHWEST){
-
-            }
-            else if (wall.getDirection() == Direction.NORTHEAST){
-
-            }
-            else if (wall.getDirection() == Direction.SOUTHWEST){
-
-            }
-            else if (wall.getDirection() == Direction.SOUTHEAST){
-
-            }
-
-
         }
+        return false;
     }
 
     public void hostGame(){}
