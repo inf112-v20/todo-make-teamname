@@ -1,13 +1,21 @@
 # Obligatorisk Oppgave 3
 
 ## Deloppgave 1 - Team og prosjekt
-*   Hvordan fungerer rollene i teamet?
-*   Erfaring team-messing/prosjektmetodikk
-*   Hva vi kan gjøre annerledes - forbedre teamwork
-*   RETROSPEKTIV
+*   Vi synes fortsatt rollene fungerer bra og har sin hensikt.
+*   Erfaring team-messing/prosjektmetodikk: Etter at skolen stengte har vi fått kjenne på hvordan det er å bare jobbe remote,
+og hvilke utfordringer dette kan medføre. Vi har fått bekreftet at arbeidsmetiden slik vi jobber fortsatt fungerer, det er 
+enkelt å holde styr på hva de ulike i teamet jobber med til enhver tid med Trello tavlen vår.
+*   Det vi kan gjøre annerledes videre for å forbedre teamwork:
+*   Retrospektiv: Siden forrige gang har vi sett veldig mye hvordan vi kan refaktorere koden. Game klassen ble veldig stor til slutt
+og det var vanskelig å holde oversikt på alt som skjedde. Dokumentasjon av metoder og klasser var heller ikke så bra så det har
+vi fokusert mye på i denne sprinten. Dette øker leselighet og gjør det lettere for andre å sette seg inn i koden. En stor del av game ble plassert
+i en ny klasse som bare holder styr på turns (TurnHandler). Ellers arbeidet generelt har gått bra - vi har ikke hatt noe problem
+med å møtes digitalt.
 *   3 forbedringspunkter fra retrospektiv
 *   Hvordan vi har prioritert opgpavene fremover, legg ved sc av trello
-*   Hvordan fungerer gruppedynamikken og kommunikasjonen?
+*   Gruppedynamikk og kommunikasjonen: Gruppedynamikken fungerer fortsatt veldig bra, vi har ikke hatt noen problem med å holde
+kontakten etter skolen stengte. Møter har vi holdt på Discord hver fredag, i tillegg til andre dager hvis det er noe teamet hadde lyst å diskutere.
+På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringer.
 
 ## Deloppgave 2 - Krav
 *   Oppdater hvilke krav dere har prioritert, hvor langt dere har kommet og hva dere har gjort siden forrige gang
