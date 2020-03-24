@@ -5,11 +5,11 @@ import inf112.skeleton.app.objects.cards.Card;
 
 public class CardTest {
     Card testCard;
-   // @Before
-   // public void setUp(){
-    //    testCard = new Card();
+    @Before
+    public void setUp(){
+        //testCard = new Card(10, );
 
-    //}
+    }
 
     public void isCardNameEqualToGetCardName(){
 
