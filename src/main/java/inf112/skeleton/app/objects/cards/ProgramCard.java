@@ -1,7 +1,6 @@
 package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.objects.cards.ICard;
 
 public class ProgramCard implements ICard {
     private boolean rotate;
@@ -9,6 +8,10 @@ public class ProgramCard implements ICard {
     private boolean rotateRight;
     private int value;
     private boolean selected;
+    private boolean backup;
+    private boolean move1;
+    private boolean move2;
+    private boolean move3;
     String name;
     String text;
 
@@ -16,7 +19,8 @@ public class ProgramCard implements ICard {
     Texture [] images;
 
     public void setImages(){
-        images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
+        images = new Texture[]{
+                new Texture("assets/cards/card_move_1.png"),
                 new Texture("assets/cards/card_move_2.png"),
                 new Texture("assets/cards/card_turn_left.png"),
                 new Texture("assets/cards/card_turn_right.png")};
@@ -24,7 +28,7 @@ public class ProgramCard implements ICard {
 
     private int type;
 
-    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight){
+    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight, boolean backup, boolean move1, boolean move2, boolean move3){
         /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
         * will do a U-turn
          */
@@ -33,8 +37,32 @@ public class ProgramCard implements ICard {
         this.rotate = rotate;
         this.rotateLeft = rotateLeft;
         this.rotateRight = rotateRight;
+        this.backup = backup;
+        this.move1 = move1;
+        this.move2 = move2;
+        this.move3 = move3;
 
-        type = value * 1000 + (rotate ? 100 : 0) + (rotateLeft ? 10 : 0) + (rotateRight ? 1 : 0);
+        if (value < 70){
+            type = 0;
+        }
+        else if (value < 410 && value % 20 != 0){
+            type = 1;
+        }
+        else if (value < 430 && value % 20 == 0){
+            type = 3;
+        }
+        else if (value < 490){
+            type = 4;
+        }
+        else if (value < 670){
+            type = 5;
+        }
+        else if (value < 790){
+            type = 6;
+        }
+        else{
+            type = 7;
+        }
     }
     public void setSelected(Boolean b){
         this.selected = b;
@@ -55,13 +83,11 @@ public class ProgramCard implements ICard {
     @Override
     public Texture getImage() {
         switch (type) {
-            case 1000:
-                return images[0];
-            case 2000:
+            case 6:
                 return images[1];
-            case 110:
+            case 1:
                 return images[2];
-            case 101:
+            case 2:
                 return images[3];
             default:
                 return images[0];

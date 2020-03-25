@@ -2,22 +2,16 @@ package inf112.skeleton.app.objects.cards;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class CardParser {
-    public static void main(String[] args) {
-        cards();
-        System.out.println(Arrays.toString(cards));
-    }
     static Card[] cards = new Card[0];
 
     public static void cards() {
         try{
             Scanner scanner = new Scanner(new File("assets/cards/cards.txt"));
             scanner.useDelimiter("[-\n]");
-
             while (scanner.hasNext()){
                 try {
                     String[] cardValue = scanner.nextLine().split(" ");
@@ -32,22 +26,16 @@ public class CardParser {
                 }
             }
             randShuffle(cards);
-
-
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
-
-
     }
-
     private static Card[] addCard(Card[] cards, Card cardToAdd){
         Card[] newCard = new Card[cards.length + 1];
         System.arraycopy(cards, 0, newCard, 0, cards.length);
         newCard[newCard.length - 1] = cardToAdd;
         return newCard;
     }
-
     public static Card[] randShuffle(Card[] card){
         Random random = new Random();
         for (int i = 0; i < card.length; i++) {
