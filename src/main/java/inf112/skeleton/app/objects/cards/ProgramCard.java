@@ -83,4 +83,17 @@ public class ProgramCard implements ICard {
     public boolean getRotate(){
         return rotate;
     }
+
+    public boolean getBackUp(){
+        return backup;
+    }
+    public boolean getMove1(){
+        return move1;
+    }
+    public boolean getMove2(){
+        return move2;
+    }
+    public boolean getMove3(){
+        return move3;
+    }
 }

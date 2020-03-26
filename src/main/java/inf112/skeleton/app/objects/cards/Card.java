@@ -1,26 +1,18 @@
 package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
+import inf112.skeleton.app.board.Direction;
 
-public class Card implements ICard {
+public class Card  {
+    String direction;
 
-    @Override
-    public String getName() {
-        return null;
+    int priority;
+
+    public Card(int valueCard, String cardName) {
     }
 
-    @Override
-    public String getText() {
-        return null;
+    public void cardDirection(Direction dir, int priority){
+
     }
 
-    @Override
-    public Texture getImage() {
-        return null;
-    }
-
-    @Override
-    public Integer getValue() {
-        return null;
-    }
 }
