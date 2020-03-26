@@ -20,11 +20,27 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 ## Deloppgave 2 - Krav
 *   Oppdater hvilke krav dere har prioritert, hvor langt dere har kommet og hva dere har gjort siden forrige gang
 *   Brukerhistorier - Akseptansekriterier - arbeidsoppgaver
+
+####   Krav: **Vegg**
+
+
+    *   Brukerhistorie: Som spiller skal jeg kunne se vegger visuelt representert på brettet
+    *   Akseptansekriterie: Vegg skal vøre en del av brettet
+    *   Arbeidsoppgaver: Tegne vegg på brettet - brettet er et bilde. Tegne inn tegn i tekstkart for at spillet skal "se" veggene.
+        
+    *   Brukerhistorie: Som robot skal jeg kunne bevege meg mot en vegg og bli stoppet fra å bevege meg gjennom den
+    *   Akseptansekriterie: Vegg stopper robotens bevegelse
+    *   Arbeidsoppgaver: Opprette en wall klasse, legge til vegg i itemFactory, implementere vegg sjekk når roboten flyttes.
+    
+    *   Brukerhistorie: Som laser skal min stråle bli stoppet av vegger 
+    *   Akseptansekriterie: Vegg stopper laser stråle fra å gå gjennom den
+    *   Arbeidsoppgaver: legge til en sjekk at hvis laseren treffer på en vegg så stopper den.
+    
+    
 *   Hvilke hovedkrav vi anser som MVP og hvorfor
 *   Notere bugs
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
-*   Dokumentere bedre hvordan det bygges, testes og kjøres
 *   Kjøre på win osx linux
 *   Klassediagram
 *   Testdekning vektlegges
