@@ -95,5 +95,4 @@ Vi har også jobbet med wall collision mot roboten i tillegg til flere robot mod
 *   Prosjektet har blitt på både Windows og OSX, men skal også fungere på Linux (som testene har blitt testet på)
 *   Klassediagram
 *   Siden sist har vi lagt til mange flere tester som dekker mye større grad av kodebasen.
-*   Manuell testing -> lever beskrivelse av hvordan testen foregår slik at gruppeleder kan utføre testen selv
 *   Mange har jobbet med andre fag, og hverdagen har blitt sterkt påvirket av COVID-19 i denne perioden, så ikke alle har hatt like mye tid å dedikere til prosjektet.
