@@ -12,7 +12,8 @@ enkelt å holde styr på hva de ulike i teamet jobber med til enhver tid med Tre
 og det var vanskelig å holde oversikt på alt som skjedde. Dokumentasjon av metoder og klasser var heller ikke så bra så det har
 vi fokusert mye på i denne sprinten. Dette øker leselighet og gjør det lettere for andre å sette seg inn i koden. En stor del av game ble plassert
 i en ny klasse som bare holder styr på turns (TurnHandler). Ellers arbeidet generelt har gått bra - vi har ikke hatt noe problem
-med å møtes digitalt. Noe vi slet med var å få travis til å samarbeide med testene våre, Joakim gruppeleder har sett på det.
+med å møtes digitalt. Noe vi slet med var å få travis til å samarbeide med testene våre, Joakim gruppeleder har sett på det. Har også prøvd å få til en Options-meny
+for å endre skjermstørrelse, men fikk det ikke helt til og vil fortsette med det frem mot neste leveranse.
 *   Forbedringspunkter: Et forbedringspunkt vi kan ha fremover er å møtes oftere slik at vi får jobbet sammen i større grad enn før.
 *   Hvordan vi har prioritert opgpavene fremover, legg ved sc av trello
 *   Gruppedynamikk og kommunikasjonen: Gruppedynamikken fungerer fortsatt veldig bra, vi har ikke hatt noen problem med å holde
