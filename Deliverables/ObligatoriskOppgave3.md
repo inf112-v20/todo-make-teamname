@@ -68,7 +68,8 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 			    *   Sende og motta kort
 			    *   Sørge for at rett brikke blir spilt i forhold til hvem som spilte kortet    
 *   Hvilke hovedkrav vi anser som MVP og hvorfor
-*   Notere bugs
+*   Bugs:
+    *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Kjøre på win osx linux
