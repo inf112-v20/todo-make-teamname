@@ -252,20 +252,24 @@ public class Game extends InputAdapter {
         }
     }
 
+    /**
+     *
+     * @return returns all the robot textures
+     */
     private Texture[][] getRobotTextures() {
         Texture[][] textures = new Texture[4][4];
         textures[0] = new Texture[]{new Texture("assets/robot_design/elias_robot_forward.png"),
                 new Texture("assets/robot_design/elias_robot.png"),
                 new Texture("assets/robot_design/elias_robot_backwards.png"),
                 new Texture("assets/robot_design/elias_robot_left.png")};
-        textures[1] = new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
-            new Texture("assets/robot_design/elias_robot.png"),
-            new Texture("assets/robot_design/elias_robot_backwards.png"),
-            new Texture("assets/robot_design/elias_robot_left.png")};
-        textures[2] = new Texture[]{new Texture("assets/robot_design/elias_robot_forward.png"),
-                new Texture("assets/robot_design/elias_robot.png"),
-                new Texture("assets/robot_design/elias_robot_backwards.png"),
-                new Texture("assets/robot_design/elias_robot_left.png")};
+        textures[1] = new Texture[] {new Texture("assets/robot_design/Wall-e_Robot_forward.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_right.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_backwards.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_left.png")};
+        textures[2][0] = new Texture("assets/robot_design/Darek_forwards.png");
+        textures[2][1] = new Texture("assets/robot_design/Darek_right.png");
+        textures[2][2] = new Texture("assets/robot_design/Darek_backwards.png");
+        textures[2][3] = new Texture("assets/robot_design/Darek_left.png");
         textures[3] = new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
                 new Texture("assets/robot_design/elias_robot.png"),
                 new Texture("assets/robot_design/elias_robot_backwards.png"),
