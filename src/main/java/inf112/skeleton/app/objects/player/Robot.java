@@ -29,7 +29,7 @@ public class Robot implements IBoardObject {
 
     //TODO setTexture needs to handle robots having different textures
     public void setTexture() {
-        sprite = new Texture("assets/Robot_Example.png");
+        sprite = new Texture("assets/robot_design/Robot_Example.png");
     }
 
     @Override

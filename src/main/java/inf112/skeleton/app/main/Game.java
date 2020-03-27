@@ -175,7 +175,7 @@ public class Game extends InputAdapter {
     }
 
     public void dispose() {
-        turnHandler.dispose();
+        if(turnHandler != null)turnHandler.dispose();
     }
 
     /**
