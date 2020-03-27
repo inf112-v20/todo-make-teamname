@@ -323,6 +323,11 @@ public class TurnHandler {
         return false;
     }
 
+    private boolean robotCollision(Robot robot){
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        return currentTile.getObjects()[2] instanceof Robot;
+    }
+
 
     /**
      * This method moves or rotates robots according to the card given. If a card has value 3, the robot moves 3 tiles
@@ -335,7 +340,8 @@ public class TurnHandler {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
                 //Move robot
-                if (!wallCollision(robot)) board.moveObject(robot, robot.getDirection());
+                if (!wallCollision(robot) && !robotCollision(robot)) board.moveObject(robot, robot.getDirection());
+
                 if (!robot.isDestroyed()){
                     if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                         board.removeObject(robot);
