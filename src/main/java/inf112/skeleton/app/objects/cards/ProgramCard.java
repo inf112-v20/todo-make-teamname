@@ -13,24 +13,15 @@ public class ProgramCard implements ICard {
     String text;
 
 
-    Texture [] images = {new Texture("assets/cards/card_move_1.png"),
-                new Texture("assets/cards/card_move_2.png"),
-                new Texture("assets/cards/card_turn_left.png"),
-                new Texture("assets/cards/card_turn_right.png")};
-
-//    public void setImages(){
-//        images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
-//                new Texture("assets/cards/card_move_2.png"),
-//                new Texture("assets/cards/card_turn_left.png"),
-//                new Texture("assets/cards/card_turn_right.png")};
-//    }
+    Texture [] images;
 
     private int type;
 
-    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight){
+    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight, Texture[] images){
         /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
         * will do a U-turn
          */
+        this.images = images;
         this.selected = false;
         this.value = value;
         this.rotate = rotate;

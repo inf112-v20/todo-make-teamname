@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Board  {
 
+    private final int flags;
     private BoardTile [][] grid;
     private int width, height;
     private ArrayList<Robot> robots;
@@ -19,10 +20,11 @@ public class Board  {
     public final static int ROBOT = 2;
 
 
-    public Board(int width, int height) {
+    public Board(int width, int height, int flags) {
         this.robots = new ArrayList<Robot>();
         this.width = width;
         this.height = height;
+        this.flags = flags;
         grid = new BoardTile [height][width];
         for (int y=0; y < height; y++) {
             for (int x=0; x < width; x++) {
@@ -118,5 +120,9 @@ public class Board  {
 
     public ArrayList<Robot> getRobots() {
         return robots;
+    }
+
+    public int getFlagNr() {
+        return flags;
     }
 }

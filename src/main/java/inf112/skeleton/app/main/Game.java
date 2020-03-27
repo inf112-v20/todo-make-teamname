@@ -46,9 +46,9 @@ public class Game extends InputAdapter {
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
-    private Texture buttonReadySelected;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
+
 
 
     /**
@@ -99,11 +99,9 @@ public class Game extends InputAdapter {
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
-                screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getPushedReady()){
+                screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))){
             //TODO fix so that one player cant send multiple sets of cards
-            myPlayer.setPushedReady(true);
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
-
         }
         return false;
     }
@@ -243,7 +241,6 @@ public class Game extends InputAdapter {
         tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
-        buttonReadySelected = new Texture("assets/button_ready_selected.png");
         damageTokens = new Texture[3];
         damageTokens[0] = new Texture("assets/damage-dead.png");
         damageTokens[1] = new Texture("assets/Damage-not-taken.png");

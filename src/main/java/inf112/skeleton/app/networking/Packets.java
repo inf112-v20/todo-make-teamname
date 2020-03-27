@@ -1,8 +1,13 @@
 package inf112.skeleton.app.networking;
 
-import inf112.skeleton.app.objects.cards.ProgramCard;
+
 
 public class Packets {
-    public static class Packet01Message{ public String message; public String clientName;}
-    public static class Packet02Cards{ public ProgramCard[] programCards; public int playerNr;}
+    public static class Packet01Message{ public String message;}
+    public static class Packet02Cards{ public int[][] programCards; public int playerId;}
+    public static class Packet03PlayerNr{ public int playerNr;}
+    public static class Packet04StartSignal{public boolean start;}
+    public static class Packet05Name{ public String[] name; public int playerId;}
+
+
 }

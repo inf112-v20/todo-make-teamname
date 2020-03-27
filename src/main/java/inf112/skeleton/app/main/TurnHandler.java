@@ -165,7 +165,6 @@ public class TurnHandler {
      * @param myPlayer This is the player and corresponding robot that gets checked.
      */
     public void cleanUp(Player myPlayer) {
-        myPlayer.setPushedReady(false);
         Robot robot = myPlayer.getRobot();
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
