@@ -57,7 +57,6 @@ public class WallCollisionTest {
     public void robotDoesNotWalkThroughNorthWall() {
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        //TODO: make robot move north, then check if robot is still in same tile
         NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
         robot.setDirection(Direction.NORTH);
         turnHandler.cardMove(card, robot);
