@@ -6,6 +6,8 @@
 og hvilke utfordringer dette kan medføre. Vi har fått bekreftet at arbeidsmetiden slik vi jobber fortsatt fungerer, det er 
 enkelt å holde styr på hva de ulike i teamet jobber med til enhver tid med Trello tavlen vår.
 *   Det vi kan gjøre annerledes videre for å forbedre teamwork:
+    * Sette av mer tid ment for å kode ilag ettersom å jobbe remote kan gjøre det veldig vanskelig dersom man støter på et problem som,
+    ikke kan løses så lett alene.
 *   Retrospektiv: Siden forrige gang har vi sett veldig mye hvordan vi kan refaktorere koden. Game klassen ble veldig stor til slutt
 og det var vanskelig å holde oversikt på alt som skjedde. Dokumentasjon av metoder og klasser var heller ikke så bra så det har
 vi fokusert mye på i denne sprinten. Dette øker leselighet og gjør det lettere for andre å sette seg inn i koden. En stor del av game ble plassert
@@ -19,7 +21,7 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 
 ## Deloppgave 2 - Krav
 *   Oppdater hvilke krav dere har prioritert, hvor langt dere har kommet og hva dere har gjort siden forrige gang
-*   I denne sprinten har vi prioritert å jobbe med kort, å få til lan funksjon med flere spillere i samme game, wall kollisjon og en bedre game menu.
+*   I denne sprinten har vi prioritert å jobbe med kort, å få til lan funksjon med flere spillere i samme game, wall kollisjon, lasere og en bedre game menu.
 
 ####   Krav: **Vegg**
 
@@ -66,7 +68,19 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 			    *   Vil alltid få samme 5 kort
 		    *   Arbeidskrav
 			    *   Sende og motta kort
-			    *   Sørge for at rett brikke blir spilt i forhold til hvem som spilte kortet    
+			    *   Sørge for at rett brikke blir spilt i forhold til hvem som spilte kortet   
+			    
+####	Krav: **Laser**
+
+
+	* Brukerhistorie: Som spiller skal jeg kunne se lasere visuelt representert på brettet.
+	* Akseptansekriterie: Lasere skal være en del av brettet.
+	* Arbeidsoppgaver: Tegne laser på brettet - der brettet er et bilde. Legge inn tegn i laserlayeret for at spillet skal oppfatter laserens eksistens.
+
+	* Brukerhistorie: Som robot skal jeg kunne bevege meg mot en laser og ta skade når en er borti den.
+	* Akseptansekriterie: Laser skal skade roboter som rører dem.
+	* Opprette en laser klasse, legge til laser i itemFactory, implementere lasser og sjekke når roboten rører den.
+			     
 *   Hovedkrav som MVP: I denne sprinten så valgte vi først å refaktorere og dokumentere koden mye fra forrige sprint, slik at koden ble mye mer leselig og forståelig, vi hadde noen få store klasser og metoder.
 Videre har vi jobbet å få på plass lan der dette ble begynt på ganske tidlig. Vi har nå en lobby og server slik at det skal være mulig for flere spillere å connecte til samme game. 
 Vi har også jobbet med wall collision mot roboten i tillegg til flere robot modeller. 
@@ -75,8 +89,9 @@ Vi har også jobbet med wall collision mot roboten i tillegg til flere robot mod
     *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
-*   Kjøre på win osx linux
+*   Hvordan en kjører prosjektet er forklart i README filen.
+*   Prosjektet har blitt på både Windows og OSX, men skal også fungere på Linux (som testene har blitt testet på)
 *   Klassediagram
-*   Testdekning vektlegges
+*   Siden sist har vi lagt til mange flere tester som dekker mye større grad av kodebasen.
 *   Manuell testing -> lever beskrivelse av hvordan testen foregår slik at gruppeleder kan utføre testen selv
-*   Hvis stor forskjell commits - forklar hvorfor
+*   Mange har jobbet med andre fag, og hverdagen har blitt sterkt påvirket av COVID-19 i denne perioden, så ikke alle har hatt like mye tid å dedikere til prosjektet.
