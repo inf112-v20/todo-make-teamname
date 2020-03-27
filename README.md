@@ -7,6 +7,7 @@ by team **todo-make-teamname.**
 ## How to run
 *   Git clone https://github.com/inf112-v20/todo-make-teamname.git
 *   Open in IntelliJ
+*   Need internet connection.
 *   Run Main
 *   Navigate menu with arrow keys, one player needs to host the game.
 *   If hosting, choose Host Game option, then you get your server IP, send this to your friends who are joining.

@@ -22,8 +22,8 @@ public class ServerNetworkListener extends Listener {
      */
     public ServerNetworkListener(Server server){
         this.server = server;
-        players = new int[4];
-        names = new String[4];
+        players = new int[5];
+        names = new String[5];
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
     }
