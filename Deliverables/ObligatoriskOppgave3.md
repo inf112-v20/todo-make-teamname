@@ -10,8 +10,8 @@ enkelt å holde styr på hva de ulike i teamet jobber med til enhver tid med Tre
 og det var vanskelig å holde oversikt på alt som skjedde. Dokumentasjon av metoder og klasser var heller ikke så bra så det har
 vi fokusert mye på i denne sprinten. Dette øker leselighet og gjør det lettere for andre å sette seg inn i koden. En stor del av game ble plassert
 i en ny klasse som bare holder styr på turns (TurnHandler). Ellers arbeidet generelt har gått bra - vi har ikke hatt noe problem
-med å møtes digitalt.
-*   3 forbedringspunkter fra retrospektiv
+med å møtes digitalt. Noe vi slet med var å få travis til å samarbeide med testene våre, Joakim gruppeleder har sett på det.
+*   Forbedringspunkter: Et forbedringspunkt vi kan ha fremover er å møtes oftere slik at vi får jobbet sammen i større grad enn før.
 *   Hvordan vi har prioritert opgpavene fremover, legg ved sc av trello
 *   Gruppedynamikk og kommunikasjonen: Gruppedynamikken fungerer fortsatt veldig bra, vi har ikke hatt noen problem med å holde
 kontakten etter skolen stengte. Møter har vi holdt på Discord hver fredag, i tillegg til andre dager hvis det er noe teamet hadde lyst å diskutere.
@@ -19,7 +19,7 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 
 ## Deloppgave 2 - Krav
 *   Oppdater hvilke krav dere har prioritert, hvor langt dere har kommet og hva dere har gjort siden forrige gang
-*   Brukerhistorier - Akseptansekriterier - arbeidsoppgaver
+*   I denne sprinten har vi prioritert å jobbe med kort, å få til lan funksjon med flere spillere i samme game, wall kollisjon og en bedre game menu.
 
 ####   Krav: **Vegg**
 
@@ -67,7 +67,10 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
 		    *   Arbeidskrav
 			    *   Sende og motta kort
 			    *   Sørge for at rett brikke blir spilt i forhold til hvem som spilte kortet    
-*   Hvilke hovedkrav vi anser som MVP og hvorfor
+*   Hovedkrav som MVP: I denne sprinten så valgte vi først å refaktorere og dokumentere koden mye fra forrige sprint, slik at koden ble mye mer leselig og forståelig, vi hadde noen få store klasser og metoder.
+Videre har vi jobbet å få på plass lan der dette ble begynt på ganske tidlig. Vi har nå en lobby og server slik at det skal være mulig for flere spillere å connecte til samme game. 
+Vi har også jobbet med wall collision mot roboten i tillegg til flere robot modeller. 
+
 *   Bugs:
     *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
 
