@@ -7,7 +7,7 @@ public class CardTest {
     Card testCard;
     @Before
     public void setUp(){
-        testCard = new Card();
+        //testCard = new Card();
 
     }
 

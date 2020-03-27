@@ -26,10 +26,8 @@ public class Robot implements IBoardObject {
         return sprite;
     }
 
-
-    //TODO setTexture needs to handle robots having different textures
     public void setTexture() {
-        sprite = new Texture("assets/Robot_Example.png");
+        sprite = new Texture("assets/mads_robot.png");
     }
 
     @Override
@@ -154,13 +152,13 @@ public class Robot implements IBoardObject {
     public float getRotation() {
         switch (this.getDirection()){
             case NORTH:
-                return 180;
-            case WEST:
-                return 270;
-            case EAST:
                 return 90;
-            case SOUTH:
+            case WEST:
+                return 180;
+            case EAST:
                 return 0;
+            case SOUTH:
+                return 270;
         }
         return 0;
     }
