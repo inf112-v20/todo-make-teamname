@@ -45,7 +45,6 @@ public class WallCollisionTest {
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
         board.addObject(player.getRobot(), 1, 0);
-        board.addObject(wall, 1, 0);
         robot = player.getRobot();
         robot.setDirection(Direction.NORTH);
     }
@@ -62,6 +61,7 @@ public class WallCollisionTest {
     public void robotDoesNotWalkThroughNORTHWall() {
         Wall wall = new Wall(Direction.NORTH);
         board.addObject(wall, 1, 0);
+
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
         NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
@@ -97,8 +97,16 @@ public class WallCollisionTest {
         assertEquals(0, robot.getTileY());
     }
 
-
-
-
-
+    @Test
+    public void robotDoesNotWalkThroughWallofNeighbourTile() {
+        Wall wall = new Wall(Direction.WEST);
+        board.addObject(wall, 2, 0);
+        assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
+        assertTrue(board.getTile(2, 0).getObjects()[1] instanceof Wall);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        robot.setDirection(Direction.EAST);
+        turnHandler.cardMove(card, robot);
+        assertEquals(1, robot.getTileX());
+        assertEquals(0, robot.getTileY());
+    }
 }
