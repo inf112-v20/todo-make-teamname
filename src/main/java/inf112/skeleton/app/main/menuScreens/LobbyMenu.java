@@ -62,10 +62,10 @@ public class LobbyMenu {
         }
         String[] names = game.getNames();
         font.setColor(Color.BLACK);
-        font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 4, (Settings.SCREEN_HEIGHT / 18) * 15);
+        font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * 15);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
-            font.draw(batch, names[i], Settings.SCREEN_WIDTH / 4, (Settings.SCREEN_HEIGHT / 18) * (14 - i));
+            font.draw(batch, names[i] + " Player number: " + i, Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * (15 - i));
         }
 
     }

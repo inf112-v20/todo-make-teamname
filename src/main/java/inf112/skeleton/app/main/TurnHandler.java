@@ -359,7 +359,9 @@ public class TurnHandler {
             }
         }
     }
-
+    public boolean getGameIsDone(){
+        return gameIsDone;
+    }
     /**
      * Interrupts the thread that {@link TurnHandler#doTurn()} runs on, so that the program manages to close.
      */
