@@ -34,7 +34,7 @@ public class ServerNetworkListener extends Listener {
      * @param c
      */
     public void connected(Connection c){
-        System.out.println("Player: " + playerNr + " has connected");
+        System.out.println("Player: " + (playerNr + 1) + " has connected");
         players[playerNr] = c.getID();
         playerNr++;
         Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
@@ -51,9 +51,13 @@ public class ServerNetworkListener extends Listener {
     public void disconnected(Connection c){
         System.out.println("Player: " + c.getID() + " has disconnected");
         playerNr--;
+        names[c.getID()] = null;
         Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
         nrOfPlayers.playerNr = playerNr;
         server.sendToAllTCP(nrOfPlayers);
+        Packets.Packet05Name name = new Packets.Packet05Name();
+        name.name = names;
+        server.sendToAllTCP(name);
     }
 
     /**
