@@ -164,6 +164,7 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
+        myPlayer.setReadyButon(false);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left

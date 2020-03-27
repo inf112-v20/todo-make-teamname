@@ -12,6 +12,7 @@ public class Player {
     public ProgramCard[] cards;
     private Queue<ProgramCard> selectedCards;
     private ArrayList<Flag> flags;
+    private Boolean readyButton = false;
 
     public Player(){
         robot = new Robot();
@@ -90,5 +91,12 @@ public class Player {
     }
     public void addFlag(Flag flag){
         flags.add(flag);
+    }
+
+    public void setReadyButon(boolean b){
+        this.readyButton = b;
+    }
+    public boolean getReadyButton(){
+        return this.readyButton;
     }
 }
