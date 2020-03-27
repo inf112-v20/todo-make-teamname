@@ -84,6 +84,8 @@ public class ProgramCard implements ICard {
         return rotate;
     }
 
+
+
     //public boolean getBackUp(){
     //    return backup;
     //}
