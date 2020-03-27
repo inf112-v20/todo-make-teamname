@@ -88,11 +88,11 @@ Vi har også jobbet med wall collision mot roboten i tillegg til flere robot mod
 
 *   Bugs:
     *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
+    *   Om du trykker på skjermen i menyen får du nullpointer
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Hvordan en kjører prosjektet er forklart i README filen.
 *   Prosjektet har blitt på både Windows og OSX, men skal også fungere på Linux (som testene har blitt testet på)
 *   Klassediagram
 *   Siden sist har vi lagt til mange flere tester som dekker mye større grad av kodebasen.
-*   Manuell testing -> lever beskrivelse av hvordan testen foregår slik at gruppeleder kan utføre testen selv
 *   Mange har jobbet med andre fag, og hverdagen har blitt sterkt påvirket av COVID-19 i denne perioden, så ikke alle har hatt like mye tid å dedikere til prosjektet.
