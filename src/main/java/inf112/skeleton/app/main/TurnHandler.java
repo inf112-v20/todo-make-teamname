@@ -317,6 +317,7 @@ public class TurnHandler {
             if (wall.getDirection() == robot.getDirection()){
                 return true;
             }
+            return false;
         }
         return false;
     }
