@@ -102,6 +102,22 @@ public class BoardParser {
                 return new RepairSite(false);
             case 'P':
                 return new Pit();
+            case 'y':
+                return new Wall(Direction.NORTH);
+            case 'h':
+                return new Wall(Direction.SOUTH);
+            case 'j':
+                return new Wall(Direction.EAST);
+            case 'g':
+                return new Wall(Direction.WEST);
+            case 't':
+                return new Wall(Direction.NORTHWEST);
+            case 'u':
+                return new Wall(Direction.NORTHEAST);
+            case 'b':
+                return new Wall(Direction.SOUTHWEST);
+            case 'm':
+                return new Wall(Direction.SOUTHEAST);
             case '-':
                 return null;
             default:

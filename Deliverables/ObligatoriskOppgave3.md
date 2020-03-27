@@ -35,10 +35,41 @@ På Slack oppdaterer vi de andre i teamet hvis vi implementerer større endringe
     *   Brukerhistorie: Som laser skal min stråle bli stoppet av vegger 
     *   Akseptansekriterie: Vegg stopper laser stråle fra å gå gjennom den
     *   Arbeidsoppgaver: legge til en sjekk at hvis laseren treffer på en vegg så stopper den.
-    
-    
+####   Krav: **Lan**
+
+
+    *   Menyer
+	    *   Brukerhistorie: Vil kunne velge om jeg skal være vert eller koble til eit spill.
+		    *   Akseptansekrav
+			    *   Kunne sette opp ein server og få tilgang til ip addresse til den serveren.
+			    *   Kunne koble til server ved å få ein ip addresse 
+			Ikke ta hensyn til:
+			    *   Mislykket tilkobling
+			    *   Koble til igjen etter å ha mistet tilkoblingen
+		    *   Arbeidskrav
+			    *   Vise i lobby og i game en oppdatert liste overnavn som er koblet til.
+        *  Brukerhistorie: Vil kunne velge brukernavn og kunne se hvem som har koblet seg til server.
+		    *   Akseptansekrav
+			    *   Kunne ta inn eit brukernavn per spiller og vise det på skjermen
+			Ikke ta hensyn til:
+			    *   Utseende
+			    *   Skrivefeil eller ordbruk i brukernavn
+		    *   Arbeidskrav
+			    *   Vise i lobby og i game en oppdatert liste overnavn som er koblet til.
+ 
+    *   Spill
+        *   Brukerhistorie: Vil kunne spille med flere personer
+            *   Akseptansekrav
+			    *   Få spill fasene til å fungere for opp til 4 spillere
+			Ikke ta hensyn til:
+			    *   Power down
+			    *   Vil alltid få samme 5 kort
+		    *   Arbeidskrav
+			    *   Sende og motta kort
+			    *   Sørge for at rett brikke blir spilt i forhold til hvem som spilte kortet    
 *   Hvilke hovedkrav vi anser som MVP og hvorfor
-*   Notere bugs
+*   Bugs:
+    *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Kjøre på win osx linux
