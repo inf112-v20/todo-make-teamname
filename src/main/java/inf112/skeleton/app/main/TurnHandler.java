@@ -154,9 +154,7 @@ public class TurnHandler {
                 board.removeObject(robot);
                 robot.destroy();
             }
-
         }
-
     }
 
     /**
@@ -178,7 +176,6 @@ public class TurnHandler {
                 gameIsDone = true;
             }
         }
-
     }
 
     /**
@@ -312,6 +309,22 @@ public class TurnHandler {
     }
 
     /**
+     * Boolean method that checks if there is a wall where the robot wants to move
+     */
+    private boolean wallCollision(Robot robot){
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if (currentTile.getObjects()[0] instanceof Wall) {
+            Wall wall = (Wall) currentTile.getObjects()[0];
+            if (wall.getDirection() == robot.getDirection()){
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+    /**
      * This method moves or rotates robots according to the card given. If a card has value 3, the robot moves 3 tiles
      * in the direction it's facing. If it has rotate value then it rotates.
      * @param card A program card that determines how to move the robot.
@@ -322,7 +335,7 @@ public class TurnHandler {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
                 //Move robot
-                board.moveObject(robot, robot.getDirection());
+                if (!wallCollision(robot)) board.moveObject(robot, robot.getDirection());
                 if (!robot.isDestroyed()){
                     if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                         board.removeObject(robot);
@@ -347,7 +360,9 @@ public class TurnHandler {
             }
         }
     }
-
+    public boolean getGameIsDone(){
+        return gameIsDone;
+    }
     /**
      * Interrupts the thread that {@link TurnHandler#doTurn()} runs on, so that the program manages to close.
      */

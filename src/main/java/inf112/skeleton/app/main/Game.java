@@ -3,6 +3,7 @@ package inf112.skeleton.app.main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -50,6 +51,7 @@ public class Game extends InputAdapter {
     private Texture buttonReadySelected;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
+
 
 
     /**
@@ -163,6 +165,13 @@ public class Game extends InputAdapter {
         if (myPlayer.getReadyButton()){
             batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         }
+
+        font.setColor(Color.BLACK);
+        font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
+        for (int i = 0; i < names.length; i++) {
+            if(names[i] == null) continue;
+            font.draw(batch, names[i] + " Player number: " + i, Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * (11 - i));
+        }
     }
 
     public void dispose() {
@@ -175,6 +184,9 @@ public class Game extends InputAdapter {
      * @param packet
      */
     public void isReady(Packets.Packet02Cards packet){
+        for (Packets.Packet02Cards pack: allCards) {
+            if(pack.playerId == packet.playerId) return;
+        }
         allCards.add(packet);
 
         if(allCards.size() == nrOfPlayers){

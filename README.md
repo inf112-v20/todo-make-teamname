@@ -7,6 +7,7 @@ by team **todo-make-teamname.**
 ## How to run
 *   Git clone https://github.com/inf112-v20/todo-make-teamname.git
 *   Open in IntelliJ
+*   Need internet connection.
 *   Run Main
 *   Navigate menu with arrow keys, one player needs to host the game.
 *   If hosting, choose Host Game option, then you get your server IP, send this to your friends who are joining.
@@ -18,5 +19,4 @@ by team **todo-make-teamname.**
 ## Known bugs
 *   Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on function or performance, and is just a warning.
-*   If a player presses the ready button several times, that player can skip other players turns.
 *   Collision between two robots causes NullPointerException.
