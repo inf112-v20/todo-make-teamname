@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
@@ -119,7 +120,20 @@ public class Game extends InputAdapter {
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {
-                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
+                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
+                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT), Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+                    TextureRegion t = new TextureRegion();
+                    t.setRegion(r.getTexture());
+                    batch.draw(t,
+                            (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
+                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
+                            Settings.TILE_WIDTH/2,
+                            Settings.TILE_HEIGHT/2,
+                            Settings.TILE_WIDTH,
+                            Settings.TILE_HEIGHT,
+                            1,
+                            1,
+                            r.getRotation());
                 }
             }
         }catch (ConcurrentModificationException ex){

@@ -150,4 +150,18 @@ public class Robot implements IBoardObject {
     public int getLife(){
         return life;
     }
+
+    public float getRotation() {
+        switch (this.getDirection()){
+            case NORTH:
+                return 180;
+            case WEST:
+                return 270;
+            case EAST:
+                return 90;
+            case SOUTH:
+                return 0;
+        }
+        return 0;
+    }
 }
