@@ -1,5 +1,10 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+import com.badlogic.gdx.graphics.GL20;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
@@ -14,6 +19,7 @@ import static org.mockito.Mockito.mock;
 
 public class RepairSiteTest {
     private static Game game;
+    private static Player player;
     private static Robot robot;
     private static Board board;
     private static TurnHandler turnHandler;
@@ -21,23 +27,40 @@ public class RepairSiteTest {
 
     @BeforeClass
     public static void setUp(){
+        HeadlessApplicationConfiguration conf = new HeadlessApplicationConfiguration();
+        new HeadlessApplication(new ApplicationListener() {
+            @Override
+            public void create() { }
+            @Override
+            public void resize(int i, int i1) { }
+            @Override
+            public void render() { }
+            @Override
+            public void pause() { }
+            @Override
+            public void resume() { }
+            @Override
+            public void dispose() { }
+        }, conf);
+        Gdx.gl = mock(GL20.class);
         game = new Game();
         game.setBoard(new Board(2,1,1));
         game.gamePhasesSetUp();
+        player = new Player();
+
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
-
-        robot = new Robot();
+        board.addObject(player.getRobot(), 1, 0);
+        robot = player.getRobot();
         RepairSite repairSite = new RepairSite(false);
-        board.addObject(robot, 1, 0);
         board.addObject(repairSite,1,0);
     }
 
-//    @Test
-//    public void repairSiteTest(){
-//        robot.takeDamage();
-//        assertEquals(robot.getHealth(), 8);
-//        turnHandler.repair(robot, mock(Player.class));
-//        assertEquals(robot.getHealth(), 9);
-//    }
+    @Test
+    public void repairSiteTest(){
+        robot.takeDamage();
+        assertEquals(robot.getHealth(), 8);
+        turnHandler.repair(player);
+        assertEquals(robot.getHealth(), 9);
+    }
 }
