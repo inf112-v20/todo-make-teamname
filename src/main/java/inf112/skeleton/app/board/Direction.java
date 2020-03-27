@@ -7,7 +7,11 @@ public enum Direction {
     NORTH,
     WEST,
     EAST,
-    SOUTH;
+    SOUTH,
+    NORTHWEST,
+    NORTHEAST,
+    SOUTHWEST,
+    SOUTHEAST;
 
     /**
      * The four directions as a list
