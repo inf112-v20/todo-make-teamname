@@ -1,5 +1,6 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
@@ -8,6 +9,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class ConveyorBeltTest {
     private static Game game;
@@ -23,7 +25,9 @@ public class ConveyorBeltTest {
         game.gamePhasesSetUp();
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
-        robot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        robot = new Robot(mockImages);
         board.addObject(robot, 1, 0);
     }
 

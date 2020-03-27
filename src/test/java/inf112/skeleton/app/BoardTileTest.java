@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
@@ -7,6 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.mock;
 
 public class BoardTileTest {
     BoardTile tile;
@@ -20,7 +22,9 @@ public class BoardTileTest {
     @Test
     public void removeObj(){
         tile = new BoardTile();
-        Robot robot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        Robot robot = new Robot(mockImages);
         tile.add(robot);
         tile.remove(BoardTile.ROBOT);
         assertNull(tile.getObjects()[BoardTile.ROBOT]);
@@ -28,7 +32,9 @@ public class BoardTileTest {
     @Test
     public void addObj(){
         tile = new BoardTile();
-        Robot robot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        Robot robot = new Robot(mockImages);
         tile.add(robot);
         assertNotNull( tile.getObjects()[BoardTile.ROBOT]);
     }

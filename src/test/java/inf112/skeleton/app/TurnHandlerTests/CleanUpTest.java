@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
@@ -40,7 +41,9 @@ public class CleanUpTest {
 
     @Before
     public void resetPlayer(){
-        player = new Player();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        player = new Player(mockImages);
         board = game.getBoard();
         board.addObject(player.getRobot(), 0, 0);
         robot = player.getRobot();

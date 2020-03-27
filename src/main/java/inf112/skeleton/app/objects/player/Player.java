@@ -14,9 +14,8 @@ public class Player {
     private ArrayList<Flag> flags;
     private Boolean readyButton = false;
 
-    public Player(){
-        robot = new Robot();
-        robot.setTexture();
+    public Player(Texture[] textures){
+        robot = new Robot(textures);
         robot.setTileX(0);
         robot.setTileY(0);
         selectedCards  = new Queue<ProgramCard>();

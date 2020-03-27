@@ -1,4 +1,5 @@
 package inf112.skeleton.app;
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
@@ -17,15 +18,19 @@ public class RobotTest {
 
     @Before
     public void setUp(){
-        testBot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        testBot = new Robot(mockImages);
 
         mockRobotClass = mock(Robot.class);
-        mockRobot = new Robot();
+        mockRobot = new Robot(mockImages);
     }
 
     @Test
     public void testX(){
-        Robot aRobot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        Robot aRobot = new Robot(mockImages);
         aRobot.setTileX(5);
 
         when(mockRobotClass.getTileX()).thenReturn(5);

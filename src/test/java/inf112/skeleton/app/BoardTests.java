@@ -1,7 +1,9 @@
 package inf112.skeleton.app;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
@@ -19,7 +21,9 @@ public class BoardTests {
     @Before
     public void setUp(){
         board = new Board(12, 12, 1);
-        robot = new Robot(Direction.NORTH);
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        robot = new Robot(Direction.NORTH, mockImages);
         board.removeObject(0, 0);
 
     }

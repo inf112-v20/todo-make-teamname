@@ -1,5 +1,6 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
@@ -11,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 public class BoardLaserTest {
     private static Game game;
@@ -32,7 +34,9 @@ public class BoardLaserTest {
 
     @Before
     public void robotSetUp(){
-        robot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        robot = new Robot(mockImages);
         board.addObject(robot, 1, 0);
     }
 

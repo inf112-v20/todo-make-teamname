@@ -1,5 +1,6 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
@@ -11,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 public class GearTest {
     private static Game game;
@@ -26,8 +28,10 @@ public class GearTest {
         game.gamePhasesSetUp();
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
-        robot1 = new Robot();
-        robot2 = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        robot1 = new Robot(mockImages);
+        robot2 = new Robot(mockImages);
         GearClockwise gearClockwise = new GearClockwise();
         GearCounterClockwise gearCounterClockwise = new GearCounterClockwise();
         board.addObject(robot1, 1, 0);

@@ -122,20 +122,17 @@ public class Game extends InputAdapter {
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {
-                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
-                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT), Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
-                    TextureRegion t = new TextureRegion();
-                    t.setRegion(r.getTexture());
-                    batch.draw(t,
-                            (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
-                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
-                            Settings.TILE_WIDTH/2,
-                            Settings.TILE_HEIGHT/2,
-                            Settings.TILE_WIDTH,
-                            Settings.TILE_HEIGHT,
-                            1,
-                            1,
-                            r.getRotation());
+//                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
+                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT), Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+//                    TextureRegion t = new TextureRegion();
+//                    t.setRegion(r.getTexture());
+//                    batch.draw(r.getTexture(),
+//                            (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
+//                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
+//                            Settings.TILE_WIDTH/2,
+//                            Settings.TILE_HEIGHT/2,
+//                            Settings.TILE_WIDTH,
+//                            Settings.TILE_HEIGHT);
                 }
             }
         }catch (ConcurrentModificationException ex){
@@ -246,12 +243,20 @@ public class Game extends InputAdapter {
         idPlayerHash = new HashMap<>();
         names = new String[4];
         allCards = new ArrayList<>();
+        Texture[] textures = getRobotTextures();
         for (int i = 1; i < 5; i++) {
-            Player player = new Player();
+            Player player = new Player(textures);
             player.deal();
             board.addObject(player.getRobot(), i, 0);
             idPlayerHash.put(i, player);
         }
+    }
+
+    private Texture[] getRobotTextures() {
+        return new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
+                new Texture("assets/robot_design/elias_robot.png"),
+                new Texture("assets/robot_design/elias_robot_backwards.png"),
+                new Texture("assets/robot_design/elias_robot_left.png")};
     }
 
     /**

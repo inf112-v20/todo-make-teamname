@@ -6,6 +6,7 @@ import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 
 public class Robot implements IBoardObject {
 
+    private final Texture[] textures;
     private int x, y;
     private Direction dir;
     private Texture sprite;
@@ -15,22 +16,31 @@ public class Robot implements IBoardObject {
     private int life = 3;
 
 
-    public Robot(Direction newDir) {
+    public Robot(Direction newDir, Texture[] textures) {
         dir = newDir;
+        this.textures = textures;
     }
-    public Robot(){
-        this(Direction.EAST);
+    public Robot(Texture[] textures){
+        this.dir = Direction.EAST;
+        this.textures = textures;
     }
 
     public Texture getTexture() {
-        return sprite;
+        switch (dir){
+            case NORTH:
+                return textures[0];
+            case SOUTH:
+                return textures[2];
+            case WEST:
+                return textures[3];
+            default:
+                return textures[1];
+        }
+
     }
 
 
-    //TODO setTexture needs to handle robots having different textures
-    public void setTexture() {
-        sprite = new Texture("assets/robot_design/Robot_Example.png");
-    }
+
 
     @Override
     public Direction getDirection() {

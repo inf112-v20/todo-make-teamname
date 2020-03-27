@@ -3,13 +3,14 @@ package inf112.skeleton.app.main;
 
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
-import inf112.skeleton.app.networking.MPClient;
+import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -318,14 +319,49 @@ public class TurnHandler {
             if (wall.getDirection() == robot.getDirection()){
                 return true;
             }
+            Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
+            if(opposite(nextWall.getDirection(), robot)){
+                return true;
+            }
             return false;
         }
         return false;
     }
 
+    private boolean opposite(Direction direction, Robot robot) {
+        switch (robot.getDirection()){
+            case WEST:
+                if(direction.equals(Direction.EAST))return true;
+            case SOUTH:
+                if(direction.equals(Direction.NORTH))return true;
+            case EAST:
+                if(direction.equals(Direction.WEST))return true;
+            case NORTH:
+                if(direction.equals(Direction.SOUTH))return true;
+            default:
+                return false;
+        }
+    }
+
     private boolean robotCollision(Robot robot){
-        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        return currentTile.getObjects()[2] instanceof Robot;
+        BoardTile nextTile = nextTile(robot);
+        return nextTile.getObjects()[2] instanceof Robot;
+    }
+
+    private BoardTile nextTile(Robot robot) {
+        switch (robot.getDirection()){
+            case WEST:
+                return board.getTile(robot.getTileX() - 1, robot.getTileY());
+            case SOUTH:
+                return board.getTile(robot.getTileX(), robot.getTileY() - 1);
+            case EAST:
+                return board.getTile(robot.getTileX() + 1, robot.getTileY());
+            case NORTH:
+                return board.getTile(robot.getTileX() , robot.getTileY() + 1);
+            default:
+                return board.getTile(robot.getTileX(), robot.getTileY());
+        }
+
     }
 
 
@@ -340,7 +376,9 @@ public class TurnHandler {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
                 //Move robot
-                if (!wallCollision(robot) && !robotCollision(robot)) board.moveObject(robot, robot.getDirection());
+                if (!wallCollision(robot) && !robotCollision(robot)) {
+                    board.moveObject(robot, robot.getDirection());
+                }
 
                 if (!robot.isDestroyed()){
                     if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {

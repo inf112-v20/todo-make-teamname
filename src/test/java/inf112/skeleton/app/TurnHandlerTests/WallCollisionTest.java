@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
@@ -37,7 +38,9 @@ public class WallCollisionTest {
         game = new Game();
         game.setBoard(new Board(4,1,1));
         game.gamePhasesSetUp();
-        player = new Player();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        player = new Player(mockImages);
         Wall wall = new Wall(Direction.NORTH);
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
@@ -49,7 +52,9 @@ public class WallCollisionTest {
 
     @Before
     public void robotSetUp(){
-        robot = new Robot();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        robot = new Robot(mockImages);
         board.addObject(robot, 1, 0);
     }
 
