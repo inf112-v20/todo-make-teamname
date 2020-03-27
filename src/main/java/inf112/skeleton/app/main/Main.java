@@ -9,7 +9,7 @@ public class Main {
         cfg.title = "RoboRally :)";
         cfg.width = Settings.SCREEN_WIDTH;
         cfg.height = Settings.SCREEN_HEIGHT;
-        cfg.resizable = false; //temporarly
+        cfg.resizable = true; //temporarly
         //new LwjglApplication(new HelloWorld());
         new LwjglApplication(new ScreenHandler(), cfg);
     }

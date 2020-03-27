@@ -59,7 +59,7 @@ public class Options {
                 ScreenHandler.changeScreenState(ScreenState.MAINMENU);
             }
             else if (selected == 1) {
-                Settings.setScreenSize(1280, 720);
+                Settings.setScreenSize(1920, 1080);
                 ScreenHandler.changeScreenState(ScreenState.MAINMENU);
             }
             else if (selected == 2){
