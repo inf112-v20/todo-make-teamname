@@ -57,9 +57,6 @@ public class LobbyMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-        if(host) {
-            input();
-        }
         String[] names = game.getNames();
         font.setColor(Color.BLACK);
         font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * 15);
@@ -73,9 +70,11 @@ public class LobbyMenu {
     /**
      * Gives the host the ability to start the game.
      */
-    public void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            game.sendStartSignal();
+    public void input(int keyCode) {
+        if(host) {
+            if (keyCode == Input.Keys.ENTER) {
+                game.sendStartSignal();
+            }
         }
     }
 }

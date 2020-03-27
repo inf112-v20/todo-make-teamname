@@ -29,7 +29,7 @@ import java.util.concurrent.Semaphore;
  * MPClient which sends it to the server.<BR> It creates all the player and board objects, and then keeps control of
  * it.
  */
-public class Game extends InputAdapter {
+public class Game{
     private Board board;
     private MPClient client;
     private Player myPlayer;
@@ -59,7 +59,6 @@ public class Game extends InputAdapter {
      */
     public void create() {
         boardSetUp("riskyexchange");
-        Gdx.input.setInputProcessor(this);
         playerSetup();
         textureSetUp();
         cardBoxSetUp();
@@ -67,7 +66,7 @@ public class Game extends InputAdapter {
 
 
 
-    @Override
+
     public boolean keyUp(int keycode) {
             switch (keycode) {
                 case Input.Keys.UP:
@@ -88,7 +87,6 @@ public class Game extends InputAdapter {
             return true;
         }
 
-    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
         if (screenX > cardBoxLeft &&
@@ -110,7 +108,6 @@ public class Game extends InputAdapter {
         return false;
     }
 
-    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer){
         return false;
     }

@@ -21,6 +21,7 @@ public class ScreenHandler implements ApplicationListener {
     private static HostGameMenu hostGameMenu;
     private static LobbyMenu lobbyMenu;
     private Texture background;
+    private InputHandler inputHandler;
 
 
     @Override
@@ -35,6 +36,7 @@ public class ScreenHandler implements ApplicationListener {
         hostGameMenu = new HostGameMenu(game);
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
+        inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, this);
 
     }
 
@@ -98,6 +100,10 @@ public class ScreenHandler implements ApplicationListener {
             joinGameMenu = null;
             lobbyMenu = null;
         }
+    }
+
+    public ScreenState getScreenState(){
+        return screenState;
     }
 
 }

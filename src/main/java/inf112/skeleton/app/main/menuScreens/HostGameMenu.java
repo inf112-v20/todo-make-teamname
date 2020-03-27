@@ -50,7 +50,6 @@ public class HostGameMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-        input();
         font.setColor(Color.BLACK);
         font.draw(batch, "IP address: " + ipAddress, Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
         font.setColor(Color.YELLOW);
@@ -61,8 +60,8 @@ public class HostGameMenu {
     /**
      * Press the Enter key to go to the lobby screen.
      */
-    public void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+    public void input(int keyCode) {
+        if (keyCode == Input.Keys.ENTER) {
             exitScreen();
         }
     }
