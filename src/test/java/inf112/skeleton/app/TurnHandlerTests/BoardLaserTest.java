@@ -1,6 +1,7 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
 import inf112.skeleton.app.board.Board;
+import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.BoardLaser;

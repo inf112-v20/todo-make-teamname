@@ -2,6 +2,7 @@ package inf112.skeleton.app.board;
 
 import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.boardObjects.IBoardObject;
+import inf112.skeleton.app.objects.boardObjects.Wall;
 import inf112.skeleton.app.objects.player.Robot;
 
 
@@ -10,6 +11,7 @@ public class BoardTile {
     public final static int BOTTOMLAYER = 0; //CONVEYORBELT
     public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
+    public final static int LASERLAYER = 3;
 
     //Array for the items on this tile
     private IBoardObject[] items = {null, null, null, null};
@@ -21,7 +23,8 @@ public class BoardTile {
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
         if(object instanceof Robot) items[ROBOT] = object;
-        else if(object instanceof BoardLaser) items[WALLLAYER] = object;
+        else if(object instanceof Wall) items[WALLLAYER] = object;
+        else if(object instanceof BoardLaser) items[LASERLAYER] = object;
         else items[BOTTOMLAYER] = object;
     }
 

@@ -24,3 +24,5 @@ j - Wall (EAST)
 b - Wall (SOUTHWEST)
 h - Wall (SOUTH)
 m - Wall (SOUTHEAST)
+
+L - Laser
