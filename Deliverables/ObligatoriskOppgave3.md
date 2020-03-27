@@ -88,6 +88,7 @@ Vi har også jobbet med wall collision mot roboten i tillegg til flere robot mod
 
 *   Bugs:
     *   Gå mot vegg stopper robot, men hvis prøver samme move igjen så vil den ignorere den bevegelsen mot veggen å prøve neste i rekken.
+    *   Om du trykker på skjermen i menyen får du nullpointer
 
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Hvordan en kjører prosjektet er forklart i README filen.
