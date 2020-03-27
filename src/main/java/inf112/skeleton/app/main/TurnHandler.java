@@ -227,7 +227,7 @@ public class TurnHandler {
     public void boardLasersShoot(Robot robot) {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[1] instanceof BoardLaser) {
+        if (currentTile.getObjects()[3] instanceof BoardLaser) {
             robot.takeDamage();
         }
     }
@@ -312,8 +312,8 @@ public class TurnHandler {
      */
     private boolean wallCollision(Robot robot){
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof Wall) {
-            Wall wall = (Wall) currentTile.getObjects()[0];
+        if (currentTile.getObjects()[1] instanceof Wall) {
+            Wall wall = (Wall) currentTile.getObjects()[1];
             if (wall.getDirection() == robot.getDirection()){
                 return true;
             }
