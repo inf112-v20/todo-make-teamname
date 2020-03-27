@@ -1,6 +1,7 @@
 package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -47,6 +48,7 @@ public class ScreenHandler implements ApplicationListener {
         //Changes what's getting rendered based on the ScreenState Enum
         switch (screenState) {
             case GAME:
+                Gdx.graphics.setWindowedMode(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
                 game.render(batch, font);
                 break;
             case JOINGAME:
