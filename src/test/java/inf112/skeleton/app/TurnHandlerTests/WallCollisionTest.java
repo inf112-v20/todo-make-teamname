@@ -38,13 +38,10 @@ public class WallCollisionTest {
         game.setBoard(new Board(4,1,1));
         game.gamePhasesSetUp();
         player = new Player();
-        Wall wall = new Wall(Direction.NORTH);
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
         board.addObject(player.getRobot(), 1, 0);
-        board.addObject(wall, 1, 0);
         robot = player.getRobot();
-        robot.setDirection(Direction.NORTH);
     }
 
     @Before
@@ -54,7 +51,9 @@ public class WallCollisionTest {
     }
 
     @Test
-    public void robotDoesNotWalkThroughNorthWall() {
+    public void robotDoesNotWalkThroughNORTHWall() {
+        Wall wall = new Wall(Direction.NORTH);
+        board.addObject(wall, 1, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
         NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
@@ -62,7 +61,32 @@ public class WallCollisionTest {
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
         assertEquals(0, robot.getTileY());
+    }
 
+    @Test
+    public void robotDoesNotWalkThroughSOUTHWall() {
+        Wall wall = new Wall(Direction.SOUTH);
+        board.addObject(wall, 1, 0);
+        assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
+        assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        robot.setDirection(Direction.SOUTH);
+        turnHandler.cardMove(card, robot);
+        assertEquals(1, robot.getTileX());
+        assertEquals(0, robot.getTileY());
+    }
+
+    @Test
+    public void robotDoesNotWalkThroughSOUTHWESTWall() {
+        Wall wall = new Wall(Direction.SOUTHWEST);
+        board.addObject(wall, 1, 0);
+        assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
+        assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        robot.setDirection(Direction.SOUTH);
+        turnHandler.cardMove(card, robot);
+        assertEquals(1, robot.getTileX());
+        assertEquals(0, robot.getTileY());
     }
 
 
