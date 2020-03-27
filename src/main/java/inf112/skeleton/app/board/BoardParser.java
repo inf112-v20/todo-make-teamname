@@ -41,7 +41,14 @@ public class BoardParser {
                     itemLayer[i] = row;
                 }
 
-//                addLayer(board, itemLayer);
+                skip = sc.nextLine();
+
+                for (int i=0; i < height; i++) {
+                    String row = sc.nextLine();
+                    itemLayer[i] = row;
+                }
+                addLayer(board, itemLayer);
+
                 return board;
             }
         }
@@ -118,6 +125,8 @@ public class BoardParser {
                 return new Wall(Direction.SOUTHWEST);
             case 'm':
                 return new Wall(Direction.SOUTHEAST);
+            case 'L':
+                return new BoardLaser();
             case '-':
                 return null;
             default:
