@@ -316,15 +316,18 @@ public class TurnHandler {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
-            if (wall.getDirection() == robot.getDirection()){
+            if (wall.getDirection() == robot.getDirection()) {
                 return true;
             }
-            Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
-            if(opposite(nextWall.getDirection(), robot)){
-                return true;
-            }
-            return false;
         }
+        BoardTile nextTile = nextTile(robot);
+        if (nextTile.getObjects()[1] instanceof Wall) {
+            Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
+            if (opposite(nextWall.getDirection(), robot)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -349,19 +352,45 @@ public class TurnHandler {
     }
 
     private BoardTile nextTile(Robot robot) {
+        BoardTile result;
         switch (robot.getDirection()){
             case WEST:
-                return board.getTile(robot.getTileX() - 1, robot.getTileY());
+                if((robot.getTileX() - 1 < 0 || robot.getTileX() - 1 >= board.getWidth()
+                        || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
+                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    break;
+                }
+                    result =  board.getTile(robot.getTileX() - 1, robot.getTileY());
+                break;
             case SOUTH:
-                return board.getTile(robot.getTileX(), robot.getTileY() - 1);
+                if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
+                        || robot.getTileY() - 1 < 0 || robot.getTileY() - 1 >= board.getHeight())) {
+                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    break;
+                }
+                result = board.getTile(robot.getTileX(), robot.getTileY() - 1);
+                break;
             case EAST:
-                return board.getTile(robot.getTileX() + 1, robot.getTileY());
+                if((robot.getTileX() + 1 < 0 || robot.getTileX() + 1 >= board.getWidth()
+                        || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
+                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    break;
+                }
+                result =  board.getTile(robot.getTileX() + 1, robot.getTileY());
+                break;
             case NORTH:
-                return board.getTile(robot.getTileX() , robot.getTileY() + 1);
+                if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
+                        || robot.getTileY() + 1 < 0 || robot.getTileY() + 1 >= board.getHeight())) {
+                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    break;
+                }
+                result = board.getTile(robot.getTileX() , robot.getTileY() + 1);
+                break;
             default:
-                return board.getTile(robot.getTileX(), robot.getTileY());
+                result = board.getTile(robot.getTileX(), robot.getTileY());
+                break;
         }
-
+        return result;
     }
 
 

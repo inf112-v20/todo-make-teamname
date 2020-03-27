@@ -70,9 +70,9 @@ public class MainMenu {
             else if (selected == 1) {
                 ScreenHandler.changeScreenState(ScreenState.JOINGAME);
             }
-            else if (selected == 2) {
-                ScreenHandler.changeScreenState(ScreenState.OPTIONS);
-            }
+//            else if (selected == 2) {
+//                ScreenHandler.changeScreenState(ScreenState.OPTIONS);
+//            }
             else {
                 Gdx.app.exit();
             }

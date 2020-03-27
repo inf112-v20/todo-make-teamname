@@ -243,20 +243,34 @@ public class Game extends InputAdapter {
         idPlayerHash = new HashMap<>();
         names = new String[4];
         allCards = new ArrayList<>();
-        Texture[] textures = getRobotTextures();
+        Texture[][] textures = getRobotTextures();
         for (int i = 1; i < 5; i++) {
-            Player player = new Player(textures);
+            Player player = new Player(textures[i-1]);
             player.deal();
             board.addObject(player.getRobot(), i, 0);
             idPlayerHash.put(i, player);
         }
     }
 
-    private Texture[] getRobotTextures() {
-        return new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
+    private Texture[][] getRobotTextures() {
+        Texture[][] textures = new Texture[4][4];
+        textures[0] = new Texture[]{new Texture("assets/robot_design/elias_robot_forward.png"),
                 new Texture("assets/robot_design/elias_robot.png"),
                 new Texture("assets/robot_design/elias_robot_backwards.png"),
                 new Texture("assets/robot_design/elias_robot_left.png")};
+        textures[1] = new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
+            new Texture("assets/robot_design/elias_robot.png"),
+            new Texture("assets/robot_design/elias_robot_backwards.png"),
+            new Texture("assets/robot_design/elias_robot_left.png")};
+        textures[2] = new Texture[]{new Texture("assets/robot_design/elias_robot_forward.png"),
+                new Texture("assets/robot_design/elias_robot.png"),
+                new Texture("assets/robot_design/elias_robot_backwards.png"),
+                new Texture("assets/robot_design/elias_robot_left.png")};
+        textures[3] = new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
+                new Texture("assets/robot_design/elias_robot.png"),
+                new Texture("assets/robot_design/elias_robot_backwards.png"),
+                new Texture("assets/robot_design/elias_robot_left.png")};
+        return textures;
     }
 
     /**
