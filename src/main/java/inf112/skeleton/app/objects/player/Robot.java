@@ -154,13 +154,13 @@ public class Robot implements IBoardObject {
     public float getRotation() {
         switch (this.getDirection()){
             case NORTH:
-                return 180;
-            case WEST:
-                return 270;
-            case EAST:
                 return 90;
-            case SOUTH:
+            case WEST:
+                return 180;
+            case EAST:
                 return 0;
+            case SOUTH:
+                return 270;
         }
         return 0;
     }

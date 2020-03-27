@@ -1,12 +1,14 @@
 package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.main.menuScreens.*;
+import inf112.skeleton.app.main.menuScreens.HostGameMenu;
+import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
+import inf112.skeleton.app.main.menuScreens.LobbyMenu;
+import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
@@ -48,7 +50,6 @@ public class ScreenHandler implements ApplicationListener {
         //Changes what's getting rendered based on the ScreenState Enum
         switch (screenState) {
             case GAME:
-                Gdx.graphics.setWindowedMode(Settings.SCREEN_WIDTH,Settings.SCREEN_HEIGHT);
                 game.render(batch, font);
                 break;
             case JOINGAME:
@@ -60,8 +61,6 @@ public class ScreenHandler implements ApplicationListener {
             case LOBBYMENU:
                 lobbyMenu.render(batch, font);
                 break;
-            case OPTIONS:
-                Options.render(batch, font);
             default:
                 MainMenu.render(batch, font);
                 break;
@@ -88,14 +87,13 @@ public class ScreenHandler implements ApplicationListener {
 
     public static void changeScreenState(ScreenState newState) {
         screenState = newState;
-
         if(screenState == ScreenState.HOSTGAME) {
             hostGameMenu.create();
             lobbyMenu.setHost(true);
         }
         if(screenState == ScreenState.JOINGAME) joinGameMenu.create();
         if(screenState == ScreenState.LOBBYMENU) lobbyMenu.create();
-        if(screenState == ScreenState.GAME ||screenState == ScreenState.OPTIONS){
+        if(screenState == ScreenState.GAME){
             hostGameMenu = null;
             joinGameMenu = null;
             lobbyMenu = null;
