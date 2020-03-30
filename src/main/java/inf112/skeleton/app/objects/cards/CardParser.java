@@ -2,7 +2,6 @@ package inf112.skeleton.app.objects.cards;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Random;
 import java.util.Scanner;
 
 public class CardParser {
