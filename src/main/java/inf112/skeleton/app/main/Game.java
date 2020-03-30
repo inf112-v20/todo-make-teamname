@@ -1,8 +1,8 @@
 package inf112.skeleton.app.main;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,7 +21,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.concurrent.Semaphore;
+
 
 
 /**
@@ -116,6 +116,42 @@ public class Game{
     //An object has to be initialized before being rendered
     public void render(SpriteBatch batch, BitmapFont font) {
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
+        renderRobots(batch, font);
+        renderCards(batch, font);
+        renderHealthAndLife(batch, font);
+        renderReadyButton(batch, font);
+        renderNames(batch, font);
+    }
+
+    private void renderNames(SpriteBatch batch, BitmapFont font) {
+        font.setColor(Color.BLACK);
+        font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
+        for (int i = 0; i < names.length; i++) {
+            if(names[i] == null) continue;
+            font.draw(batch, names[i] + " Player number " + i, Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * (11 - i));
+        }
+    }
+
+    private void renderReadyButton(SpriteBatch batch, BitmapFont font) {
+        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        if (myPlayer.getReadyButton()){
+            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        }
+    }
+
+    private void renderHealthAndLife(SpriteBatch batch, BitmapFont font) {
+        for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
+            batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+        }
+        for (int i = myPlayer.getRobot().getHealth() ; i < 9; i++){
+            batch.draw(damageTokens[2], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
+        }
+        for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
+            batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
+        }
+    }
+
+    public void renderRobots(SpriteBatch batch, BitmapFont font){
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {
@@ -138,7 +174,9 @@ public class Game{
             //at render skipper en iterasjon som ikke er merkbart for bruker.
 
         }
+    }
 
+    public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             if (myPlayer.getCards()[i].getSelected()){
@@ -146,28 +184,7 @@ public class Game{
                 batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
             }
         }
-        for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
-            batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
-        }
-        for (int i = myPlayer.getRobot().getHealth() ; i < 9; i++){
-            batch.draw(damageTokens[2], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
-        }
-        for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
-            batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
-        }
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
-        if (myPlayer.getReadyButton()){
-            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
-        }
-
-        font.setColor(Color.BLACK);
-        font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
-        for (int i = 0; i < names.length; i++) {
-            if(names[i] == null) continue;
-            font.draw(batch, names[i] + " Player number " + i, Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * (11 - i));
-        }
     }
-
     public void dispose() {
         if(turnHandler != null)turnHandler.dispose();
     }

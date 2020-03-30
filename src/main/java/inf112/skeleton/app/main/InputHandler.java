@@ -9,9 +9,9 @@ import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class InputHandler extends InputAdapter {
 
-    private final ScreenHandler screenHandler;
-    private  HostGameMenu hostGameMenu;
-    private  JoinGameMenu joinGameMenu;
+    private ScreenHandler screenHandler;
+    private HostGameMenu hostGameMenu;
+    private JoinGameMenu joinGameMenu;
     private LobbyMenu lobbyMenu;
     private ScreenState screenState;
     private Game game;
