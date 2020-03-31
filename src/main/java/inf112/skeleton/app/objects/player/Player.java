@@ -2,6 +2,7 @@ package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.utils.Queue;
 import inf112.skeleton.app.objects.boardObjects.Flag;
+import inf112.skeleton.app.objects.cards.Deck;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class Player {
     public ProgramCard[] cards;
     private Queue<ProgramCard> selectedCards;
     private ArrayList<Flag> flags;
+    private Deck deck;
 
     public Player(){
         robot = new Robot();
@@ -24,17 +26,7 @@ public class Player {
     public boolean hasWon(){return true;}
     public void deal(){
         //TODO:: change so that players get random cards
-        cards = new ProgramCard[5];
-        cards[0] = (new ProgramCard(1,false,false,false));
-        cards[1] = (new ProgramCard(1,false,false,false));
-        cards[2]= (new ProgramCard(2,false,false,false));
-        cards[3] = (new ProgramCard(0,true,true,false));
-        cards[4] = (new ProgramCard(0,true,false,true));
-        cards[0].setImages();
-        cards[1].setImages();
-        cards[2].setImages();
-        cards[3].setImages();
-        cards[4].setImages();
+        cards = deck.draw();
     }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}

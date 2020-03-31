@@ -3,15 +3,13 @@ package inf112.skeleton.app.objects.cards;
 import com.badlogic.gdx.graphics.Texture;
 
 public class ProgramCard implements ICard {
-    private boolean rotate;
-    private boolean rotateLeft;
-    private boolean rotateRight;
-    private int value;
+    private boolean rotate = false;
+    private boolean rotateLeft = false;
+    private boolean rotateRight = false;
+    private int value = 0;
     private boolean selected;
-    private boolean backup;
-    private boolean move1;
-    private boolean move2;
-    private boolean move3;
+    private Texture sprite;
+    private int priorityValue;
     String name;
     String text;
 
@@ -28,7 +26,7 @@ public class ProgramCard implements ICard {
 
     private int type;
 
-    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight, boolean backup, boolean move1, boolean move2, boolean move3){
+    public ProgramCard(int value, boolean rotate, boolean rotateLeft, boolean rotateRight){
         /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
         * will do a U-turn
          */
@@ -37,31 +35,37 @@ public class ProgramCard implements ICard {
         this.rotate = rotate;
         this.rotateLeft = rotateLeft;
         this.rotateRight = rotateRight;
-        this.backup = backup;
-        this.move1 = move1;
-        this.move2 = move2;
-        this.move3 = move3;
+    }
 
-        if (value < 70){
-            type = 0;
-        }
-        else if (value < 410 && value % 20 != 0){
-            type = 1;
-        }
-        else if (value < 430 && value % 20 == 0){
-            type = 3;
-        }
-        else if (value < 490){
-            type = 4;
-        }
-        else if (value < 670){
-            type = 5;
-        }
-        else if (value < 790){
-            type = 6;
-        }
-        else{
-            type = 7;
+    public ProgramCard (Texture sprite, int priorityValue, String cardName) {
+        this.sprite = sprite;
+        this.priorityValue = priorityValue;
+
+        switch (cardName){
+            case "UTurn":
+                rotate = true;
+                break;
+            case "RotateLeft":
+                rotate = true;
+                rotateLeft = true;
+                break;
+            case "RotateRight":
+                rotate = true;
+                rotateRight = true;
+                break;
+            case "BackUp":
+                value = -1;
+                break;
+            case "Move1":
+                value = 1;
+                break;
+            case "Move2":
+                value = 2;
+                break;
+            case "Move3":
+                value = 3;
+                break;
+            default:
         }
     }
     public void setSelected(Boolean b){
@@ -82,16 +86,7 @@ public class ProgramCard implements ICard {
 
     @Override
     public Texture getImage() {
-        switch (type) {
-            case 6:
-                return images[1];
-            case 1:
-                return images[2];
-            case 2:
-                return images[3];
-            default:
-                return images[0];
-        }
+        return sprite;
     }
 
     @Override
