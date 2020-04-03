@@ -16,24 +16,24 @@ public class MainMenu {
         switch(selected) {
             case 0:
                 font.setColor(Color.WHITE);
-                font.draw(batch, "Join Game", Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
-                font.draw(batch, "Quit", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 8);
+                font.draw(batch, "Join Game", (Settings.SCREEN_WIDTH / 2)-60, Settings.SCREEN_HEIGHT / 2);
+                font.draw(batch, "Quit", (Settings.SCREEN_WIDTH / 2)-60, (Settings.SCREEN_HEIGHT / 18) * 8);
                 font.setColor(Color.YELLOW);
-                font.draw(batch, "Host Game", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 10);
+                font.draw(batch, "Host Game", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 18) * 10);
                 break;
             case 1:
                 font.setColor(Color.WHITE);
-                font.draw(batch, "Host Game", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 10);
-                font.draw(batch, "Quit", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 8);
+                font.draw(batch, "Host Game", (Settings.SCREEN_WIDTH / 2)-60, (Settings.SCREEN_HEIGHT / 18) * 10);
+                font.draw(batch, "Quit", (Settings.SCREEN_WIDTH / 2)-60, (Settings.SCREEN_HEIGHT / 18) * 8);
                 font.setColor(Color.YELLOW);
-                font.draw(batch, "Join Game", Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
+                font.draw(batch, "Join Game", (Settings.SCREEN_WIDTH / 2)-50, Settings.SCREEN_HEIGHT / 2);
                 break;
             case 2:
                 font.setColor(Color.WHITE);
-                font.draw(batch, "Host Game", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 10);
-                font.draw(batch, "Join Game", Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
+                font.draw(batch, "Host Game", (Settings.SCREEN_WIDTH / 2)-60, (Settings.SCREEN_HEIGHT / 18) * 10);
+                font.draw(batch, "Join Game", (Settings.SCREEN_WIDTH / 2)-60, Settings.SCREEN_HEIGHT / 2);
                 font.setColor(Color.YELLOW);
-                font.draw(batch, "Quit", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 8);
+                font.draw(batch, "Quit", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 18) * 8);
                 break;
             default:
                 font.setColor(Color.WHITE);
