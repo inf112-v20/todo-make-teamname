@@ -127,7 +127,7 @@ public class Game{
     }
 
     private void renderNames(SpriteBatch batch, BitmapFont font) {
-        font.setColor(Color.BLACK);
+        font.setColor(Color.WHITE);
         font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;

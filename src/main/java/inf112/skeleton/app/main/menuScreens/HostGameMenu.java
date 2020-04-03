@@ -51,9 +51,9 @@ public class HostGameMenu {
      */
     public void render(SpriteBatch batch, BitmapFont font) {
         font.setColor(Color.WHITE);
-        font.draw(batch, "IP address: " + ipAddress, Settings.SCREEN_WIDTH / 2, Settings.SCREEN_HEIGHT / 2);
+        font.draw(batch, "IP address: " + ipAddress, (Settings.SCREEN_WIDTH / 2)-100, (Settings.SCREEN_HEIGHT / 2)+70);
         font.setColor(Color.YELLOW);
-        font.draw(batch, "Go to lobby", Settings.SCREEN_WIDTH / 6 * 5, Settings.SCREEN_HEIGHT / 18);
+        font.draw(batch, "Press ENTER to go to lobby", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-20);
 
     }
 

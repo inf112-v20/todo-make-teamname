@@ -59,11 +59,13 @@ public class LobbyMenu {
     public void render(SpriteBatch batch, BitmapFont font) {
         String[] names = game.getNames();
         font.setColor(Color.WHITE);
-        font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * 15);
+        font.draw(batch, "Players joined:", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 18) * 15);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
-            font.draw(batch, names[i] + " Player number: " + i, Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * (15 - i));
+            font.draw(batch,  " Player " + i + " : " + names[i], (Settings.SCREEN_WIDTH / 2)-30, (Settings.SCREEN_HEIGHT / 18) * (15 - i));
         }
+        font.setColor(Color.YELLOW);
+        font.draw(batch, "Press ENTER to start the game", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-200);
 
     }
 
