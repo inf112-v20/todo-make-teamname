@@ -23,7 +23,7 @@ public class Player {
         robot.setTileY(0);
         selectedCards  = new Queue<ProgramCard>();
         flags = new ArrayList<>();
-        deck = new Deck();
+        deck = new Deck(robot);
     }
 
     public boolean hasWon(){return true;}

@@ -1,21 +1,25 @@
 package inf112.skeleton.app.objects.cards;
 
+import inf112.skeleton.app.objects.player.Robot;
+
 import java.util.*;
 
 public class Deck {
     private ArrayList<ProgramCard> drawPile = new ArrayList<>();
     private ArrayList<ProgramCard> discardPile = new ArrayList<>();
     private int numOfShuffles = 5; //Default amount of shuffles
+    private Robot robot;
 
-    public Deck() {
+    public Deck(Robot robot) {
         ProgramCard[] newCards = CardParser.cards();
         drawPile.addAll(Arrays.asList(newCards));
         randShuffle();
+        this.robot = robot;
     }
 
     public ProgramCard[] draw() {
-        ProgramCard[] newHand = new ProgramCard[5];
-        for (int i = 0; i < 5; i++) {
+        ProgramCard[] newHand = new ProgramCard[robot.getHealth()];
+        for (int i = 0; i < robot.getHealth(); i++) {
             if (drawPile.isEmpty()) {
                 drawPile = discardPile;
                 discardPile.clear();
