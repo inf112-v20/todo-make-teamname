@@ -97,5 +97,6 @@ public class Player {
     public void discard() {
         deck.discard(cards);
         Arrays.fill(cards, null);
+        selectedCards.clear();
     }
 }
