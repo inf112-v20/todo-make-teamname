@@ -67,7 +67,7 @@ public class ScreenHandler implements ApplicationListener {
                 break;
             case LOBBYMENU:
                 lobbyMenu.render(batch, font);
-                //batch.draw(mainLogo, 380, 500, 550, 160);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
             default:
                 MainMenu.render(batch, font);
