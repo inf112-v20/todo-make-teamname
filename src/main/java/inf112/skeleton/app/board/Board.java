@@ -28,7 +28,7 @@ public class Board  {
         grid = new BoardTile [height][width];
         for (int y=0; y < height; y++) {
             for (int x=0; x < width; x++) {
-                grid[y][x] = new BoardTile();
+                grid[y][x] = new BoardTile(x, y);
             }
         }
     }

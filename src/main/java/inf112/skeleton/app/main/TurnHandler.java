@@ -317,6 +317,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
             if (wall.getDirection() == robot.getDirection()) {
+                System.out.println("hit wall");
                 return true;
             }
         }
@@ -324,6 +325,7 @@ public class TurnHandler {
         if (nextTile.getObjects()[1] instanceof Wall) {
             Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
             if (opposite(nextWall.getDirection(), robot)) {
+                System.out.println("hit wall");
                 return true;
             }
         }
@@ -335,12 +337,17 @@ public class TurnHandler {
         switch (robot.getDirection()){
             case WEST:
                 if(direction.equals(Direction.EAST))return true;
+                else return false;
             case SOUTH:
                 if(direction.equals(Direction.NORTH))return true;
+                else return false;
             case EAST:
                 if(direction.equals(Direction.WEST))return true;
+                else return false;
             case NORTH:
                 if(direction.equals(Direction.SOUTH))return true;
+                else return false;
+
             default:
                 return false;
         }

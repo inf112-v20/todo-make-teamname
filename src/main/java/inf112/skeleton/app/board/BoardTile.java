@@ -12,6 +12,7 @@ public class BoardTile {
     public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
     public final static int LASERLAYER = 3;
+    private int x, y;
 
     //Array for the items on this tile
     private IBoardObject[] items = {null, null, null, null};
@@ -20,6 +21,11 @@ public class BoardTile {
     public BoardTile() {
     }
 
+
+    public BoardTile(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
     //Adds a  object on this tile, only works for robots atm
     public void add(IBoardObject object) {
         if(object instanceof Robot) items[ROBOT] = object;
