@@ -30,7 +30,8 @@ public class ScreenHandler implements ApplicationListener {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
-        background = new Texture("assets/pink_background.png");
+        font.getData().setScale(1, 1); //Change this to 2 2 for bigger font size
+        background = new Texture("assets/grey_background.png");
         game = new Game();
         game.create();
         hostGameMenu = new HostGameMenu(game);

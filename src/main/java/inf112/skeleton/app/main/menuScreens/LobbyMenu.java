@@ -58,7 +58,7 @@ public class LobbyMenu {
      */
     public void render(SpriteBatch batch, BitmapFont font) {
         String[] names = game.getNames();
-        font.setColor(Color.BLACK);
+        font.setColor(Color.WHITE);
         font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * 15);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
