@@ -140,14 +140,14 @@ public class Game{
         }
     }
 
-    private void renderReadyButton(SpriteBatch batch, BitmapFont font) {
+    private void renderReadyButton(SpriteBatch batch) {
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         if (myPlayer.getReadyButton()){
             batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         }
     }
 
-    private void renderHealthAndLife(SpriteBatch batch, BitmapFont font) {
+    private void renderHealthAndLife(SpriteBatch batch) {
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
             batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
         }
@@ -159,7 +159,7 @@ public class Game{
         }
     }
 
-    public void renderRobots(SpriteBatch batch, BitmapFont font){
+    public void renderRobots(SpriteBatch batch){
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {

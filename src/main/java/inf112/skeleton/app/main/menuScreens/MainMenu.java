@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.main.ScreenHandler;
 import inf112.skeleton.app.main.ScreenState;
 import inf112.skeleton.app.main.Settings;
-import javafx.scene.input.KeyCode;
 
 public class MainMenu {
     private static int selected = 0;
