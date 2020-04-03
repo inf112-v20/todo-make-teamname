@@ -174,4 +174,8 @@ public class Robot implements IBoardObject {
         }
         return 0;
     }
+
+    public Texture getNonRotatingTexture() {
+        return textures[1];
+    }
 }

@@ -1,32 +1,32 @@
 package inf112.skeleton.app.objects.cards;
 
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.Arrays;
 
 public class Deck {
-    private Card[] cards;
-    private int nextCard = 0;
-    private int deckSize = 84;
-    private int shuffles = 5;
+    private ArrayList<ProgramCard> drawPile = new ArrayList<>();
+    private ArrayList<ProgramCard> discardPile = new ArrayList<>();
 
-    /**
-     * Creates new Deck
-     */
     public Deck(){
-        this.cards = new Card[deckSize];
-        for (int i = 0; i < shuffles; i++) {
-            shuffle(cards);
-        }
+        ProgramCard[] newCards = CardParser.cardParser();
+        drawPile.addAll(Arrays.asList(newCards));
     }
 
-    public static Card[] shuffle(Card[] card){
-        Random random = new Random();
-        for (int i = 0; i < card.length; i++) {
-            int randomPos = random.nextInt(card.length);
-            Card temp = card[i];
-            card[i] = card[randomPos];
-            card[randomPos] = temp;
+    public ProgramCard[] draw(){
+        ProgramCard[] newHand = new ProgramCard[5];
+        for (int i = 0; i < 5; i++) {
+            if(drawPile.isEmpty()){
+                drawPile = discardPile;
+                discardPile.clear();
+            }
+            newHand[i] = drawPile.remove(0);
         }
-        return card;
+        return newHand;
     }
+
+    public void discard(ProgramCard[] cards){
+        discardPile.addAll(Arrays.asList(cards));
+    }
+
 }
+

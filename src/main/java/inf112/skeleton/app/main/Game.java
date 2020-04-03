@@ -89,12 +89,15 @@ public class Game{
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
+
         if (screenX > cardBoxLeft &&
                 screenX < cardBoxRight &&
-                screenY > Settings.SCREEN_HEIGHT-Settings.CARD_HEIGHT &&
-                screenY < Settings.SCREEN_HEIGHT){
-            int card = (screenX - cardBoxLeft)/Settings.CARD_WIDTH;
-            myPlayer.addSelectedCard(card);
+                screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
+                screenY < Settings.SCREEN_HEIGHT) {
+            int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
+            if(myPlayer.getCards()[0] != null) {
+                myPlayer.addSelectedCard(card);
+            }
         }
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
@@ -102,7 +105,7 @@ public class Game{
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
             //TODO fix so that one player cant send multiple sets of cards
-            myPlayer.setReadyButon(true);
+            myPlayer.setReadyButton(true);
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }
         return false;
@@ -128,7 +131,12 @@ public class Game{
         font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
-            font.draw(batch, names[i] + " Player number " + i, Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * (11 - i));
+            font.draw(batch, names[i], Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 36) * (22 - i));
+            batch.draw(idPlayerHash.get(i).getRobot().getNonRotatingTexture(),
+                    Settings.SCREEN_WIDTH / 21,
+                    (Settings.SCREEN_HEIGHT / 64) * (39 - (2*i)),
+                    Settings.TILE_WIDTH/2, Settings.TILE_HEIGHT/2);
+
         }
     }
 
@@ -178,10 +186,12 @@ public class Game{
 
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
-            batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
-            if (myPlayer.getCards()[i].getSelected()){
-                font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i*Settings.CARD_WIDTH) + (Settings.CARD_WIDTH/5), Settings.CARD_HEIGHT- (Settings.CARD_HEIGHT/10));
-                batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+            if(myPlayer.getCards()[i] != null) {
+                batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                if (myPlayer.getCards()[i].getSelected()) {
+                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
+                    batch.draw(selectedFrame, cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                }
             }
         }
     }
@@ -195,6 +205,7 @@ public class Game{
      * @param packet
      */
     public void isReady(Packets.Packet02Cards packet){
+        myPlayer.discard();
         for (Packets.Packet02Cards pack: allCards) {
             if(pack.playerId == packet.playerId) return;
         }
@@ -327,6 +338,7 @@ public class Game{
         server.run();
         client = new MPClient(server.getAddress(),this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        myPlayer.deal();
         host = true;
         return server.getAddress();
     }
@@ -339,6 +351,7 @@ public class Game{
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
+        myPlayer.deal();
     }
 
     /**
@@ -348,6 +361,8 @@ public class Game{
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        host = false;
+        myPlayer.deal();
     }
 
     public int getId(){
@@ -442,5 +457,9 @@ public class Game{
      */
     public boolean getConnection(){
         return client.getConnection();
+    }
+
+    public Player getMyPlayer() {
+        return myPlayer;
     }
 }

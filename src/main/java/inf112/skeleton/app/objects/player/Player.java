@@ -3,9 +3,11 @@ package inf112.skeleton.app.objects.player;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Queue;
 import inf112.skeleton.app.objects.boardObjects.Flag;
+import inf112.skeleton.app.objects.cards.Deck;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Player {
     private Robot robot;
@@ -13,6 +15,7 @@ public class Player {
     private Queue<ProgramCard> selectedCards;
     private ArrayList<Flag> flags;
     private Boolean readyButton = false;
+    private Deck deck;
 
     public Player(Texture[] textures){
         robot = new Robot(textures);
@@ -20,21 +23,13 @@ public class Player {
         robot.setTileY(0);
         selectedCards  = new Queue<ProgramCard>();
         flags = new ArrayList<>();
+        deck = new Deck();
     }
 
     public boolean hasWon(){return true;}
     public void deal(){
         //TODO:: change so that players get random cards
-        Texture[] images = new Texture[]{new Texture("assets/cards/card_move_1.png"),
-                new Texture("assets/cards/card_move_2.png"),
-                new Texture("assets/cards/card_turn_left.png"),
-                new Texture("assets/cards/card_turn_right.png")};
-        cards = new ProgramCard[5];
-        cards[0] = (new ProgramCard(1,false,false,false, images));
-        cards[1] = (new ProgramCard(1,false,false,false, images));
-        cards[2]= (new ProgramCard(2,false,false,false, images));
-        cards[3] = (new ProgramCard(0,true,true,false, images));
-        cards[4] = (new ProgramCard(0,true,false,true, images));
+        cards = deck.draw();
     }
     public void setCards(ProgramCard[] cards){this.cards = cards;}
     public ProgramCard[] getCards(){return cards;}
@@ -92,10 +87,15 @@ public class Player {
         flags.add(flag);
     }
 
-    public void setReadyButon(boolean b){
+    public void setReadyButton(boolean b){
         this.readyButton = b;
     }
     public boolean getReadyButton(){
         return this.readyButton;
+    }
+
+    public void discard() {
+        deck.discard(cards);
+        Arrays.fill(cards, null);
     }
 }

@@ -165,7 +165,8 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
-        myPlayer.setReadyButon(false);
+        game.getMyPlayer().deal();
+        myPlayer.setReadyButton(false);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -432,7 +433,28 @@ public class TurnHandler {
                 robot.rotateRight();
             }
         }
+        else if(card.getValue() == -1){
+            if (!wallCollision(robot) && !robotCollision(robot)) {
+                board.moveObject(robot, oppositeDirection(robot.getDirection()));
+            }
+        }
     }
+
+    private Direction oppositeDirection(Direction direction){
+        switch (direction){
+            case WEST:
+                return Direction.EAST;
+            case SOUTH:
+                return Direction.NORTH;
+            case EAST:
+                return Direction.WEST;
+            case NORTH:
+                return Direction.SOUTH;
+            default:
+                return null;
+        }
+    }
+
     public boolean getGameIsDone(){
         return gameIsDone;
     }

@@ -44,6 +44,8 @@ public class CleanUpTest {
         Texture mockTexture = mock(Texture.class);
         Texture[] mockImages = {mockTexture};
         player = new Player(mockImages);
+        game.setMyPlayer(player);
+        player.deal();
         board = game.getBoard();
         board.addObject(player.getRobot(), 0, 0);
         robot = player.getRobot();
