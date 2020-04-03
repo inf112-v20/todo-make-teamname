@@ -136,7 +136,6 @@ public class TurnHandler {
                     e.printStackTrace();
                 }
             }
-            //TODO remove register etc...
             for (int id: idPlayerHash.keySet()) {
                 cleanUp(idPlayerHash.get(id));
             }
@@ -165,7 +164,7 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
-        game.getMyPlayer().deal();
+        if (myPlayer.equals(game.getMyPlayer())) game.getMyPlayer().deal();
         myPlayer.setReadyButton(false);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {

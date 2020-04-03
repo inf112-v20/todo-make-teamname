@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CardParser {
     static ProgramCard[] cards = new ProgramCard[0];
 
-    public static ProgramCard[] cardParser() {
+    public static ProgramCard[] cards() {
         try{
             Scanner scanner = new Scanner(new File("assets/cards/cards.txt"));
             scanner.useDelimiter("[-\n]");
@@ -20,14 +20,13 @@ public class CardParser {
                     int valueCard = Integer.parseInt(cardValue[0]);
                     String cardName = cardValue[1];
 
-                    ProgramCard newCard = new ProgramCard( cardName, new Texture("assets/cards/card_" + cardName + ".png"), valueCard);
+                    ProgramCard newCard = new ProgramCard(cardName, new Texture("assets/cards/card_" + cardName + ".png"), valueCard);
                     cards = addCard(cards, newCard);
                 }
                 catch (NumberFormatException f){
                     f.printStackTrace();
                 }
             }
-            randShuffle(cards);
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
@@ -39,14 +38,5 @@ public class CardParser {
         newCard[newCard.length - 1] = cardToAdd;
         return newCard;
     }
-    public static ProgramCard[] randShuffle(ProgramCard[] card){
-        Random random = new Random();
-        for (int i = 0; i < card.length; i++) {
-            int randomPos = random.nextInt(card.length);
-            ProgramCard temp = card[i];
-            card[i] = card[randomPos];
-            card[randomPos] = temp;
-        }
-        return card;
-    }
+
 }
