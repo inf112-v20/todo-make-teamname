@@ -10,6 +10,7 @@ public class Deck {
     public Deck() {
         ProgramCard[] newCards = CardParser.cards();
         drawPile.addAll(Arrays.asList(newCards));
+        randShuffle();
     }
 
     public ProgramCard[] draw() {

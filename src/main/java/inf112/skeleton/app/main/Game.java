@@ -119,10 +119,10 @@ public class Game{
     //An object has to be initialized before being rendered
     public void render(SpriteBatch batch, BitmapFont font) {
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
-        renderRobots(batch, font);
+        renderRobots(batch);
         renderCards(batch, font);
-        renderHealthAndLife(batch, font);
-        renderReadyButton(batch, font);
+        renderHealthAndLife(batch);
+        renderReadyButton(batch);
         renderNames(batch, font);
     }
 
