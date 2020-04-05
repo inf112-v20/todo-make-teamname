@@ -71,10 +71,9 @@ public class MPClient {
     /**
      * The constructor initializes a Kryonet client and a ClientNetworkListener, registers the classes sent over the
      * server, starts the client and finally tries to connect to the server.
-     * @param ipAddress The server address
      * @param game The game it wants to send data from to the server, and send data to from the server.
      */
-    public MPClient(String ipAddress, Game game){
+    public MPClient(Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
         tcp = 54555;
@@ -84,13 +83,16 @@ public class MPClient {
         registerPackets();
         client.addListener(cnl);
 
+    }
 
+    public boolean connect(String ipAddress) {
         new Thread(client).start();
-
         try {
             client.connect(5000, ipAddress, tcp, udp);
-        }catch (IOException e){
+            return true;
+        }catch (Exception e){
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -104,8 +106,10 @@ public class MPClient {
         kryo.register(Packets.Packet03PlayerNr.class);
         kryo.register(Packets.Packet04StartSignal.class);
         kryo.register(Packets.Packet05Name.class);
+        kryo.register(Packets.Packet06ReadySignal.class);
         kryo.register(String[].class);
         kryo.register(boolean.class);
+        kryo.register(boolean[].class);
         kryo.register(int.class);
         kryo.register(int[].class);
         kryo.register(int[][].class);
@@ -178,5 +182,9 @@ public class MPClient {
             client.dispose();
         } catch (IOException e) {
         }
+    }
+
+    public void sendReady(Packets.Packet06ReadySignal signal) {
+        cnl.sendReady(signal);
     }
 }

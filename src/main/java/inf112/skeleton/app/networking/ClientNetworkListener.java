@@ -116,6 +116,10 @@ public class ClientNetworkListener extends Listener {
             Packets.Packet05Name name = (Packets.Packet05Name) o;
             game.receiveNames(name);
         }
+        else if(o instanceof Packets.Packet06ReadySignal){
+            Packets.Packet06ReadySignal ready = (Packets.Packet06ReadySignal) o;
+            game.receiveAllReady(ready.allReady);
+        }
     }
 
     /**
@@ -134,4 +138,7 @@ public class ClientNetworkListener extends Listener {
         return connection;
     }
 
+    public void sendReady(Packets.Packet06ReadySignal signal) {
+        client.sendTCP(signal);
+    }
 }

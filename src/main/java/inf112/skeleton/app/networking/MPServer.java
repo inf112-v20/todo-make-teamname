@@ -43,8 +43,10 @@ public class MPServer implements Runnable{
         kryo.register(Packets.Packet03PlayerNr.class);
         kryo.register(Packets.Packet04StartSignal.class);
         kryo.register(Packets.Packet05Name.class);
+        kryo.register(Packets.Packet06ReadySignal.class);
         kryo.register(String[].class);
         kryo.register(boolean.class);
+        kryo.register(boolean[].class);
         kryo.register(int.class);
         kryo.register(int[].class);
         kryo.register(int[][].class);

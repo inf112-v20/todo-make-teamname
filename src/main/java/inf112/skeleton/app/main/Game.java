@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.jcraft.jogg.Packet;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
@@ -51,7 +51,7 @@ public class Game{
     private Texture buttonReadySelected;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
-
+    private boolean[] allReady;
 
 
     /**
@@ -346,12 +346,15 @@ public class Game{
     /**
      * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
      * @param ipAddress The IP Address for the server as a String.
+     * @return
      */
-    public void joinGame(String ipAddress){
-        client = new MPClient(ipAddress, this);
+    public boolean joinGame(String ipAddress){
+        client = new MPClient(this);
+        if(!client.connect(ipAddress)) return false;
         setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
         myPlayer.deal();
+        return true;
     }
 
     /**
@@ -461,5 +464,18 @@ public class Game{
 
     public Player getMyPlayer() {
         return myPlayer;
+    }
+
+    public void sendReadySignal() {
+        Packets.Packet06ReadySignal signal = new Packets.Packet06ReadySignal();
+        signal.signal = true;
+        client.sendReady(signal);
+    }
+
+    public void receiveAllReady(boolean[] allReady){
+        this.allReady = allReady;
+    }
+    public boolean[] getAllReady() {
+        return allReady;
     }
 }

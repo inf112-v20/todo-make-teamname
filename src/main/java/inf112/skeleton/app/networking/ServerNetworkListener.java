@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ServerNetworkListener extends Listener {
     private Server server;
-    private int[] players;
+    private boolean[] allReady;
     private ArrayList<Packets.Packet02Cards> receivedCards;
     private ArrayList<Packets.Packet02Cards> copyReceivedCards;
     private String[] names;
@@ -22,10 +22,10 @@ public class ServerNetworkListener extends Listener {
      */
     public ServerNetworkListener(Server server){
         this.server = server;
-        players = new int[5];
         names = new String[5];
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
+        allReady = new boolean[5];
     }
 
     /**
@@ -35,7 +35,6 @@ public class ServerNetworkListener extends Listener {
      */
     public void connected(Connection c){
         System.out.println("Player: " + (playerNr + 1) + " has connected");
-        players[playerNr] = c.getID();
         playerNr++;
         Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
         nrOfPlayers.playerNr = playerNr;
@@ -88,6 +87,11 @@ public class ServerNetworkListener extends Listener {
             names[c.getID()] = name.name[0];
             name.name = names;
             server.sendToAllTCP(name);
+        }else if(o instanceof Packets.Packet06ReadySignal){
+            Packets.Packet06ReadySignal ready = (Packets.Packet06ReadySignal) o;
+            allReady[c.getID()] = ready.signal;
+            ready.allReady = allReady;
+            server.sendToAllTCP(ready);
         }
     }
 

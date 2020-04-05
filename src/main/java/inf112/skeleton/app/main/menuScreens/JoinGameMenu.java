@@ -39,13 +39,21 @@ public class JoinGameMenu {
         Gdx.input.getTextInput(new Input.TextInputListener() {
             @Override
             public void input (String text) {
-                game.joinGame(text);
-                ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+                joinGame(text);
+
             }
 
             @Override
             public void canceled () {
+                ScreenHandler.changeScreenState(ScreenState.MAINMENU);
             }
         }, "Enter IP:", "", "");
     }
+
+    private void joinGame(String text) {
+        if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+        else create();
+    }
+
+
 }
