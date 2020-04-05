@@ -184,6 +184,10 @@ public class MPClient {
         }
     }
 
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready
+     * @param signal A packet with booleans
+     */
     public void sendReady(Packets.Packet06ReadySignal signal) {
         cnl.sendReady(signal);
     }

@@ -50,6 +50,10 @@ public class JoinGameMenu {
         }, "Enter IP:", "", "");
     }
 
+    /**
+     * Tries to join a server, if failed will give a new text prompt trying to join again
+     * @param text The ip of the server
+     */
     private void joinGame(String text) {
         if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
         else create();

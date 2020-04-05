@@ -262,7 +262,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof Pusher) {
             //Robot gets pushed
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
-            board.moveObject(robot, pusher.getDirection());
+            moveRobot(robot, pusher.getDirection());
         }
     }
 
@@ -278,7 +278,7 @@ public class TurnHandler {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
-                board.moveObject(robot, conveyorBelt.getDirection());
+                moveRobot(robot, conveyorBelt.getDirection());
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -300,7 +300,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             //Conveoyrbelt moves robot
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            board.moveObject(robot, conveyorBelt.getDirection());
+            moveRobot(robot, conveyorBelt.getDirection());
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -335,6 +335,12 @@ public class TurnHandler {
         return false;
     }
 
+    /**
+     * This method is used to compare two directions so that a robot going south will crash into a southwest wall
+     * @param roboDirection the robots direction
+     * @param wallDirection the walls direction
+     * @return Returns true if the wall and the robot has an overlapping direction
+     */
     private boolean compareWallDirection(Direction roboDirection, Direction wallDirection) {
         boolean result = false;
         switch (roboDirection){
@@ -358,12 +364,24 @@ public class TurnHandler {
         return result;
     }
 
+    /**
+     * This method checks if two robots crash
+     * @param robot The robot that is going to move
+     * @param direction The direction the robot is going, not necesseary robot.getDirection
+     * @return returns true if there is a robot there
+     */
     private boolean robotCollision(Robot robot, Direction direction){
         BoardTile nextTile = nextTile(robot, direction);
         if(nextTile == null) return false;
         return nextTile.getObjects()[2] instanceof Robot;
     }
 
+    /**
+     * This method is used to get the next tile the robot is going to enter
+     * @param robot The robot that is going to move
+     * @param direction The direction it is moving
+     * @return Returns a the next BoardTile in the robots direction
+     */
     private BoardTile nextTile(Robot robot, Direction direction) {
         BoardTile result;
         switch (direction){
@@ -438,6 +456,12 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * This method moves a robot one move in a direction
+     * @param robot The robot that is going to move
+     * @param direction The direction the robot is moving
+     * @return Returns true if the robot moved
+     */
     public boolean moveRobot(Robot robot, Direction direction) {
         if (!wallCollision(robot) && !robotCollision(robot, direction)) {
             board.moveObject(robot, direction);
@@ -448,7 +472,7 @@ public class TurnHandler {
             }
         }else if(robotCollision(robot, direction)){
             Robot nextRobot = (Robot) nextTile(robot, direction).getObjects()[2];
-            if(!moveRobot(nextRobot, direction)){
+            if(moveRobot(nextRobot, direction)){
                board.moveObject(robot, direction);
             }
         }
@@ -460,9 +484,14 @@ public class TurnHandler {
             }
         }
 
-        return wallCollision(robot);
+        return !wallCollision(robot);
     }
 
+    /**
+     * Returns the opposite direction
+     * @param direction A direction
+     * @return The opposite direction
+     */
     private Direction oppositeDirection(Direction direction){
         switch (direction){
             case WEST:
@@ -473,6 +502,14 @@ public class TurnHandler {
                 return Direction.WEST;
             case NORTH:
                 return Direction.SOUTH;
+            case SOUTHWEST:
+                return Direction.NORTHEAST;
+            case NORTHEAST:
+                return Direction.SOUTHWEST;
+            case NORTHWEST:
+                return Direction.SOUTHEAST;
+            case SOUTHEAST:
+                return Direction.NORTHWEST;
             default:
                 return null;
         }

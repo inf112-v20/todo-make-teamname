@@ -126,6 +126,11 @@ public class Game{
         renderNames(batch, font);
     }
 
+    /**
+     * Renders the names of the players in the game
+     * @param batch
+     * @param font
+     */
     private void renderNames(SpriteBatch batch, BitmapFont font) {
         font.setColor(Color.WHITE);
         font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
@@ -140,6 +145,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the ready button on the screen
+     * @param batch
+     */
     private void renderReadyButton(SpriteBatch batch) {
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         if (myPlayer.getReadyButton()){
@@ -147,6 +156,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the health of myPlayer.getRobot(), and the life of myPlayer
+     * @param batch
+     */
     private void renderHealthAndLife(SpriteBatch batch) {
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
             batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
@@ -159,6 +172,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the robots on the board
+     * @param batch
+     */
     public void renderRobots(SpriteBatch batch){
         try {
             for (Robot r : board.getRobots()) {
@@ -184,6 +201,11 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the cards in myPlayers hand
+     * @param batch
+     * @param font
+     */
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
@@ -466,15 +488,27 @@ public class Game{
         return myPlayer;
     }
 
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready to play
+     */
     public void sendReadySignal() {
         Packets.Packet06ReadySignal signal = new Packets.Packet06ReadySignal();
         signal.signal = true;
         client.sendReady(signal);
     }
 
+    /**
+     * Takes a list of booleans representing the players who are ready
+     * @param allReady
+     */
     public void receiveAllReady(boolean[] allReady){
         this.allReady = allReady;
     }
+
+    /**
+     *
+     * @return Returns a list of booleans that holds which players that are ready
+     */
     public boolean[] getAllReady() {
         return allReady;
     }
