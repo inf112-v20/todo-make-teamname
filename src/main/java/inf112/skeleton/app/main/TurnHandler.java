@@ -318,7 +318,7 @@ public class TurnHandler {
     }
 
     /**
-     * Boolean method that checks if there is a wall where the robot wants to move
+     * Boolean method that checks if there is a wall or pusher where the robot wants to move
      */
     private boolean wallCollision(Robot robot){
         if(robot.isDestroyed()) return false;
@@ -329,6 +329,12 @@ public class TurnHandler {
                 System.out.println("hit wall");
                 return true;
             }
+        }else if(currentTile.getObjects()[0] instanceof Pusher){
+            Pusher pusher = (Pusher) currentTile.getObjects()[0];
+            if(compareWallDirection(robot.getDirection(), oppositeDirection(pusher.getDirection()))){
+                System.out.println("hit pusher");
+                return true;
+            }
         }
         BoardTile nextTile = nextTile(robot, robot.getDirection());
         if(nextTile == null) return false;
@@ -336,6 +342,12 @@ public class TurnHandler {
             Wall nextWall = (Wall) nextTile(robot, robot.getDirection()).getObjects()[1];
             if (compareWallDirection(robot.getDirection(), oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
+                return true;
+            }
+        }else if(nextTile.getObjects()[0] instanceof Pusher){
+            Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
+            if(compareWallDirection(robot.getDirection(), nextPusher.getDirection())){
+                System.out.println("hit pusher");
                 return true;
             }
         }
