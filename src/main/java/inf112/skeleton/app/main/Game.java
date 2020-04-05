@@ -105,7 +105,6 @@ public class Game{
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
-            //TODO fix so that one player cant send multiple sets of cards
             myPlayer.setReadyButton(true);
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }

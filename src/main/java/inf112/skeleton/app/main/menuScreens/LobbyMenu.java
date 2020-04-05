@@ -75,7 +75,10 @@ public class LobbyMenu {
     public void input(int keyCode) {
         if(host) {
             if (keyCode == Input.Keys.ENTER) {
-                if (game.getAllReady() == null)return;
+                if (game.getAllReady() == null){
+                    game.sendStartSignal();
+                    return;
+                }
                 for (int i = 2; i <= game.getNrOfPlayers(); i++) {
                     if (!game.getAllReady()[i]) return;
                 }
