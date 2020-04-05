@@ -52,6 +52,7 @@ public class Game{
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
     private boolean[] allReady;
+    private boolean[] playersShutdown;
 
 
     /**
@@ -291,11 +292,13 @@ public class Game{
         names = new String[4];
         allCards = new ArrayList<>();
         Texture[][] textures = getRobotTextures();
+        playersShutdown = new boolean[5];
         for (int i = 1; i < 5; i++) {
             Player player = new Player(textures[i-1]);
             player.deal();
             board.addObject(player.getRobot(), i+1, 0);
             idPlayerHash.put(i, player);
+            playersShutdown[i] = false;
         }
     }
 
@@ -511,5 +514,28 @@ public class Game{
      */
     public boolean[] getAllReady() {
         return allReady;
+    }
+
+    /**
+     *
+     * @return Returns a list of booleans describing which players have shut down their robot
+     */
+    public boolean[] getPlayersShutdown() {
+        return playersShutdown;
+    }
+
+    /**
+     * Sets the playersShutdown list to a new list
+     * @param tempPlayersShutdown
+     */
+    public void setPlayersShutdown(boolean[] tempPlayersShutdown) {
+        playersShutdown = tempPlayersShutdown;
+    }
+
+    /**
+     * Call this when myPlayers robot needs to shut down
+     */
+    public void shutdownRobot(){
+        client.sendShutdownRobot();
     }
 }

@@ -191,4 +191,8 @@ public class MPClient {
     public void sendReady(Packets.Packet06ReadySignal signal) {
         cnl.sendReady(signal);
     }
+
+    public void sendShutdownRobot() {
+        cnl.sendShutdownRobot();
+    }
 }

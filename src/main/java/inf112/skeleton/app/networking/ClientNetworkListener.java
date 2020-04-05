@@ -120,6 +120,10 @@ public class ClientNetworkListener extends Listener {
             Packets.Packet06ReadySignal ready = (Packets.Packet06ReadySignal) o;
             game.receiveAllReady(ready.allReady);
         }
+        else if(o instanceof Packets.Packet07ShutdownRobot){
+            Packets.Packet07ShutdownRobot shutdownRobot = (Packets.Packet07ShutdownRobot) o;
+            game.setPlayersShutdown(shutdownRobot.playersShutdown);
+        }
     }
 
     /**
@@ -144,5 +148,10 @@ public class ClientNetworkListener extends Listener {
      */
     public void sendReady(Packets.Packet06ReadySignal signal) {
         client.sendTCP(signal);
+    }
+
+    public void sendShutdownRobot() {
+        Packets.Packet07ShutdownRobot shutdownRobot = new Packets.Packet07ShutdownRobot();
+        client.sendTCP(shutdownRobot);
     }
 }

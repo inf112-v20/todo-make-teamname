@@ -96,6 +96,7 @@ public class TurnHandler {
                     cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
                 }
                 for (NonTextureProgramCard card: cards.keySet()) {
+                    if (game.getPlayersShutdown()[cards.get(card)]) continue;
                     cardMove(card, idPlayerHash.get(cards.get(card)).getRobot()); // moves robot
                 }
                 for (int id: idPlayerHash.keySet()) {
@@ -164,8 +165,15 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
-        if (myPlayer.equals(game.getMyPlayer())) game.getMyPlayer().deal();
-        myPlayer.setReadyButton(false);
+        if (myPlayer.equals(game.getMyPlayer())) {
+            game.getMyPlayer().deal();
+            myPlayer.setReadyButton(false);
+        }
+        boolean[] tempPlayersShutdown = game.getPlayersShutdown();
+        for (int i = 0; i < game.getPlayersShutdown().length; i++) {
+            tempPlayersShutdown[i] = false;
+        }
+        game.setPlayersShutdown(tempPlayersShutdown);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -380,7 +388,7 @@ public class TurnHandler {
      * This method is used to get the next tile the robot is going to enter
      * @param robot The robot that is going to move
      * @param direction The direction it is moving
-     * @return Returns a the next BoardTile in the robots direction
+     * @return Returns a the next BoardTile in the robots direction, or null if it is outside the board
      */
     private BoardTile nextTile(Robot robot, Direction direction) {
         BoardTile result;
@@ -432,6 +440,10 @@ public class TurnHandler {
      * @param robot Robot that gets moved.
      */
     public void cardMove(NonTextureProgramCard card, Robot robot){
+        if(robot.getHealth() < 6){
+            moveRobot(robot, robot.getDirection());
+            return;
+        }
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
