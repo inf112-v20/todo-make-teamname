@@ -317,7 +317,7 @@ public class TurnHandler {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
-            if (wall.getDirection() == robot.getDirection()) {
+            if (compareWallDirection(robot.getDirection(), wall.getDirection())) {
                 System.out.println("hit wall");
                 return true;
             }
@@ -326,7 +326,7 @@ public class TurnHandler {
         if(nextTile == null) return false;
         if (nextTile.getObjects()[1] instanceof Wall) {
             Wall nextWall = (Wall) nextTile(robot, robot.getDirection()).getObjects()[1];
-            if (opposite(nextWall.getDirection(), robot)) {
+            if (compareWallDirection(robot.getDirection(), oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
                 return true;
             }
@@ -335,24 +335,27 @@ public class TurnHandler {
         return false;
     }
 
-    private boolean opposite(Direction direction, Robot robot) {
-        switch (robot.getDirection()){
-            case WEST:
-                if(direction.equals(Direction.EAST))return true;
-                else return false;
+    private boolean compareWallDirection(Direction roboDirection, Direction wallDirection) {
+        boolean result = false;
+        switch (roboDirection){
             case SOUTH:
-                if(direction.equals(Direction.NORTH))return true;
-                else return false;
-            case EAST:
-                if(direction.equals(Direction.WEST))return true;
-                else return false;
+                result = wallDirection == Direction.SOUTH || wallDirection == Direction.SOUTHWEST ||
+                        wallDirection == Direction.SOUTHEAST;
+                break;
+            case WEST:
+                result = wallDirection == Direction.WEST || wallDirection == Direction.SOUTHWEST ||
+                        wallDirection == Direction.NORTHWEST;
+                break;
             case NORTH:
-                if(direction.equals(Direction.SOUTH))return true;
-                else return false;
-
-            default:
-                return false;
+                result = wallDirection == Direction.NORTH || wallDirection == Direction.NORTHWEST ||
+                        wallDirection == Direction.NORTHEAST;
+                break;
+            case EAST:
+                result = wallDirection == Direction.EAST || wallDirection == Direction.NORTHEAST ||
+                        wallDirection == Direction.SOUTHEAST;
+                break;
         }
+        return result;
     }
 
     private boolean robotCollision(Robot robot, Direction direction){
