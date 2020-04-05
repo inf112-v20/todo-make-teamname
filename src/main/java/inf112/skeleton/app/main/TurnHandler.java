@@ -313,6 +313,7 @@ public class TurnHandler {
      * Boolean method that checks if there is a wall where the robot wants to move
      */
     private boolean wallCollision(Robot robot){
+        if(robot.isDestroyed()) return false;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
@@ -321,9 +322,10 @@ public class TurnHandler {
                 return true;
             }
         }
-        BoardTile nextTile = nextTile(robot);
+        BoardTile nextTile = nextTile(robot, robot.getDirection());
+        if(nextTile == null) return false;
         if (nextTile.getObjects()[1] instanceof Wall) {
-            Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
+            Wall nextWall = (Wall) nextTile(robot, robot.getDirection()).getObjects()[1];
             if (opposite(nextWall.getDirection(), robot)) {
                 System.out.println("hit wall");
                 return true;
@@ -353,18 +355,19 @@ public class TurnHandler {
         }
     }
 
-    private boolean robotCollision(Robot robot){
-        BoardTile nextTile = nextTile(robot);
+    private boolean robotCollision(Robot robot, Direction direction){
+        BoardTile nextTile = nextTile(robot, direction);
+        if(nextTile == null) return false;
         return nextTile.getObjects()[2] instanceof Robot;
     }
 
-    private BoardTile nextTile(Robot robot) {
+    private BoardTile nextTile(Robot robot, Direction direction) {
         BoardTile result;
-        switch (robot.getDirection()){
+        switch (direction){
             case WEST:
                 if((robot.getTileX() - 1 < 0 || robot.getTileX() - 1 >= board.getWidth()
                         || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                     result =  board.getTile(robot.getTileX() - 1, robot.getTileY());
@@ -372,7 +375,7 @@ public class TurnHandler {
             case SOUTH:
                 if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
                         || robot.getTileY() - 1 < 0 || robot.getTileY() - 1 >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result = board.getTile(robot.getTileX(), robot.getTileY() - 1);
@@ -380,7 +383,7 @@ public class TurnHandler {
             case EAST:
                 if((robot.getTileX() + 1 < 0 || robot.getTileX() + 1 >= board.getWidth()
                         || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result =  board.getTile(robot.getTileX() + 1, robot.getTileY());
@@ -388,13 +391,13 @@ public class TurnHandler {
             case NORTH:
                 if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
                         || robot.getTileY() + 1 < 0 || robot.getTileY() + 1 >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result = board.getTile(robot.getTileX() , robot.getTileY() + 1);
                 break;
             default:
-                result = board.getTile(robot.getTileX(), robot.getTileY());
+                result = null;
                 break;
         }
         return result;
@@ -412,21 +415,7 @@ public class TurnHandler {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
                 //Move robot
-                if (!wallCollision(robot) && !robotCollision(robot)) {
-                    board.moveObject(robot, robot.getDirection());
-                }
-
-                if (!robot.isDestroyed()){
-                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                        board.removeObject(robot);
-                        robot.destroy();
-                    }
-                }
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                moveRobot(robot, robot.getDirection());
             }
         }
         else if (card.getRotate()) {
@@ -440,10 +429,35 @@ public class TurnHandler {
             }
         }
         else if(card.getValue() == -1){
-            if (!wallCollision(robot) && !robotCollision(robot)) {
+            if (!wallCollision(robot) && !robotCollision(robot, robot.getDirection())) {
                 board.moveObject(robot, oppositeDirection(robot.getDirection()));
             }
         }
+    }
+
+    public boolean moveRobot(Robot robot, Direction direction) {
+        if (!wallCollision(robot) && !robotCollision(robot, direction)) {
+            board.moveObject(robot, direction);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else if(robotCollision(robot, direction)){
+            Robot nextRobot = (Robot) nextTile(robot, direction).getObjects()[2];
+            if(!moveRobot(nextRobot, direction)){
+               board.moveObject(robot, direction);
+            }
+        }
+
+        if (!robot.isDestroyed()){
+            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                board.removeObject(robot);
+                robot.destroy();
+            }
+        }
+
+        return wallCollision(robot);
     }
 
     private Direction oppositeDirection(Direction direction){
