@@ -320,33 +320,33 @@ public class TurnHandler {
     /**
      * Boolean method that checks if there is a wall or pusher where the robot wants to move
      */
-    private boolean wallCollision(Robot robot){
+    private boolean wallCollision(Robot robot, Direction direction){
         if(robot.isDestroyed()) return false;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
-            if (compareWallDirection(robot.getDirection(), wall.getDirection())) {
+            if (compareWallDirection(direction, wall.getDirection())) {
                 System.out.println("hit wall");
                 return true;
             }
         }else if(currentTile.getObjects()[0] instanceof Pusher){
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
-            if(compareWallDirection(robot.getDirection(), oppositeDirection(pusher.getDirection()))){
+            if(compareWallDirection(direction, oppositeDirection(pusher.getDirection()))){
                 System.out.println("hit pusher");
                 return true;
             }
         }
-        BoardTile nextTile = nextTile(robot, robot.getDirection());
+        BoardTile nextTile = nextTile(robot, direction);
         if(nextTile == null) return false;
         if (nextTile.getObjects()[1] instanceof Wall) {
-            Wall nextWall = (Wall) nextTile(robot, robot.getDirection()).getObjects()[1];
-            if (compareWallDirection(robot.getDirection(), oppositeDirection(nextWall.getDirection()))) {
+            Wall nextWall = (Wall) nextTile(robot, direction).getObjects()[1];
+            if (compareWallDirection(direction, oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
                 return true;
             }
         }else if(nextTile.getObjects()[0] instanceof Pusher){
             Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
-            if(compareWallDirection(robot.getDirection(), nextPusher.getDirection())){
+            if(compareWallDirection(direction, nextPusher.getDirection())){
                 System.out.println("hit pusher");
                 return true;
             }
@@ -474,7 +474,7 @@ public class TurnHandler {
             }
         }
         else if(card.getValue() == -1){
-            if (!wallCollision(robot) && !robotCollision(robot, robot.getDirection())) {
+            if (!wallCollision(robot, robot.getDirection()) && !robotCollision(robot, robot.getDirection())) {
                 board.moveObject(robot, oppositeDirection(robot.getDirection()));
             }
         }
@@ -487,7 +487,7 @@ public class TurnHandler {
      * @return Returns true if the robot moved
      */
     public boolean moveRobot(Robot robot, Direction direction) {
-        if (!wallCollision(robot) && !robotCollision(robot, direction)) {
+        if (!wallCollision(robot, direction) && !robotCollision(robot, direction)) {
             board.moveObject(robot, direction);
             try {
                 Thread.sleep(300);
@@ -508,7 +508,7 @@ public class TurnHandler {
             }
         }
 
-        return !wallCollision(robot);
+        return !wallCollision(robot, direction);
     }
 
     /**
