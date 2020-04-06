@@ -52,6 +52,7 @@ public class Game{
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
     private boolean[] allReady;
+    private boolean[] playersShutdown;
 
 
     /**
@@ -104,7 +105,6 @@ public class Game{
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
-            //TODO fix so that one player cant send multiple sets of cards
             myPlayer.setReadyButton(true);
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
         }
@@ -126,6 +126,11 @@ public class Game{
         renderNames(batch, font);
     }
 
+    /**
+     * Renders the names of the players in the game
+     * @param batch
+     * @param font
+     */
     private void renderNames(SpriteBatch batch, BitmapFont font) {
         font.setColor(Color.WHITE);
         font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
@@ -140,6 +145,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the ready button on the screen
+     * @param batch
+     */
     private void renderReadyButton(SpriteBatch batch) {
         batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         if (myPlayer.getReadyButton()){
@@ -147,6 +156,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the health of myPlayer.getRobot(), and the life of myPlayer
+     * @param batch
+     */
     private void renderHealthAndLife(SpriteBatch batch) {
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
             batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
@@ -159,12 +172,18 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the robots on the board
+     * @param batch
+     */
     public void renderRobots(SpriteBatch batch){
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {
 //                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
-                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT), Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
+                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
+                            Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
 //                    TextureRegion t = new TextureRegion();
 //                    t.setRegion(r.getTexture());
 //                    batch.draw(r.getTexture(),
@@ -184,6 +203,11 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the cards in myPlayers hand
+     * @param batch
+     * @param font
+     */
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
@@ -269,11 +293,13 @@ public class Game{
         names = new String[4];
         allCards = new ArrayList<>();
         Texture[][] textures = getRobotTextures();
+        playersShutdown = new boolean[5];
         for (int i = 1; i < 5; i++) {
             Player player = new Player(textures[i-1]);
             player.deal();
             board.addObject(player.getRobot(), i+1, 0);
             idPlayerHash.put(i, player);
+            playersShutdown[i] = false;
         }
     }
 
@@ -466,16 +492,51 @@ public class Game{
         return myPlayer;
     }
 
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready to play
+     */
     public void sendReadySignal() {
         Packets.Packet06ReadySignal signal = new Packets.Packet06ReadySignal();
         signal.signal = true;
         client.sendReady(signal);
     }
 
+    /**
+     * Takes a list of booleans representing the players who are ready
+     * @param allReady
+     */
     public void receiveAllReady(boolean[] allReady){
         this.allReady = allReady;
     }
+
+    /**
+     *
+     * @return Returns a list of booleans that holds which players that are ready
+     */
     public boolean[] getAllReady() {
         return allReady;
+    }
+
+    /**
+     *
+     * @return Returns a list of booleans describing which players have shut down their robot
+     */
+    public boolean[] getPlayersShutdown() {
+        return playersShutdown;
+    }
+
+    /**
+     * Sets the playersShutdown list to a new list
+     * @param tempPlayersShutdown
+     */
+    public void setPlayersShutdown(boolean[] tempPlayersShutdown) {
+        playersShutdown = tempPlayersShutdown;
+    }
+
+    /**
+     * Call this when myPlayers robot needs to shut down
+     */
+    public void shutdownRobot(){
+        client.sendShutdownRobot();
     }
 }

@@ -103,11 +103,13 @@ public class Board  {
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
+        if(x == -1 || y == -1) return null;
         return grid[y][x].remove(ROBOT);
     }
 
     //Removes a object at the x and y coordinate
     public IBoardObject removeObject(int x, int y){
+        if(x == -1 || y == -1) return null;
         return grid[y][x].remove(ROBOT);
     }
 

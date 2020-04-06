@@ -37,6 +37,7 @@ public class CleanUpTest {
         game.setBoard(new Board(1,1,1));
         game.gamePhasesSetUp();
         turnHandler = game.getTurnHandler();
+        game.setPlayersShutdown(new boolean[]{false, false});
     }
 
     @Before

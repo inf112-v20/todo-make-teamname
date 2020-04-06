@@ -96,6 +96,7 @@ public class TurnHandler {
                     cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
                 }
                 for (NonTextureProgramCard card: cards.keySet()) {
+                    if (game.getPlayersShutdown()[cards.get(card)]) continue;
                     cardMove(card, idPlayerHash.get(cards.get(card)).getRobot()); // moves robot
                 }
                 for (int id: idPlayerHash.keySet()) {
@@ -164,8 +165,15 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
-        if (myPlayer.equals(game.getMyPlayer())) game.getMyPlayer().deal();
-        myPlayer.setReadyButton(false);
+        if (myPlayer.equals(game.getMyPlayer())) {
+            game.getMyPlayer().deal();
+            myPlayer.setReadyButton(false);
+        }
+        boolean[] tempPlayersShutdown = game.getPlayersShutdown();
+        for (int i = 0; i < game.getPlayersShutdown().length; i++) {
+            tempPlayersShutdown[i] = false;
+        }
+        game.setPlayersShutdown(tempPlayersShutdown);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -262,7 +270,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof Pusher) {
             //Robot gets pushed
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
-            board.moveObject(robot, pusher.getDirection());
+            moveRobot(robot, pusher.getDirection());
         }
     }
 
@@ -278,7 +286,7 @@ public class TurnHandler {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
-                board.moveObject(robot, conveyorBelt.getDirection());
+                moveRobot(robot, conveyorBelt.getDirection());
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -300,7 +308,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             //Conveoyrbelt moves robot
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            board.moveObject(robot, conveyorBelt.getDirection());
+            moveRobot(robot, conveyorBelt.getDirection());
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -310,22 +318,36 @@ public class TurnHandler {
     }
 
     /**
-     * Boolean method that checks if there is a wall where the robot wants to move
+     * Boolean method that checks if there is a wall or pusher where the robot wants to move
      */
-    private boolean wallCollision(Robot robot){
+    private boolean wallCollision(Robot robot, Direction direction){
+        if(robot.isDestroyed()) return false;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
-            if (wall.getDirection() == robot.getDirection()) {
+            if (compareWallDirection(direction, wall.getDirection())) {
                 System.out.println("hit wall");
                 return true;
             }
+        }else if(currentTile.getObjects()[0] instanceof Pusher){
+            Pusher pusher = (Pusher) currentTile.getObjects()[0];
+            if(compareWallDirection(direction, oppositeDirection(pusher.getDirection()))){
+                System.out.println("hit pusher");
+                return true;
+            }
         }
-        BoardTile nextTile = nextTile(robot);
+        BoardTile nextTile = nextTile(robot, direction);
+        if(nextTile == null) return false;
         if (nextTile.getObjects()[1] instanceof Wall) {
-            Wall nextWall = (Wall) nextTile(robot).getObjects()[1];
-            if (opposite(nextWall.getDirection(), robot)) {
+            Wall nextWall = (Wall) nextTile(robot, direction).getObjects()[1];
+            if (compareWallDirection(direction, oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
+                return true;
+            }
+        }else if(nextTile.getObjects()[0] instanceof Pusher){
+            Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
+            if(compareWallDirection(direction, nextPusher.getDirection())){
+                System.out.println("hit pusher");
                 return true;
             }
         }
@@ -333,38 +355,60 @@ public class TurnHandler {
         return false;
     }
 
-    private boolean opposite(Direction direction, Robot robot) {
-        switch (robot.getDirection()){
-            case WEST:
-                if(direction.equals(Direction.EAST))return true;
-                else return false;
+    /**
+     * This method is used to compare two directions so that a robot going south will crash into a southwest wall
+     * @param roboDirection the robots direction
+     * @param wallDirection the walls direction
+     * @return Returns true if the wall and the robot has an overlapping direction
+     */
+    private boolean compareWallDirection(Direction roboDirection, Direction wallDirection) {
+        boolean result = false;
+        switch (roboDirection){
             case SOUTH:
-                if(direction.equals(Direction.NORTH))return true;
-                else return false;
-            case EAST:
-                if(direction.equals(Direction.WEST))return true;
-                else return false;
+                result = wallDirection == Direction.SOUTH || wallDirection == Direction.SOUTHWEST ||
+                        wallDirection == Direction.SOUTHEAST;
+                break;
+            case WEST:
+                result = wallDirection == Direction.WEST || wallDirection == Direction.SOUTHWEST ||
+                        wallDirection == Direction.NORTHWEST;
+                break;
             case NORTH:
-                if(direction.equals(Direction.SOUTH))return true;
-                else return false;
-
-            default:
-                return false;
+                result = wallDirection == Direction.NORTH || wallDirection == Direction.NORTHWEST ||
+                        wallDirection == Direction.NORTHEAST;
+                break;
+            case EAST:
+                result = wallDirection == Direction.EAST || wallDirection == Direction.NORTHEAST ||
+                        wallDirection == Direction.SOUTHEAST;
+                break;
         }
+        return result;
     }
 
-    private boolean robotCollision(Robot robot){
-        BoardTile nextTile = nextTile(robot);
+    /**
+     * This method checks if two robots crash
+     * @param robot The robot that is going to move
+     * @param direction The direction the robot is going, not necesseary robot.getDirection
+     * @return returns true if there is a robot there
+     */
+    private boolean robotCollision(Robot robot, Direction direction){
+        BoardTile nextTile = nextTile(robot, direction);
+        if(nextTile == null) return false;
         return nextTile.getObjects()[2] instanceof Robot;
     }
 
-    private BoardTile nextTile(Robot robot) {
+    /**
+     * This method is used to get the next tile the robot is going to enter
+     * @param robot The robot that is going to move
+     * @param direction The direction it is moving
+     * @return Returns a the next BoardTile in the robots direction, or null if it is outside the board
+     */
+    private BoardTile nextTile(Robot robot, Direction direction) {
         BoardTile result;
-        switch (robot.getDirection()){
+        switch (direction){
             case WEST:
                 if((robot.getTileX() - 1 < 0 || robot.getTileX() - 1 >= board.getWidth()
                         || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                     result =  board.getTile(robot.getTileX() - 1, robot.getTileY());
@@ -372,7 +416,7 @@ public class TurnHandler {
             case SOUTH:
                 if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
                         || robot.getTileY() - 1 < 0 || robot.getTileY() - 1 >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result = board.getTile(robot.getTileX(), robot.getTileY() - 1);
@@ -380,7 +424,7 @@ public class TurnHandler {
             case EAST:
                 if((robot.getTileX() + 1 < 0 || robot.getTileX() + 1 >= board.getWidth()
                         || robot.getTileY() < 0 || robot.getTileY() >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result =  board.getTile(robot.getTileX() + 1, robot.getTileY());
@@ -388,13 +432,13 @@ public class TurnHandler {
             case NORTH:
                 if((robot.getTileX() < 0 || robot.getTileX() >= board.getWidth()
                         || robot.getTileY() + 1 < 0 || robot.getTileY() + 1 >= board.getHeight())) {
-                    result = board.getTile(robot.getTileX(), robot.getTileY());
+                    result = null;
                     break;
                 }
                 result = board.getTile(robot.getTileX() , robot.getTileY() + 1);
                 break;
             default:
-                result = board.getTile(robot.getTileX(), robot.getTileY());
+                result = null;
                 break;
         }
         return result;
@@ -408,25 +452,15 @@ public class TurnHandler {
      * @param robot Robot that gets moved.
      */
     public void cardMove(NonTextureProgramCard card, Robot robot){
+        if(robot.getHealth() < 6){
+            moveRobot(robot, robot.getDirection());
+            return;
+        }
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
                 //Move robot
-                if (!wallCollision(robot) && !robotCollision(robot)) {
-                    board.moveObject(robot, robot.getDirection());
-                }
-
-                if (!robot.isDestroyed()){
-                    if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
-                        board.removeObject(robot);
-                        robot.destroy();
-                    }
-                }
-                try {
-                    Thread.sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                moveRobot(robot, robot.getDirection());
             }
         }
         else if (card.getRotate()) {
@@ -440,12 +474,48 @@ public class TurnHandler {
             }
         }
         else if(card.getValue() == -1){
-            if (!wallCollision(robot) && !robotCollision(robot)) {
+            if (!wallCollision(robot, robot.getDirection()) && !robotCollision(robot, robot.getDirection())) {
                 board.moveObject(robot, oppositeDirection(robot.getDirection()));
             }
         }
     }
 
+    /**
+     * This method moves a robot one move in a direction
+     * @param robot The robot that is going to move
+     * @param direction The direction the robot is moving
+     * @return Returns true if the robot moved
+     */
+    public boolean moveRobot(Robot robot, Direction direction) {
+        if (!wallCollision(robot, direction) && !robotCollision(robot, direction)) {
+            board.moveObject(robot, direction);
+            try {
+                Thread.sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else if(robotCollision(robot, direction)){
+            Robot nextRobot = (Robot) nextTile(robot, direction).getObjects()[2];
+            if(moveRobot(nextRobot, direction)){
+               board.moveObject(robot, direction);
+            }
+        }
+
+        if (!robot.isDestroyed()){
+            if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
+                board.removeObject(robot);
+                robot.destroy();
+            }
+        }
+
+        return !wallCollision(robot, direction);
+    }
+
+    /**
+     * Returns the opposite direction
+     * @param direction A direction
+     * @return The opposite direction
+     */
     private Direction oppositeDirection(Direction direction){
         switch (direction){
             case WEST:
@@ -456,6 +526,14 @@ public class TurnHandler {
                 return Direction.WEST;
             case NORTH:
                 return Direction.SOUTH;
+            case SOUTHWEST:
+                return Direction.NORTHEAST;
+            case NORTHEAST:
+                return Direction.SOUTHWEST;
+            case NORTHWEST:
+                return Direction.SOUTHEAST;
+            case SOUTHEAST:
+                return Direction.NORTHWEST;
             default:
                 return null;
         }

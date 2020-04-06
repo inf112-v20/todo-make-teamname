@@ -15,6 +15,7 @@ public class ServerNetworkListener extends Listener {
     private ArrayList<Packets.Packet02Cards> copyReceivedCards;
     private String[] names;
     private int playerNr = 0;
+    private boolean[] playersShutdown;
 
     /**
      * Sets the field variable server to the Kryonet server, then initializes some lists for storing data.
@@ -26,6 +27,11 @@ public class ServerNetworkListener extends Listener {
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
         allReady = new boolean[5];
+        playersShutdown = new boolean[5];
+        for (int i = 1; i < 5; i++) {
+            allReady[i] = false;
+            playersShutdown[i] = false;
+        }
     }
 
     /**
@@ -92,6 +98,11 @@ public class ServerNetworkListener extends Listener {
             allReady[c.getID()] = ready.signal;
             ready.allReady = allReady;
             server.sendToAllTCP(ready);
+        }else if(o instanceof Packets.Packet07ShutdownRobot){
+            Packets.Packet07ShutdownRobot shutdownRobot = (Packets.Packet07ShutdownRobot) o;
+            playersShutdown[c.getID()] = true;
+            shutdownRobot.playersShutdown = playersShutdown;
+            server.sendToAllTCP(shutdownRobot);
         }
     }
 

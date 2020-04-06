@@ -10,7 +10,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * The MultiPlayerServer class creates a Kryonet server that can receive and send data from and to clients.<BR>
+ * The MultiPlayerServer class creates a Kryonet server that can receive and send data from and to clients. <BR>
+ * Uses mainly TCP. <BR>
  * Use run() to start the server
  */
 public class MPServer implements Runnable{
@@ -23,6 +24,11 @@ public class MPServer implements Runnable{
     Server server;
     ServerNetworkListener snl;
 
+    /**
+     * An extra constructor if you want to use specific ports
+     * @param udp UDP port
+     * @param tcp TCP port
+     */
     public MPServer(int udp, int tcp){
         this.udp = udp;
         this.tcp = tcp;

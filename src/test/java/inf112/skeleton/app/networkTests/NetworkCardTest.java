@@ -34,7 +34,7 @@ public class NetworkCardTest {
     @Test
     public void serverReceivedCardsTest(){
         Texture mockTexture = mock(Texture.class);
-        Texture[] mockImages = {mockTexture};
+
         ProgramCard card0 = new ProgramCard("Move1", mockTexture, 1);
         ProgramCard card1 = new ProgramCard("Move2",  mockTexture, 1);
         ProgramCard card2 = new ProgramCard("UTurn",  mockTexture, 1);
@@ -60,7 +60,6 @@ public class NetworkCardTest {
     @Test
     public void clientReceivedCardsTest(){
         Texture mockTexture = mock(Texture.class);
-        Texture[] mockImages = {mockTexture};
         ProgramCard card0 = new ProgramCard("Move1", mockTexture, 1);
         ProgramCard card1 = new ProgramCard("Move2",  mockTexture, 1);
         ProgramCard card2 = new ProgramCard("UTurn",  mockTexture, 1);

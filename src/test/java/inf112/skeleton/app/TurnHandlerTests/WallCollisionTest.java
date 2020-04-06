@@ -98,7 +98,7 @@ public class WallCollisionTest {
     }
 
     @Test
-    public void robotDoesNotWalkThroughWallofNeighbourTile() {
+    public void robotDoesNotWalkThroughWallOfNeighbourTile() {
         Wall wall = new Wall(Direction.WEST);
         board.addObject(wall, 2, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
