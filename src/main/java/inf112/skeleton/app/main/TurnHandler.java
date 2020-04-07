@@ -165,10 +165,6 @@ public class TurnHandler {
      */
     public void cleanUp(Player myPlayer) {
         Robot robot = myPlayer.getRobot();
-        if (myPlayer.equals(game.getMyPlayer())) {
-            game.getMyPlayer().deal();
-            myPlayer.setReadyButton(false);
-        }
         boolean[] tempPlayersShutdown = game.getPlayersShutdown();
         for (int i = 0; i < game.getPlayersShutdown().length; i++) {
             tempPlayersShutdown[i] = false;
@@ -184,6 +180,10 @@ public class TurnHandler {
                 //Not the case if there are more players
                 gameIsDone = true;
             }
+        }
+        if (myPlayer.equals(game.getMyPlayer())) {
+            game.getMyPlayer().deal();
+            myPlayer.setReadyButton(false);
         }
     }
 
@@ -452,6 +452,7 @@ public class TurnHandler {
      * @param robot Robot that gets moved.
      */
     public void cardMove(NonTextureProgramCard card, Robot robot){
+        if(robot.isDestroyed()) return;
         if(robot.getHealth() < 6){
             moveRobot(robot, robot.getDirection());
             return;

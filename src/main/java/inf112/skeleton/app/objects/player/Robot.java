@@ -84,7 +84,7 @@ public class Robot implements IBoardObject {
     }
 
     public void healDamage(){
-        health++;
+        if(health < 9) health++;
     }
     public void fullHealth(){
         health = 9;
