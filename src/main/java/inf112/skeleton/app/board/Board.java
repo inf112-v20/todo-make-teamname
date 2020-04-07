@@ -5,7 +5,10 @@ import inf112.skeleton.app.objects.player.Robot;
 
 import java.util.ArrayList;
 
-
+/**
+ * The Board class is used to represent the board that is being played on,<BR>
+ * it uses a double array of {@link BoardTile}'s to represent it.
+ */
 public class Board  {
 
     private final int flags;
@@ -19,7 +22,12 @@ public class Board  {
     public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
 
-
+    /**
+     * Creates the board according to parameters, fills the board with {@link BoardTile}'s.
+     * @param width Width of the board.
+     * @param height Height of the board.
+     * @param flags Number of flags on the board.
+     */
     public Board(int width, int height, int flags) {
         this.robots = new ArrayList<Robot>();
         this.width = width;
@@ -36,16 +44,29 @@ public class Board  {
     public BoardTile[][] getGrid(){
         return grid;
     }
+
+    /**
+     *
+     * @return Returns the height of the board
+     */
     public int getHeight(){return this.height;}
 
-    //Returns a specific tile
+    /**
+     * @return Returns a specific tile
+     */
     public BoardTile getTile(int x, int y){
         return grid[y][x];
     }
 
+    /**
+     *
+     * @return Returns the width of the board
+     */
     public int getWidth(){return this.width;}
 
-    //Adds a object at x and y coordinate
+    /**
+     * Adds a object at x and y coordinate
+     */
     public void addObject(IBoardObject object, int x, int y){
         if (object instanceof Robot)robots.add((Robot)object);
         grid[y][x].add(object);
@@ -53,7 +74,9 @@ public class Board  {
         object.setTileY(y);
     }
 
-    //Moves a object a direction
+    /**
+     * Moves an object a direction
+     */
     public void moveObject(IBoardObject object, Direction direction){
         switch (direction){
             case NORTH:
@@ -74,7 +97,9 @@ public class Board  {
         }
     }
 
-    //Moves a object to x any coordinate
+    /**
+     * Moves an object to x any coordinate
+     */
     public void moveObject(IBoardObject object, int x, int y){
         if (x > getWidth()-1 || y > getHeight()-1 || y < 0 || x < 0){
             System.out.println("You fell off the board, rebooting...");
@@ -87,7 +112,9 @@ public class Board  {
         addObject(removeObject(object), x, y);
     }
 
-    //moves selected robot in a direction
+    /**
+     * Moves selected robot in a direction
+     */
     public void moveSelected(Direction dir){
         if (selected == null)return;
         moveObject(selected, dir);
@@ -99,7 +126,9 @@ public class Board  {
         moveObject(selected,x,y);
     }
 
-    //Removes a specific object
+    /**
+     * Removes a specific object
+     */
     public IBoardObject removeObject(IBoardObject object){
         int x = object.getTileX();
         int y = object.getTileY();
@@ -107,7 +136,9 @@ public class Board  {
         return grid[y][x].remove(ROBOT);
     }
 
-    //Removes a object at the x and y coordinate
+    /**
+     * Removes a object at the x and y coordinate
+     */
     public IBoardObject removeObject(int x, int y){
         if(x == -1 || y == -1) return null;
         return grid[y][x].remove(ROBOT);
@@ -120,10 +151,18 @@ public class Board  {
         this.selected = r;
     }
 
+    /**
+     *
+     * @return Returns all robots on the board.
+     */
     public ArrayList<Robot> getRobots() {
         return robots;
     }
 
+    /**
+     *
+     * @return Returns the number of flags on the board.
+     */
     public int getFlagNr() {
         return flags;
     }
