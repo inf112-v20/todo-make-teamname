@@ -62,9 +62,10 @@ public class RobotTest {
 
     @Test
     public void testHealDamage(){
-        assertEquals(9, testBot.getHealth());
+        testBot.takeDamage();
+        assertEquals(8, testBot.getHealth());
         testBot.healDamage();
-        assertEquals(10, testBot.getHealth());
+        assertEquals(9, testBot.getHealth());
     }
 
     @Test

@@ -14,6 +14,8 @@ import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.boardObjects.BoardLaser;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 
@@ -96,7 +98,7 @@ public class Game{
                 screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
                 screenY < Settings.SCREEN_HEIGHT) {
             int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
-            if(myPlayer.getCards()[0] != null) {
+            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 6) {
                 myPlayer.addSelectedCard(card);
             }
         }
@@ -180,19 +182,9 @@ public class Game{
         try {
             for (Robot r : board.getRobots()) {
                 if (r.getTileX() != -1 && r.getTileY() != -1) {
-//                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
                     batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
                             (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
                             Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
-//                    TextureRegion t = new TextureRegion();
-//                    t.setRegion(r.getTexture());
-//                    batch.draw(r.getTexture(),
-//                            (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
-//                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
-//                            Settings.TILE_WIDTH/2,
-//                            Settings.TILE_HEIGHT/2,
-//                            Settings.TILE_WIDTH,
-//                            Settings.TILE_HEIGHT);
                 }
             }
         }catch (ConcurrentModificationException ex){
@@ -218,6 +210,13 @@ public class Game{
                 }
             }
         }
+        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * 7);
+        int j = 5;
+        for (int i = 0; i < myPlayer.getLockedCards().size(); i++) {
+            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * (6-i));
+            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/12 * 11, Settings.SCREEN_HEIGHT/10 * (6-i),
+                    Settings.CARD_WIDTH/4, Settings.CARD_HEIGHT/4);
+        }
     }
     public void dispose() {
         if(turnHandler != null)turnHandler.dispose();
@@ -229,7 +228,6 @@ public class Game{
      * @param packet
      */
     public void isReady(Packets.Packet02Cards packet){
-        myPlayer.discard();
         for (Packets.Packet02Cards pack: allCards) {
             if(pack.playerId == packet.playerId) return;
         }
