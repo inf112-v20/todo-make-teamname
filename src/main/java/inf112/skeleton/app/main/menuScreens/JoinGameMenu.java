@@ -30,7 +30,7 @@ public class JoinGameMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-        font.draw(batch, "Type the Host's IP address in the popup", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) + 50);
+        font.draw(batch, "Type the Host's IP address in the popup", (Settings.SCREEN_WIDTH / 2)-150, (Settings.SCREEN_HEIGHT / 2) + 50);
     }
 
     /**
@@ -59,6 +59,4 @@ public class JoinGameMenu {
         if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
         else create();
     }
-
-
 }
