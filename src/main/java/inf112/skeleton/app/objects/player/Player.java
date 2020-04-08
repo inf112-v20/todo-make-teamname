@@ -2,6 +2,7 @@ package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Queue;
+import com.sun.deploy.config.JREInfo;
 import inf112.skeleton.app.objects.boardObjects.Flag;
 import inf112.skeleton.app.objects.cards.Deck;
 import inf112.skeleton.app.objects.cards.ProgramCard;
@@ -19,6 +20,7 @@ public class Player {
     private ArrayList<Flag> flags;
     private Boolean readyButton = false;
     private Deck deck;
+    private ArrayList<ProgramCard> lockedCards;
 
     /**
      * This constructor creates the player's robot and deck, also initializes some lists.
@@ -28,7 +30,8 @@ public class Player {
         robot = new Robot(textures);
 //        robot.setTileX(0);
 //        robot.setTileY(0);
-        selectedCards  = new Queue<ProgramCard>();
+        selectedCards = new Queue<ProgramCard>();
+        lockedCards = new ArrayList<>();
         flags = new ArrayList<>();
         deck = new Deck(robot);
     }
@@ -132,12 +135,26 @@ public class Player {
         return this.readyButton;
     }
 
+    public ArrayList<ProgramCard> getLockedCards(){
+        return lockedCards;
+    }
+
     /**
      * Discard the hand of cards the player has.
      */
     public void discard() {
         deck.discard(cards);
         Arrays.fill(cards, null);
-        selectedCards.clear();
+        if(robot.getHealth() >= 5){
+            selectedCards.clear();
+            lockedCards.clear();
+        }else {
+            for (int i = 0; i < robot.getHealth(); i++) {
+                selectedCards.removeFirst();
+            }
+            for (int i = 0; i < selectedCards.size; i++) {
+                lockedCards.add(selectedCards.get(i));
+            }
+        }
     }
 }

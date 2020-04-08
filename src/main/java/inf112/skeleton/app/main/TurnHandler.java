@@ -182,6 +182,7 @@ public class TurnHandler {
             }
         }
         if (myPlayer.equals(game.getMyPlayer())) {
+            game.getMyPlayer().discard();
             game.getMyPlayer().deal();
             myPlayer.setReadyButton(false);
         }
@@ -453,10 +454,6 @@ public class TurnHandler {
      */
     public void cardMove(NonTextureProgramCard card, Robot robot){
         if(robot.isDestroyed()) return;
-        if(robot.getHealth() < 6){
-            moveRobot(robot, robot.getDirection());
-            return;
-        }
         if (card.getValue() > 0) {
             for (int i = 0; i < card.getValue(); i++) {
                 if(robot.isDestroyed()) break;
