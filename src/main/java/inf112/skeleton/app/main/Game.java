@@ -294,6 +294,7 @@ public class Game{
         allCards = new ArrayList<>();
         Texture[][] textures = getRobotTextures();
         playersShutdown = new boolean[5];
+        allReady = new boolean[]{false, true, false, false, false};
         for (int i = 1; i < 5; i++) {
             Player player = new Player(textures[i-1]);
             player.deal();
