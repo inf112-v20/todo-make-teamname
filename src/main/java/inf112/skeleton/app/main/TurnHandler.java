@@ -4,6 +4,7 @@ package inf112.skeleton.app.main;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
+import inf112.skeleton.app.board.DirectionConverter;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.CardTranslator;
@@ -15,6 +16,8 @@ import inf112.skeleton.app.objects.player.Robot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
+
+import static inf112.skeleton.app.board.DirectionConverter.*;
 
 /**
  * The TurnHandler class handles the turn from after the program registers phase and until the end of the turn. <BR>
@@ -287,7 +290,7 @@ public class TurnHandler {
         //Board elements do their things
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            if(robotCollision(robot, conveyorBelt.getDirection())) return;
+            if(robotCollision(robot, conveyorBelt.getDirection()) || conveyorCollision(conveyorBelt,robot)) return;
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
                 moveRobot(robot, conveyorBelt.getDirection());
@@ -319,7 +322,7 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             //Conveoyrbelt moves robot
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-            if(robotCollision(robot, conveyorBelt.getDirection())) return;
+            if(robotCollision(robot, conveyorBelt.getDirection()) || conveyorCollision(conveyorBelt, robot)) return;
             moveRobot(robot, conveyorBelt.getDirection());
             currentTile = board.getTile(robot.getTileX(), robot.getTileY());
             if(currentTile.getObjects()[0] instanceof ConveyorBelt){
@@ -336,8 +339,18 @@ public class TurnHandler {
         }
     }
 
-    public boolean conveyorCollision(){
-        return false;
+    /**
+     * See Roborally rulebook page 7
+     * @param conveyorBelt
+     * @param robot
+     * @return Returns true if collision occurs
+     */
+    public boolean conveyorCollision(ConveyorBelt conveyorBelt, Robot robot){
+        int x = (directionToIntCoordinate(conveyorBelt.getDirection())[0] *2) + robot.getTileX();
+        int y = (directionToIntCoordinate(conveyorBelt.getDirection())[1] *2) + robot.getTileY();
+        BoardTile boardTile = board.getTile(x, y);
+        return boardTile.getObjects()[0] instanceof ConveyorBelt && boardTile.getObjects()[2] instanceof Robot
+                && boardTile.getObjects()[0].getDirection().equals(oppositeDirection(conveyorBelt.getDirection()));
     }
 
     /**
@@ -376,35 +389,6 @@ public class TurnHandler {
         }
 
         return false;
-    }
-
-    /**
-     * This method is used to compare two directions so that a robot going south will crash into a southwest wall
-     * @param roboDirection the robots direction
-     * @param wallDirection the walls direction
-     * @return Returns true if the wall and the robot has an overlapping direction
-     */
-    private boolean compareWallDirection(Direction roboDirection, Direction wallDirection) {
-        boolean result = false;
-        switch (roboDirection){
-            case SOUTH:
-                result = wallDirection == Direction.SOUTH || wallDirection == Direction.SOUTHWEST ||
-                        wallDirection == Direction.SOUTHEAST;
-                break;
-            case WEST:
-                result = wallDirection == Direction.WEST || wallDirection == Direction.SOUTHWEST ||
-                        wallDirection == Direction.NORTHWEST;
-                break;
-            case NORTH:
-                result = wallDirection == Direction.NORTH || wallDirection == Direction.NORTHWEST ||
-                        wallDirection == Direction.NORTHEAST;
-                break;
-            case EAST:
-                result = wallDirection == Direction.EAST || wallDirection == Direction.NORTHEAST ||
-                        wallDirection == Direction.SOUTHEAST;
-                break;
-        }
-        return result;
     }
 
     /**
@@ -529,34 +513,6 @@ public class TurnHandler {
         }
 
         return !wallCollision(robot, direction);
-    }
-
-    /**
-     * Returns the opposite direction
-     * @param direction A direction
-     * @return The opposite direction
-     */
-    private Direction oppositeDirection(Direction direction){
-        switch (direction){
-            case WEST:
-                return Direction.EAST;
-            case SOUTH:
-                return Direction.NORTH;
-            case EAST:
-                return Direction.WEST;
-            case NORTH:
-                return Direction.SOUTH;
-            case SOUTHWEST:
-                return Direction.NORTHEAST;
-            case NORTHEAST:
-                return Direction.SOUTHWEST;
-            case NORTHWEST:
-                return Direction.SOUTHEAST;
-            case SOUTHEAST:
-                return Direction.NORTHWEST;
-            default:
-                return null;
-        }
     }
 
     public boolean getGameIsDone(){
