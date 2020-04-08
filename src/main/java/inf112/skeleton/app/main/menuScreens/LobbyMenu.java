@@ -3,14 +3,10 @@ package inf112.skeleton.app.main.menuScreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.Settings;
-import inf112.skeleton.app.objects.player.Player;
-
-import java.util.ArrayList;
 
 /**
  * A simple lobby that ask for the user name of the player, then shows all the connected players. When the host presses
@@ -19,10 +15,6 @@ import java.util.ArrayList;
 public class LobbyMenu {
     private boolean host = false;
     private Game game;
-
-    private Texture buttonReady;
-    private Texture buttonReadySelected;
-    private Player myPlayer;
 
 
     /**
@@ -73,21 +65,7 @@ public class LobbyMenu {
         }
         font.setColor(Color.YELLOW);
         font.draw(batch, "Press ENTER to start the game", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-200);
-
-        renderReadyButton(batch);
-
     }
-
-    private void renderReadyButton(SpriteBatch batch) {
-        buttonReady = new Texture("assets/button_ready.png");
-        buttonReadySelected = new Texture("assets/button_ready_selected.png");
-        batch.draw(buttonReady, (Settings.SCREEN_WIDTH/2)-30, (Settings.SCREEN_HEIGHT/2)-180   , 64, 32);
-        //if (myPlayer.getReadyButton()){
-        //    batch.draw(buttonReadySelected, (Settings.SCREEN_WIDTH/2)-30, (Settings.SCREEN_HEIGHT/2)-180   , 64, 32);
-        //}
-    }
-
-
 
     /**
      * Gives the host the ability to start the game.

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.ScreenHandler;
 import inf112.skeleton.app.main.ScreenState;
+import inf112.skeleton.app.main.Settings;
 
 /**
  * The JoinGameMenu class gives a prompt to enter an IP Address and the tries to connect to a server at that IP.
@@ -24,12 +25,12 @@ public class JoinGameMenu {
     }
 
     /**
-     * Just gives a pink background screen for now
+     *
      * @param batch The batch used for the game.
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-
+        font.draw(batch, "Type the Host's IP address in the popup", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) + 50);
     }
 
     /**
