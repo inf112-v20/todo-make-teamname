@@ -15,7 +15,7 @@ import java.util.Arrays;
  */
 public class Player {
     private Robot robot;
-    public ProgramCard[] cards;
+    private ProgramCard[] cards;
     private Queue<ProgramCard> selectedCards;
     private ArrayList<Flag> flags;
     private Boolean readyButton = false;
@@ -164,5 +164,9 @@ public class Player {
             }
             selectedCards.clear();
         }
+    }
+
+    public void clearLockedCards(){
+        lockedCards.clear();
     }
 }
