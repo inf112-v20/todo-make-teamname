@@ -32,6 +32,7 @@ public class ServerNetworkListener extends Listener {
             allReady[i] = false;
             playersShutdown[i] = false;
         }
+        allReady[1] = true;
     }
 
     /**
