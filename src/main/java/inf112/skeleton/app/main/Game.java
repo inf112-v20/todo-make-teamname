@@ -109,6 +109,9 @@ public class Game{
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
             myPlayer.setReadyButton(true);
             if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
+            else if (myPlayer.getArrayCards().length == myPlayer.getRobot().getHealth()){
+                client.sendCards(myPlayer.getArrayCards());
+            }
         }
         return false;
     }

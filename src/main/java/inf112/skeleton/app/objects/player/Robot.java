@@ -245,6 +245,8 @@ public class Robot implements IBoardObject {
     public void respawn(){
         isDestroyed = false;
         fullHealth();
+        takeDamage();
+        takeDamage();
         setTileY(respawnY);
         setTileX(respawnX);
     }

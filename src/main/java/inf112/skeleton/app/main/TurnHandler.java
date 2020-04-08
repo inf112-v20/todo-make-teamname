@@ -124,10 +124,6 @@ public class TurnHandler {
                     pickUpFlag(idPlayerHash.get(id));
                 }
                 for (int id: idPlayerHash.keySet()) {
-
-                    repair(idPlayerHash.get(id));
-                }
-                for (int id: idPlayerHash.keySet()) {
                     Robot robot = idPlayerHash.get(id).getRobot();
                     pitFall(robot);
                 }
@@ -138,6 +134,9 @@ public class TurnHandler {
                 }
             }
             for (int id: idPlayerHash.keySet()) {
+                repair(idPlayerHash.get(id));
+            }
+            for (int id: idPlayerHash.keySet()) {
                 cleanUp(idPlayerHash.get(id));
             }
             game.clearAllCards();
@@ -146,7 +145,7 @@ public class TurnHandler {
 
     /**
      * The pitFall method checks if the robot falls into a pit, and if it does it destroys the robot
-     * @param robot This is the robot that gets check if it is on a pit.
+     * @param robot This is the robot that gets checked if it is on a pit.
      */
     public void pitFall(Robot robot) {
         if (!robot.isDestroyed()) {
@@ -219,6 +218,7 @@ public class TurnHandler {
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[0] instanceof Flag) {
+            robot.setRespawn(robot.getTileX(), robot.getTileY());
             Flag flag = (Flag) currentTile.getObjects()[0];
             if (!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()) {
                 myPlayer.addFlag(flag);
@@ -228,6 +228,8 @@ public class TurnHandler {
                     gameIsDone = true;
                 }
             }
+        }else if(currentTile.getObjects()[0] instanceof RepairSite){
+            robot.setRespawn(robot.getTileX(), robot.getTileY());
         }
     }
 
@@ -285,9 +287,17 @@ public class TurnHandler {
         //Board elements do their things
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+            if(robotCollision(robot, conveyorBelt.getDirection())) return;
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
                 moveRobot(robot, conveyorBelt.getDirection());
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if(currentTile.getObjects()[0] instanceof ConveyorBelt){// if the new conveyor belt can rotate the robot it does it
+                    conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                    if(conveyorBelt.canRotate()){
+                        robot.setDirection(conveyorBelt.getDirection());
+                    }
+                }
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
@@ -309,13 +319,25 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
             //Conveoyrbelt moves robot
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+            if(robotCollision(robot, conveyorBelt.getDirection())) return;
             moveRobot(robot, conveyorBelt.getDirection());
+            currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+            if(currentTile.getObjects()[0] instanceof ConveyorBelt){
+                conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                if(conveyorBelt.canRotate()){ // if the new conveyor belt can rotate the robot it does it
+                    robot.setDirection(conveyorBelt.getDirection());
+                }
+            }
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public boolean conveyorCollision(){
+        return false;
     }
 
     /**

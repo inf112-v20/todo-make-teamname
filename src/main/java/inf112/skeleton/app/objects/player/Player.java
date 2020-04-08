@@ -109,6 +109,13 @@ public class Player {
         for (int i = 0; i < selectedCards.size; i++) {
             newHand[i] = selectedCards.get(i);
         }
+        if(newHand.length < 5){
+            ProgramCard[] newHand5 = new ProgramCard[5];
+            for (int i = 0; i < lockedCards.size(); i++) {
+                newHand5[newHand.length+i] = lockedCards.get(lockedCards.size()-(i+1));
+            }
+            newHand = newHand5;
+        }
         return newHand;
     }
 
@@ -150,11 +157,12 @@ public class Player {
             lockedCards.clear();
         }else {
             for (int i = 0; i < robot.getHealth(); i++) {
-                selectedCards.removeFirst();
+                if(!selectedCards.isEmpty())selectedCards.removeFirst();
             }
             for (int i = 0; i < selectedCards.size; i++) {
-                lockedCards.add(selectedCards.get(i));
+                if(!selectedCards.isEmpty())lockedCards.add(selectedCards.get(i));
             }
+            selectedCards.clear();
         }
     }
 }

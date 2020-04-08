@@ -5,11 +5,18 @@ import inf112.skeleton.app.board.Direction;
 public class ConveyorBelt implements IBoardObject {
     private boolean express;
     private Direction direction;
+    private boolean rotate;
 
     public ConveyorBelt(boolean express, Direction newDir){
         //if its an express conveyor belt...
         this.express = express;
         direction = newDir;
+        rotate = false;
+    }
+    public ConveyorBelt(boolean express, Direction newDir, boolean rotate){
+        this.express = express;
+        this.direction = newDir;
+        this.rotate = rotate;
     }
 
     @Override
@@ -48,5 +55,9 @@ public class ConveyorBelt implements IBoardObject {
      */
     public boolean getExpress(){
         return express;
+    }
+
+    public boolean canRotate() {
+        return rotate;
     }
 }
