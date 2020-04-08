@@ -82,7 +82,7 @@ public class RobotTest {
         assertEquals(0, testBot.getHealth());
         testBot.respawn();
         assertFalse(testBot.isDestroyed());
-        assertEquals(7, testBot.getHealth());
+        assertEquals(7, testBot.getHealth()); // supposed to take 2 damage when you respawn
     }
 
 }
