@@ -53,7 +53,7 @@ public class Game{
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture buttonReadySelected;
-    private Texture robotLaser;
+    private Texture[] robotLaser;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
     private boolean[] allReady;
@@ -231,7 +231,7 @@ public class Game{
         if(laserTime == 0){
             laserTime = System.currentTimeMillis();
         }
-        if(laserTime + 2000 < System.currentTimeMillis()){
+        if(laserTime + 1000 < System.currentTimeMillis()){
             laserTime = 0;
             renderRobotLasers = false;
             turnHandler.clearAllArraysOfCoordinates();
@@ -240,7 +240,7 @@ public class Game{
         ArrayList<ArrayList<int[]>> arrayListArrayList = turnHandler.getAllArraysOfCoordinates();
         for (ArrayList<int[]> listOfCoordinates: arrayListArrayList) {
             for (int[] coordinates: listOfCoordinates) {
-                batch.draw(robotLaser, (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH),
+                batch.draw(robotLaser[coordinates[2]], (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH),
                         (Settings.BOARD_LOC_Y) + (coordinates[1] * Settings.TILE_HEIGHT),
                         Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
             }
@@ -381,7 +381,8 @@ public class Game{
         lifeTokens = new Texture[2];
         lifeTokens[0] = new Texture("assets/life-token-lost.png");
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
-        robotLaser = new Texture("assets/temp_laser.png");
+        robotLaser = new Texture[] {new Texture("assets/temp_laser.png"),
+                                    new Texture("assets/temp_laserNS.png")};
         laserTime = 0;
     }
 

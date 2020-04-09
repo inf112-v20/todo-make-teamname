@@ -268,7 +268,7 @@ public class TurnHandler {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
-                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y});
+                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
                 }
             }
         }else if (robot.getDirection().equals(Direction.SOUTH)) {
@@ -277,7 +277,7 @@ public class TurnHandler {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
-                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y});
+                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
                 }
             }
         }else if (robot.getDirection().equals(Direction.EAST)){
@@ -286,7 +286,7 @@ public class TurnHandler {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
-                    arrayOfCoordinates.add(new int[]{x, robot.getTileY()});
+                    arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
                 }
             }
         }else {
@@ -295,7 +295,7 @@ public class TurnHandler {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
-                    arrayOfCoordinates.add(new int[]{x, robot.getTileY()});
+                    arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
                 }
             }
         }
@@ -368,11 +368,13 @@ public class TurnHandler {
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
                 moveRobot(robot, conveyorBelt.getDirection());
-                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-                if(currentTile.getObjects()[0] instanceof ConveyorBelt){// if the new conveyor belt can rotate the robot it does it
-                    conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                    if(conveyorBelt.canRotate()){
-                        robot.setDirection(conveyorBelt.getDirection());
+                if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
+                    currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                    if (currentTile.getObjects()[0] instanceof ConveyorBelt) {// if the new conveyor belt can rotate the robot it does it
+                        conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                        if (conveyorBelt.canRotate()) {
+                            robot.setDirection(conveyorBelt.getDirection());
+                        }
                     }
                 }
                 try {
@@ -398,11 +400,13 @@ public class TurnHandler {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
             if(robotCollision(robot, conveyorBelt.getDirection()) || conveyorCollision(conveyorBelt, robot)) return;
             moveRobot(robot, conveyorBelt.getDirection());
-            currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-            if(currentTile.getObjects()[0] instanceof ConveyorBelt){
-                conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                if(conveyorBelt.canRotate()){ // if the new conveyor belt can rotate the robot it does it
-                    robot.setDirection(conveyorBelt.getDirection());
+            if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
+                currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+                if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
+                    conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
+                    if (conveyorBelt.canRotate()) { // if the new conveyor belt can rotate the robot it does it
+                        robot.setDirection(conveyorBelt.getDirection());
+                    }
                 }
             }
             try {

@@ -55,6 +55,7 @@ public class Board  {
      * @return Returns a specific tile
      */
     public BoardTile getTile(int x, int y){
+        if(x < 0 || x >= width || y < 0 || y >= height) return null;
         return grid[y][x];
     }
 
