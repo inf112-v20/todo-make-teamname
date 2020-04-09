@@ -4,6 +4,7 @@ import inf112.skeleton.app.board.Direction;
 
 public class RepairSite implements IBoardObject {
     private boolean hammer;
+    private int x ,y;
 
     public RepairSite(boolean hammer){
         //if it is a repair site with wrench and hammer, hammer = true, if not hammer = false.
@@ -19,25 +20,24 @@ public class RepairSite implements IBoardObject {
     public void setDirection(Direction d) {
 
     }
-
     @Override
     public int getTileX() {
-        return 0;
+        return x;
     }
 
     @Override
     public int getTileY() {
-        return 0;
+        return y;
     }
 
     @Override
     public void setTileX(int x) {
-
+        this.x = x;
     }
 
     @Override
     public void setTileY(int y) {
-
+        this.y = y;
     }
 
     public boolean getHammer() {

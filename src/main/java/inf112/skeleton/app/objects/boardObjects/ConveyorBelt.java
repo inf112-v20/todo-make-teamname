@@ -6,6 +6,7 @@ public class ConveyorBelt implements IBoardObject {
     private boolean express;
     private Direction direction;
     private boolean rotate;
+    private int x,y;
 
     public ConveyorBelt(boolean express, Direction newDir){
         //if its an express conveyor belt...
@@ -31,22 +32,22 @@ public class ConveyorBelt implements IBoardObject {
 
     @Override
     public int getTileX() {
-        return 0;
+        return x;
     }
 
     @Override
     public int getTileY() {
-        return 0;
+        return y;
     }
 
     @Override
     public void setTileX(int x) {
-
+        this.x = x;
     }
 
     @Override
     public void setTileY(int y) {
-
+        this.y = y;
     }
 
     /**

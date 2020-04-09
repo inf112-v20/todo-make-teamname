@@ -34,6 +34,7 @@ public class TurnHandler {
     private HashMap<Integer, Player> idPlayerHash;
     private Thread phase;
     private Board board;
+    private ArrayList<ArrayList<int[]>> allArraysOfCoordinates;
 
 
     /**
@@ -50,6 +51,7 @@ public class TurnHandler {
         gameIsDone = false;
         idPlayerHash = game.getIdPlayerHash();
         board = game.getBoard();
+        allArraysOfCoordinates = new ArrayList<>();
         phase = new Thread(this::doTurn);
         phase.start();
     }
@@ -125,7 +127,10 @@ public class TurnHandler {
                 for (int id: idPlayerHash.keySet()) {
                     Robot robot = idPlayerHash.get(id).getRobot();
                     robotLasersShoot(robot);
-                }                for (int id: idPlayerHash.keySet()) {
+                }
+                game.setRenderRobotLasers(true);
+
+                for (int id: idPlayerHash.keySet()) {
                     pickUpFlag(idPlayerHash.get(id));
                 }
                 for (int id: idPlayerHash.keySet()) {
@@ -219,6 +224,11 @@ public class TurnHandler {
      * @param myPlayer This is the player that tries to pick up flags.
      */
     public void pickUpFlag(Player myPlayer) {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
@@ -251,27 +261,56 @@ public class TurnHandler {
     }
 
     public void robotLasersShoot(Robot robot){
+        ArrayList<int[]> arrayOfCoordinates = new ArrayList<>();
         if (robot.getDirection().equals(Direction.NORTH)) {
+            if(laserCurrentTileCollision(robot)) return;
             for (int y = robot.getTileY() + 1; y < board.getHeight(); y++) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(laserCollision(boardTile, robot.getDirection()))break;
+                else {
+                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y});
+                }
             }
         }else if (robot.getDirection().equals(Direction.SOUTH)) {
+            if(laserCurrentTileCollision(robot)) return;
             for (int y = robot.getTileY() - 1; y >= 0; y--) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(laserCollision(boardTile, robot.getDirection()))break;
+                else {
+                    arrayOfCoordinates.add(new int[]{robot.getTileX(), y});
+                }
             }
         }else if (robot.getDirection().equals(Direction.EAST)){
+            if(laserCurrentTileCollision(robot)) return;
             for (int x = robot.getTileX() + 1; x < board.getWidth(); x++) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(laserCollision(boardTile, robot.getDirection()))break;
+                else {
+                    arrayOfCoordinates.add(new int[]{x, robot.getTileY()});
+                }
             }
         }else {
+            if(laserCurrentTileCollision(robot)) return;
             for (int x = robot.getTileX() - 1; x >= 0; x--) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(laserCollision(boardTile, robot.getDirection()))break;
+                else {
+                    arrayOfCoordinates.add(new int[]{x, robot.getTileY()});
+                }
             }
         }
+        allArraysOfCoordinates.add(arrayOfCoordinates);
+    }
+
+    private boolean laserCurrentTileCollision(Robot robot) {
+        BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if(currentTile.getObjects()[1] != null){
+            if(robot.getDirection().equals(currentTile.getObjects()[1].getDirection())) return true;
+        }
+        if(currentTile.getObjects()[0] instanceof Pusher){
+            return robot.getDirection().equals(oppositeDirection(currentTile.getObjects()[0].getDirection()));
+        }
+        return false;
     }
 
     private boolean shootRobot(BoardTile boardTile) {
@@ -383,6 +422,7 @@ public class TurnHandler {
     public boolean conveyorCollision(ConveyorBelt conveyorBelt, Robot robot){
         int x = (directionToIntCoordinate(conveyorBelt.getDirection())[0] *2) + robot.getTileX();
         int y = (directionToIntCoordinate(conveyorBelt.getDirection())[1] *2) + robot.getTileY();
+        if(x >= board.getWidth() || x < 0 || y < 0 || y >= board.getHeight()) return false;
         BoardTile boardTile = board.getTile(x, y);
         return boardTile.getObjects()[0] instanceof ConveyorBelt && boardTile.getObjects()[2] instanceof Robot
                 && boardTile.getObjects()[0].getDirection().equals(oppositeDirection(conveyorBelt.getDirection()));
@@ -572,6 +612,15 @@ public class TurnHandler {
     public boolean getGameIsDone(){
         return gameIsDone;
     }
+
+    public void clearAllArraysOfCoordinates(){
+        allArraysOfCoordinates.clear();
+    }
+
+    public ArrayList<ArrayList<int[]>> getAllArraysOfCoordinates(){
+        return allArraysOfCoordinates;
+    }
+
     /**
      * Interrupts the thread that {@link TurnHandler#doTurn()} runs on, so that the program manages to close.
      */

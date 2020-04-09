@@ -18,6 +18,7 @@ import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
+import org.lwjgl.Sys;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -46,15 +47,18 @@ public class Game{
     private MPServer server;
     private TurnHandler turnHandler;
     private boolean host;
+    private long laserTime;
 
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture buttonReadySelected;
+    private Texture robotLaser;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
     private boolean[] allReady;
     private boolean[] playersShutdown;
+    private boolean renderRobotLasers;
 
 
     /**
@@ -129,6 +133,7 @@ public class Game{
         renderHealthAndLife(batch);
         renderReadyButton(batch);
         renderNames(batch, font);
+        if(renderRobotLasers) renderRobotLasers(batch);
     }
 
     /**
@@ -221,6 +226,27 @@ public class Game{
                     Settings.CARD_WIDTH/4, Settings.CARD_HEIGHT/4);
         }
     }
+
+    public void renderRobotLasers(SpriteBatch batch){
+        if(laserTime == 0){
+            laserTime = System.currentTimeMillis();
+        }
+        if(laserTime + 2000 < System.currentTimeMillis()){
+            laserTime = 0;
+            renderRobotLasers = false;
+            turnHandler.clearAllArraysOfCoordinates();
+            return;
+        }
+        ArrayList<ArrayList<int[]>> arrayListArrayList = turnHandler.getAllArraysOfCoordinates();
+        for (ArrayList<int[]> listOfCoordinates: arrayListArrayList) {
+            for (int[] coordinates: listOfCoordinates) {
+                batch.draw(robotLaser, (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH),
+                        (Settings.BOARD_LOC_Y) + (coordinates[1] * Settings.TILE_HEIGHT),
+                        Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+            }
+        }
+    }
+
     public void dispose() {
         if(turnHandler != null)turnHandler.dispose();
     }
@@ -355,6 +381,8 @@ public class Game{
         lifeTokens = new Texture[2];
         lifeTokens[0] = new Texture("assets/life-token-lost.png");
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
+        robotLaser = new Texture("assets/temp_laser.png");
+        laserTime = 0;
     }
 
     /**
@@ -540,5 +568,9 @@ public class Game{
      */
     public void shutdownRobot(){
         client.sendShutdownRobot();
+    }
+
+    public void setRenderRobotLasers(boolean bool) {
+        renderRobotLasers = bool;
     }
 }
