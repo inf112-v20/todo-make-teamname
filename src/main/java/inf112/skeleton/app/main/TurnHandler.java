@@ -260,6 +260,11 @@ public class TurnHandler {
         }
     }
 
+    /**
+     * A robot shoots a laser in the direction the robot is facing, if the laser collides with something it then stops,<BR>
+     * if that something was another robot that robot takes damage.
+     * @param robot the robot shooting the laser
+     */
     public void robotLasersShoot(Robot robot){
         ArrayList<int[]> arrayOfCoordinates = new ArrayList<>();
         if (robot.getDirection().equals(Direction.NORTH)) {
@@ -302,6 +307,11 @@ public class TurnHandler {
         allArraysOfCoordinates.add(arrayOfCoordinates);
     }
 
+    /**
+     * Checks if the tile the robot is on blocks the laser.
+     * @param robot Robot shooting the laser
+     * @return Returns true if the laser is blocked
+     */
     private boolean laserCurrentTileCollision(Robot robot) {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if(currentTile.getObjects()[1] != null){
@@ -313,6 +323,11 @@ public class TurnHandler {
         return false;
     }
 
+    /**
+     * If a robot is on the board tile, the robot gets hit by the laser
+     * @param boardTile The board tile being checked
+     * @return Returns true if it hits a robot
+     */
     private boolean shootRobot(BoardTile boardTile) {
         if(boardTile.getObjects()[2] instanceof Robot){
             Robot robot = (Robot) boardTile.getObjects()[2];
@@ -482,6 +497,12 @@ public class TurnHandler {
         return nextTile.getObjects()[2] instanceof Robot;
     }
 
+    /**
+     * Checks if the laser collides with something, and if that something is a robot, tries to shoot it.
+     * @param boardTile The board tile being checked.
+     * @param direction The direction the laser is traveling.
+     * @return Returns true if the laser collides with something.
+     */
     private boolean laserCollision(BoardTile boardTile, Direction direction){
         if(boardTile.getObjects()[1] instanceof Wall){
             IBoardObject boardObject = boardTile.getObjects()[1];
@@ -617,10 +638,17 @@ public class TurnHandler {
         return gameIsDone;
     }
 
+    /**
+     * Clears the coordinates of the laser path.
+     */
     public void clearAllArraysOfCoordinates(){
         allArraysOfCoordinates.clear();
     }
 
+    /**
+     *
+     * @return Returns the coordinates of all the lasers paths.
+     */
     public ArrayList<ArrayList<int[]>> getAllArraysOfCoordinates(){
         return allArraysOfCoordinates;
     }

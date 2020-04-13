@@ -227,6 +227,10 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the lasers that the robots just shot for 1 second
+     * @param batch
+     */
     public void renderRobotLasers(SpriteBatch batch){
         if(laserTime == 0){
             laserTime = System.currentTimeMillis();
