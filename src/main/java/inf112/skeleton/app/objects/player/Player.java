@@ -2,7 +2,6 @@ package inf112.skeleton.app.objects.player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Queue;
-import com.sun.deploy.config.JREInfo;
 import inf112.skeleton.app.objects.boardObjects.Flag;
 import inf112.skeleton.app.objects.cards.Deck;
 import inf112.skeleton.app.objects.cards.ProgramCard;

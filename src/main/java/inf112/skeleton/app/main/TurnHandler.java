@@ -320,6 +320,7 @@ public class TurnHandler {
      */
     private boolean laserCurrentTileCollision(Robot robot) {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
+        if(currentTile == null)return false;
         if(currentTile.getObjects()[1] != null){
             if(robot.getDirection().equals(currentTile.getObjects()[1].getDirection())) return true;
         }
