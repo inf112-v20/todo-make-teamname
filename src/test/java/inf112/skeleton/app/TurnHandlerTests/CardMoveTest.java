@@ -39,77 +39,73 @@ public class CardMoveTest {
         game = new Game();
         game.setBoard(new Board(4,1,1));
         game.gamePhasesSetUp();
-        player = new Player();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        player = new Player(mockImages);
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
-        board.addObject(player.getRobot(), 1, 0);
         robot = player.getRobot();
         robot.setDirection(Direction.EAST);
+        board.addObject(robot, 0, 0);
     }
 
     @Test
     public void cardMoveTestMoveOne(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
 
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
     @Test
     public void cardMoveTestMoveTwo(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(2,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(2,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(2, robot.getTileX());
 
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
     @Test
     public void cardMoveTestMoveThree(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(3,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(3,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(3, robot.getTileX());
 
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
     @Test
     public void cardMoveTestRotateLeft(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,true,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,true,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.NORTH, robot.getDirection());
         robot.setDirection(Direction.EAST);
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
     @Test
     public void cardMoveTestRotateRight(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,true);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,true, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.SOUTH, robot.getDirection());
         robot.setDirection(Direction.EAST);
 
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
     @Test
     public void cardMoveTestUTurn(){
-        board.addObject(robot, 0, 0);
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.WEST, robot.getDirection());
         robot.setDirection(Direction.EAST);
 
-        board.removeObject(robot);
+        board.moveObject(robot, 0, 0);
     }
 }

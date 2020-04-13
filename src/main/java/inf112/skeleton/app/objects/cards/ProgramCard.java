@@ -1,35 +1,52 @@
 package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.objects.cards.ICard;
 
 public class ProgramCard implements ICard {
-    private boolean rotate;
-    private boolean rotateLeft;
-    private boolean rotateRight;
-    private int value;
+    private boolean rotate = false;
+    private boolean rotateLeft = false;
+    private boolean rotateRight = false;
+    private int value = 0;
     private boolean selected;
+    private int priorityValue;
     String name;
     String text;
 
+    private Texture sprite;
 
-    Texture [] images;
+    public ProgramCard(String cardName, Texture sprite, int priorityValue){
+        this.priorityValue = priorityValue;
+        this.sprite = sprite;
+        switch (cardName){
+            case "UTurn":
+                rotate = true;
+                break;
+            case "RotateLeft":
+                rotate = true;
+                rotateLeft = true;
+                break;
+            case "RotateRight":
+                rotate = true;
+                rotateRight = true;
+                break;
+            case "Move1":
+                value = 1;
+                break;
+            case "Move2":
+                value = 2;
+                break;
+            case "Move3":
+                value = 3;
+                break;
+            case "BackUp":
+                value = -1;
+                break;
+            default:
 
-    private int type;
+        }
 
-    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight, Texture[] images){
-        /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
-        * will do a U-turn
-         */
-        this.images = images;
-        this.selected = false;
-        this.value = value;
-        this.rotate = rotate;
-        this.rotateLeft = rotateLeft;
-        this.rotateRight = rotateRight;
-
-        type = value * 1000 + (rotate ? 100 : 0) + (rotateLeft ? 10 : 0) + (rotateRight ? 1 : 0);
     }
+
     public void setSelected(Boolean b){
         this.selected = b;
     }
@@ -48,18 +65,7 @@ public class ProgramCard implements ICard {
 
     @Override
     public Texture getImage() {
-        switch (type) {
-            case 1000:
-                return images[0];
-            case 2000:
-                return images[1];
-            case 110:
-                return images[2];
-            case 101:
-                return images[3];
-            default:
-                return images[0];
-        }
+        return sprite;
     }
 
     @Override
@@ -83,17 +89,8 @@ public class ProgramCard implements ICard {
     public boolean getRotate(){
         return rotate;
     }
-    /*
-    public boolean getBackUp(){
-        return backup;
+
+    public int getPriorityValue(){
+        return priorityValue;
     }
-    public boolean getMove1(){
-        return move1;
-    }
-    public boolean getMove2(){
-        return move2;
-    }
-    public boolean getMove3(){
-        return move3;
-    }*/
 }

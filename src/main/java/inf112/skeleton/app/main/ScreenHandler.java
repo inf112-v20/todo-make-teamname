@@ -1,12 +1,14 @@
 package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.main.menuScreens.*;
+import inf112.skeleton.app.main.menuScreens.HostGameMenu;
+import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
+import inf112.skeleton.app.main.menuScreens.LobbyMenu;
+import inf112.skeleton.app.main.menuScreens.MainMenu;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
@@ -19,6 +21,8 @@ public class ScreenHandler implements ApplicationListener {
     private static HostGameMenu hostGameMenu;
     private static LobbyMenu lobbyMenu;
     private Texture background;
+    private Texture mainLogo;
+    private InputHandler inputHandler;
 
 
     @Override
@@ -27,12 +31,15 @@ public class ScreenHandler implements ApplicationListener {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.BLACK);
-        background = new Texture("assets/pink_background.png");
+        font.getData().setScale(1, 1); //Change this to 2 2 for bigger font size
+        background = new Texture("assets/grey_background.png");
+        mainLogo = new Texture("assets/main_logo.png");
         game = new Game();
         game.create();
         hostGameMenu = new HostGameMenu(game);
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
+        inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, this);
 
     }
 
@@ -48,23 +55,23 @@ public class ScreenHandler implements ApplicationListener {
         //Changes what's getting rendered based on the ScreenState Enum
         switch (screenState) {
             case GAME:
-                Gdx.graphics.setWindowedMode(Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
                 game.render(batch, font);
                 break;
             case JOINGAME:
                 joinGameMenu.render(batch, font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
             case HOSTGAME:
                 hostGameMenu.render(batch, font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
             case LOBBYMENU:
                 lobbyMenu.render(batch, font);
-                break;
-            case OPTIONS:
-                Options.render(batch,font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
             default:
                 MainMenu.render(batch, font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
         }
         batch.end();
@@ -100,6 +107,10 @@ public class ScreenHandler implements ApplicationListener {
             joinGameMenu = null;
             lobbyMenu = null;
         }
+    }
+
+    public ScreenState getScreenState(){
+        return screenState;
     }
 
 }

@@ -1,32 +1,44 @@
 package inf112.skeleton.app.objects.cards;
 
-import java.util.ArrayList;
-import java.util.Random;
+import inf112.skeleton.app.objects.player.Robot;
+
+import java.util.*;
 
 public class Deck {
-    private Card[] cards;
-    private int nextCard = 0;
-    private int deckSize = 84;
-    private int shuffles = 5;
+    private ArrayList<ProgramCard> drawPile = new ArrayList<>();
+    private ArrayList<ProgramCard> discardPile = new ArrayList<>();
+    private int numOfShuffles = 5; //Default amount of shuffles
+    private Robot robot;
 
-    /**
-     * Creates new Deck
-     */
-    public Deck(){
-        this.cards = new Card[deckSize];
-        for (int i = 0; i < shuffles; i++) {
-            shuffle(cards);
-        }
+    public Deck(Robot robot) {
+        ProgramCard[] newCards = CardParser.cards();
+        drawPile.addAll(Arrays.asList(newCards));
+        randShuffle();
+        this.robot = robot;
     }
 
-    public static Card[] shuffle(Card[] card){
-        Random random = new Random();
-        for (int i = 0; i < card.length; i++) {
-            int randomPos = random.nextInt(card.length);
-            Card temp = card[i];
-            card[i] = card[randomPos];
-            card[randomPos] = temp;
+    public ProgramCard[] draw() {
+        ProgramCard[] newHand = new ProgramCard[robot.getHealth()];
+        for (int i = 0; i < robot.getHealth(); i++) {
+            if (drawPile.isEmpty()) {
+                drawPile = discardPile;
+                discardPile.clear();
+
+                randShuffle();
+            }
+            newHand[i] = drawPile.remove(0);
         }
-        return card;
+        return newHand;
+    }
+
+    public void discard(ProgramCard[] cards) {
+        discardPile.addAll(Arrays.asList(cards));
+    }
+
+    public void randShuffle() {
+        for (int i = 0; i < numOfShuffles; i++) {
+            Collections.shuffle(drawPile);
+        }
     }
 }
+

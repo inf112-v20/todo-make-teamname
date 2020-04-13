@@ -3,12 +3,11 @@ package inf112.skeleton.app.main.menuScreens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.Settings;
-
-import java.util.ArrayList;
 
 /**
  * A simple lobby that ask for the user name of the player, then shows all the connected players. When the host presses
@@ -17,6 +16,7 @@ import java.util.ArrayList;
 public class LobbyMenu {
     private boolean host = false;
     private Game game;
+    private Texture checkMark;
 
     /**
      * The constructor sets the game i the parameter to the field variable game.
@@ -57,25 +57,41 @@ public class LobbyMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-        if(host) {
-            input();
-        }
+        checkMark = new Texture("assets/green_check.png");
         String[] names = game.getNames();
-        font.setColor(Color.BLACK);
-        font.draw(batch, "Players joined:", Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * 15);
+        font.setColor(Color.WHITE);
+        font.draw(batch, "Players joined:", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) + 50);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
-            font.draw(batch, names[i] + " Player number: " + i, Settings.SCREEN_WIDTH / 8, (Settings.SCREEN_HEIGHT / 18) * (15 - i));
+            font.draw(batch,  " Player " + i + " : " + names[i], (Settings.SCREEN_WIDTH / 2)-30, (Settings.SCREEN_HEIGHT / 2) - 15*i);
+            if (game.getAllReady()[i]){
+                batch.draw(checkMark, (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) - 15*i - 15 , 20, 20);
+            }
         }
-
+        font.setColor(Color.YELLOW);
+        font.draw(batch, "Press ENTER to start the game", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-200);
     }
 
     /**
      * Gives the host the ability to start the game.
      */
-    public void input() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            game.sendStartSignal();
+    public void input(int keyCode) {
+        if(host) {
+            if (keyCode == Input.Keys.ENTER) {
+                if (game.getAllReady() == null){
+                    game.sendStartSignal();
+                    return;
+                }
+                for (int i = 2; i <= game.getNrOfPlayers(); i++) {
+                    if (!game.getAllReady()[i]) return;
+                }
+                game.sendStartSignal();
+            }
+        }
+        else {
+            if (keyCode == Input.Keys.ENTER) {
+                game.sendReadySignal();
+            }
         }
     }
 }

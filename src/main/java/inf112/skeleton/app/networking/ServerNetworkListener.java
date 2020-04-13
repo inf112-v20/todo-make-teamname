@@ -10,11 +10,12 @@ import java.util.ArrayList;
  */
 public class ServerNetworkListener extends Listener {
     private Server server;
-    private int[] players;
+    private boolean[] allReady;
     private ArrayList<Packets.Packet02Cards> receivedCards;
     private ArrayList<Packets.Packet02Cards> copyReceivedCards;
     private String[] names;
     private int playerNr = 0;
+    private boolean[] playersShutdown;
 
     /**
      * Sets the field variable server to the Kryonet server, then initializes some lists for storing data.
@@ -22,10 +23,16 @@ public class ServerNetworkListener extends Listener {
      */
     public ServerNetworkListener(Server server){
         this.server = server;
-        players = new int[5];
         names = new String[5];
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
+        allReady = new boolean[5];
+        playersShutdown = new boolean[5];
+        for (int i = 1; i < 5; i++) {
+            allReady[i] = false;
+            playersShutdown[i] = false;
+        }
+        allReady[1] = true;
     }
 
     /**
@@ -35,7 +42,6 @@ public class ServerNetworkListener extends Listener {
      */
     public void connected(Connection c){
         System.out.println("Player: " + (playerNr + 1) + " has connected");
-        players[playerNr] = c.getID();
         playerNr++;
         Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
         nrOfPlayers.playerNr = playerNr;
@@ -88,6 +94,21 @@ public class ServerNetworkListener extends Listener {
             names[c.getID()] = name.name[0];
             name.name = names;
             server.sendToAllTCP(name);
+        }else if(o instanceof Packets.Packet06ReadySignal){
+            Packets.Packet06ReadySignal ready = (Packets.Packet06ReadySignal) o;
+            allReady[c.getID()] = ready.signal;
+            ready.allReady = allReady;
+            server.sendToAllTCP(ready);
+        }else if(o instanceof Packets.Packet07ShutdownRobot){
+            Packets.Packet07ShutdownRobot shutdownRobot = (Packets.Packet07ShutdownRobot) o;
+            playersShutdown[c.getID()] = true;
+            shutdownRobot.playersShutdown = playersShutdown;
+            server.sendToAllTCP(shutdownRobot);
+        }else if(o instanceof Packets.Packet08RemovePlayer){
+            playerNr--;
+            Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
+            nrOfPlayers.playerNr = playerNr;
+            server.sendToAllTCP(nrOfPlayers);
         }
     }
 

@@ -7,11 +7,12 @@ public class CardTranslator {
         boolean rotate = intToBoolean(intCard[1]);
         boolean rotateLeft = intToBoolean(intCard[2]);
         boolean rotateRight = intToBoolean(intCard[3]);
-        return new NonTextureProgramCard(value, rotate, rotateLeft, rotateRight);
+        int priority = intCard[4];
+        return new NonTextureProgramCard(value, rotate, rotateLeft, rotateRight, priority);
     }
     public static int[] programCardsToInt(ProgramCard programCard){
         return new int[]{programCard.getValue(), booleanToInt(programCard.getRotate()),
-                booleanToInt(programCard.getRotateLeft()), booleanToInt(programCard.getRotateRight())};
+                booleanToInt(programCard.getRotateLeft()), booleanToInt(programCard.getRotateRight()), programCard.getPriorityValue()};
     }
 
     public static boolean intToBoolean(int i){

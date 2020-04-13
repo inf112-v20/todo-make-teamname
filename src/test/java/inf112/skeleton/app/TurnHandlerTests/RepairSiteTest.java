@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
@@ -34,7 +35,9 @@ public class RepairSiteTest {
         game = new Game();
         game.setBoard(new Board(2,1,1));
         game.gamePhasesSetUp();
-        player = new Player();
+        Texture mockTexture = mock(Texture.class);
+        Texture[] mockImages = {mockTexture};
+        player = new Player(mockImages);
 
         turnHandler = game.getTurnHandler();
         board = game.getBoard();

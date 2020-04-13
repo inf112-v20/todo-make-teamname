@@ -34,12 +34,12 @@ public class NetworkCardTest {
     @Test
     public void serverReceivedCardsTest(){
         Texture mockTexture = mock(Texture.class);
-        Texture[] mockImages = {mockTexture};
-        ProgramCard card0 = new ProgramCard(1, false, false, false, mockImages);
-        ProgramCard card1 = new ProgramCard(2, false, false, false, mockImages);
-        ProgramCard card2 = new ProgramCard(0, true, false, false, mockImages);
-        ProgramCard card3 = new ProgramCard(0, true, true, false, mockImages);
-        ProgramCard card4 = new ProgramCard(0, true, false, true, mockImages);
+
+        ProgramCard card0 = new ProgramCard("Move1", mockTexture, 1);
+        ProgramCard card1 = new ProgramCard("Move2",  mockTexture, 1);
+        ProgramCard card2 = new ProgramCard("UTurn",  mockTexture, 1);
+        ProgramCard card3 = new ProgramCard("RotateLeft",  mockTexture, 1);
+        ProgramCard card4 = new ProgramCard("RotateRight",  mockTexture, 1);
         ProgramCard[] cards = {card0, card1, card2, card3, card4};
         client.sendCards(cards);
         try {
@@ -49,7 +49,7 @@ public class NetworkCardTest {
             e.printStackTrace();
         }
         for (int i = 0; i < cards.length; i++) {
-            assertEquals(cards[i].getValue(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getValue());
+            assertEquals((long) cards[i].getValue(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getValue());
             assertEquals(cards[i].getRotate(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotate());
             assertEquals(cards[i].getRotateLeft(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotateLeft());
             assertEquals(cards[i].getRotateRight(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotateRight());
@@ -60,12 +60,11 @@ public class NetworkCardTest {
     @Test
     public void clientReceivedCardsTest(){
         Texture mockTexture = mock(Texture.class);
-        Texture[] mockImages = {mockTexture};
-        ProgramCard card0 = new ProgramCard(1, false, false, false, mockImages);
-        ProgramCard card1 = new ProgramCard(2, false, false, false, mockImages);
-        ProgramCard card2 = new ProgramCard(0, true, false, false, mockImages);
-        ProgramCard card3 = new ProgramCard(0, true, true, false, mockImages);
-        ProgramCard card4 = new ProgramCard(0, true, false, true, mockImages);
+        ProgramCard card0 = new ProgramCard("Move1", mockTexture, 1);
+        ProgramCard card1 = new ProgramCard("Move2",  mockTexture, 1);
+        ProgramCard card2 = new ProgramCard("UTurn",  mockTexture, 1);
+        ProgramCard card3 = new ProgramCard("RotateLeft",  mockTexture, 1);
+        ProgramCard card4 = new ProgramCard("RotateRight",  mockTexture, 1);
         ProgramCard[] cards = {card0, card1, card2, card3, card4};
         client.sendCards(cards);
         try {
@@ -75,7 +74,7 @@ public class NetworkCardTest {
             e.printStackTrace();
         }
         for (int i = 0; i < cards.length; i++) {
-            assertEquals(cards[i].getValue(), client.getLastCardTransfer()[i].getValue());
+            assertEquals((long) cards[i].getValue(), client.getLastCardTransfer()[i].getValue());
             assertEquals(cards[i].getRotate(), client.getLastCardTransfer()[i].getRotate());
             assertEquals(cards[i].getRotateLeft(), client.getLastCardTransfer()[i].getRotateLeft());
             assertEquals(cards[i].getRotateRight(), client.getLastCardTransfer()[i].getRotateRight());

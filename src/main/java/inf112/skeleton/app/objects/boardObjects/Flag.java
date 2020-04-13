@@ -4,6 +4,7 @@ import inf112.skeleton.app.board.Direction;
 
 public class Flag implements IBoardObject {
     private int nr;
+    private int x,y;
 
     public Flag(int nr){
         this.nr = nr;
@@ -21,20 +22,22 @@ public class Flag implements IBoardObject {
 
     @Override
     public int getTileX() {
-        return 0;
+        return x;
     }
 
     @Override
     public int getTileY() {
-        return 0;
+        return y;
     }
 
     @Override
     public void setTileX(int x) {
+        this.x = x;
     }
 
     @Override
     public void setTileY(int y) {
+        this.y = y;
     }
 
     public int getNr() {

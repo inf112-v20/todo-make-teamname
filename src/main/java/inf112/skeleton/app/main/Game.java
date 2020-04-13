@@ -1,27 +1,30 @@
 package inf112.skeleton.app.main;
 
-import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.jcraft.jogg.Packet;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.boardObjects.BoardLaser;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
+import org.lwjgl.Sys;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.concurrent.Semaphore;
+
 
 
 /**
@@ -29,7 +32,7 @@ import java.util.concurrent.Semaphore;
  * MPClient which sends it to the server.<BR> It creates all the player and board objects, and then keeps control of
  * it.
  */
-public class Game extends InputAdapter {
+public class Game{
     private Board board;
     private MPClient client;
     private Player myPlayer;
@@ -44,14 +47,18 @@ public class Game extends InputAdapter {
     private MPServer server;
     private TurnHandler turnHandler;
     private boolean host;
+    private long laserTime;
 
     private Texture tempMap;
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture buttonReadySelected;
+    private Texture[] robotLaser;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
-
+    private boolean[] allReady;
+    private boolean[] playersShutdown;
+    private boolean renderRobotLasers;
 
 
     /**
@@ -59,7 +66,6 @@ public class Game extends InputAdapter {
      */
     public void create() {
         boardSetUp("riskyexchange");
-        Gdx.input.setInputProcessor(this);
         playerSetup();
         textureSetUp();
         cardBoxSetUp();
@@ -67,7 +73,7 @@ public class Game extends InputAdapter {
 
 
 
-    @Override
+
     public boolean keyUp(int keycode) {
             switch (keycode) {
                 case Input.Keys.UP:
@@ -88,29 +94,32 @@ public class Game extends InputAdapter {
             return true;
         }
 
-    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
+
         if (screenX > cardBoxLeft &&
                 screenX < cardBoxRight &&
-                screenY > Settings.SCREEN_HEIGHT-Settings.CARD_HEIGHT &&
-                screenY < Settings.SCREEN_HEIGHT){
-            int card = (screenX - cardBoxLeft)/Settings.CARD_WIDTH;
-            myPlayer.addSelectedCard(card);
+                screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
+                screenY < Settings.SCREEN_HEIGHT) {
+            int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
+            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 6) {
+                myPlayer.addSelectedCard(card);
+            }
         }
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
-            //TODO fix so that one player cant send multiple sets of cards
-            myPlayer.setReadyButon(true);
-            if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
+            myPlayer.setReadyButton(true);
+            if (myPlayer.getArrayCards().length == 5 && !myPlayer.getDead()) client.sendCards(myPlayer.getArrayCards());
+            else if (myPlayer.getArrayCards().length == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
+                client.sendCards(myPlayer.getArrayCards());
+            }
         }
         return false;
     }
 
-    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer){
         return false;
     }
@@ -119,39 +128,49 @@ public class Game extends InputAdapter {
     //An object has to be initialized before being rendered
     public void render(SpriteBatch batch, BitmapFont font) {
         batch.draw(tempMap, Settings.BOARD_LOC_X , Settings.BOARD_LOC_Y);
-        try {
-            for (Robot r : board.getRobots()) {
-                if (r.getTileX() != -1 && r.getTileY() != -1) {
-                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT));
-                    //batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH), (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT), Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
-                    TextureRegion t = new TextureRegion();
-                    t.setRegion(r.getTexture());
-                    batch.draw(t,
-                            (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
-                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
-                            Settings.TILE_WIDTH/2,
-                            Settings.TILE_HEIGHT/2,
-                            Settings.TILE_WIDTH,
-                            Settings.TILE_HEIGHT,
-                            1,
-                            1,
-                            r.getRotation());
-                }
-            }
-        }catch (ConcurrentModificationException ex){
-            //TODO fjern gaffateip og lag en skikkelig løsning
-            //får en concurrentmodificationException i enkelte tilfeller, men ved å catche den er alt som skjer
-            //at render skipper en iterasjon som ikke er merkbart for bruker.
+        renderRobots(batch);
+        renderCards(batch, font);
+        renderHealthAndLife(batch);
+        renderReadyButton(batch);
+        renderNames(batch, font);
+        if(renderRobotLasers) renderRobotLasers(batch);
+    }
+
+    /**
+     * Renders the names of the players in the game
+     * @param batch
+     * @param font
+     */
+    private void renderNames(SpriteBatch batch, BitmapFont font) {
+        font.setColor(Color.WHITE);
+        font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
+        for (int i = 0; i < names.length; i++) {
+            if(names[i] == null) continue;
+            font.draw(batch, names[i], Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 36) * (22 - i));
+            batch.draw(idPlayerHash.get(i).getRobot().getNonRotatingTexture(),
+                    Settings.SCREEN_WIDTH / 21,
+                    (Settings.SCREEN_HEIGHT / 64) * (39 - (2*i)),
+                    Settings.TILE_WIDTH/2, Settings.TILE_HEIGHT/2);
 
         }
+    }
 
-        for (int i = 0; i < myPlayer.getCards().length; i++){
-            batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
-            if (myPlayer.getCards()[i].getSelected()){
-                font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i*Settings.CARD_WIDTH) + (Settings.CARD_WIDTH/5), Settings.CARD_HEIGHT- (Settings.CARD_HEIGHT/10));
-                batch.draw(selectedFrame, cardBoxLeft+ (i*Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
-            }
+    /**
+     * Renders the ready button on the screen
+     * @param batch
+     */
+    private void renderReadyButton(SpriteBatch batch) {
+        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        if (myPlayer.getReadyButton()){
+            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
         }
+    }
+
+    /**
+     * Renders the health of myPlayer.getRobot(), and the life of myPlayer
+     * @param batch
+     */
+    private void renderHealthAndLife(SpriteBatch batch) {
         for (int i = 0 ; i < myPlayer.getRobot().getHealth(); i++){
             batch.draw(damageTokens[1], i*34, Settings.SCREEN_HEIGHT-32, 32, 32);
         }
@@ -161,21 +180,79 @@ public class Game extends InputAdapter {
         for (int i = 0; i < myPlayer.getRobot().getLife(); i++) {
             batch.draw(lifeTokens[1],i*34, Settings.SCREEN_HEIGHT-64, 32, 32 );
         }
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
-        if (myPlayer.getReadyButton()){
-            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
-        }
+    }
 
-        font.setColor(Color.BLACK);
-        font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
-        for (int i = 0; i < names.length; i++) {
-            if(names[i] == null) continue;
-            font.draw(batch, names[i] + " Player number " + i, Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * (11 - i));
+    /**
+     * Renders the robots on the board
+     * @param batch
+     */
+    public void renderRobots(SpriteBatch batch){
+        try {
+            for (Robot r : board.getRobots()) {
+                if (r.getTileX() != -1 && r.getTileY() != -1) {
+                    batch.draw(r.getTexture(), (Settings.BOARD_LOC_X) + (r.getTileX() * Settings.TILE_WIDTH),
+                            (Settings.BOARD_LOC_Y) + (r.getTileY() * Settings.TILE_HEIGHT),
+                            Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+                }
+            }
+        }catch (ConcurrentModificationException ex){
+            //TODO fjern gaffateip og lag en skikkelig løsning
+            //får en concurrentmodificationException i enkelte tilfeller, men ved å catche den er alt som skjer
+            //at render skipper en iterasjon som ikke er merkbart for bruker.
+
+        }
+    }
+
+    /**
+     * Renders the cards in myPlayers hand
+     * @param batch
+     * @param font
+     */
+    public void renderCards(SpriteBatch batch, BitmapFont font){
+        for (int i = 0; i < myPlayer.getCards().length; i++){
+            if(myPlayer.getCards()[i] != null) {
+                batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                if (myPlayer.getCards()[i].getSelected()) {
+                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
+                    batch.draw(selectedFrame, cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                }
+            }
+        }
+        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * 7);
+        int j = 5;
+        for (int i = 0; i < myPlayer.getLockedCards().size(); i++) {
+            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * (6-i));
+            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/12 * 11, Settings.SCREEN_HEIGHT/10 * (6-i),
+                    Settings.CARD_WIDTH/4, Settings.CARD_HEIGHT/4);
+        }
+    }
+
+    /**
+     * Renders the lasers that the robots just shot for 1 second
+     * @param batch
+     */
+    public void renderRobotLasers(SpriteBatch batch){
+        if(laserTime == 0){
+            laserTime = System.currentTimeMillis();
+        }
+        if(laserTime + 1000 < System.currentTimeMillis()){
+            laserTime = 0;
+            renderRobotLasers = false;
+            turnHandler.clearAllArraysOfCoordinates();
+            return;
+        }
+        ArrayList<ArrayList<int[]>> arrayListArrayList = turnHandler.getAllArraysOfCoordinates();
+        for (ArrayList<int[]> listOfCoordinates: arrayListArrayList) {
+            for (int[] coordinates: listOfCoordinates) {
+                batch.draw(robotLaser[coordinates[2]], (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH),
+                        (Settings.BOARD_LOC_Y) + (coordinates[1] * Settings.TILE_HEIGHT),
+                        Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+            }
         }
     }
 
     public void dispose() {
-        turnHandler.dispose();
+        if(turnHandler != null)turnHandler.dispose();
     }
 
     /**
@@ -246,12 +323,41 @@ public class Game extends InputAdapter {
         idPlayerHash = new HashMap<>();
         names = new String[4];
         allCards = new ArrayList<>();
+        Texture[][] textures = getRobotTextures();
+        playersShutdown = new boolean[5];
+        allReady = new boolean[]{false, true, false, false, false};
         for (int i = 1; i < 5; i++) {
-            Player player = new Player();
+            Player player = new Player(textures[i-1]);
             player.deal();
-            board.addObject(player.getRobot(), i, 0);
+            board.addObject(player.getRobot(), i+1, 0);
             idPlayerHash.put(i, player);
+            playersShutdown[i] = false;
         }
+    }
+
+    /**
+     *
+     * @return returns all the robot textures
+     */
+    private Texture[][] getRobotTextures() {
+        Texture[][] textures = new Texture[4][4];
+        textures[0] = new Texture[]{new Texture("assets/robot_design/elias_robot_forward.png"),
+                new Texture("assets/robot_design/elias_robot.png"),
+                new Texture("assets/robot_design/elias_robot_backwards.png"),
+                new Texture("assets/robot_design/elias_robot_left.png")};
+        textures[1] = new Texture[] {new Texture("assets/robot_design/Wall-e_Robot_forward.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_right.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_backwards.png"),
+            new Texture("assets/robot_design/Wall-e_Robot_left.png")};
+        textures[2][0] = new Texture("assets/robot_design/Darek_forwards.png");
+        textures[2][1] = new Texture("assets/robot_design/Darek_right.png");
+        textures[2][2] = new Texture("assets/robot_design/Darek_backwards.png");
+        textures[2][3] = new Texture("assets/robot_design/Darek_left.png");
+        textures[3] = new Texture[] {new Texture("assets/robot_design/elias_robot_forward.png"),
+                new Texture("assets/robot_design/elias_robot.png"),
+                new Texture("assets/robot_design/elias_robot_backwards.png"),
+                new Texture("assets/robot_design/elias_robot_left.png")};
+        return textures;
     }
 
     /**
@@ -279,6 +385,9 @@ public class Game extends InputAdapter {
         lifeTokens = new Texture[2];
         lifeTokens[0] = new Texture("assets/life-token-lost.png");
         lifeTokens[1] = new Texture("assets/life-tokens-alive.png");
+        robotLaser = new Texture[] {new Texture("assets/temp_laser.png"),
+                                    new Texture("assets/temp_laserNS.png")};
+        laserTime = 0;
     }
 
     /**
@@ -290,6 +399,7 @@ public class Game extends InputAdapter {
         server.run();
         client = new MPClient(server.getAddress(),this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        myPlayer.deal();
         host = true;
         return server.getAddress();
     }
@@ -297,11 +407,15 @@ public class Game extends InputAdapter {
     /**
      * The joinGame method initializes a new  {@link MPClient} and tries to connect to the server on the IP Address given.
      * @param ipAddress The IP Address for the server as a String.
+     * @return
      */
-    public void joinGame(String ipAddress){
-        client = new MPClient(ipAddress, this);
+    public boolean joinGame(String ipAddress){
+        client = new MPClient(this);
+        if(!client.connect(ipAddress)) return false;
         setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
+        myPlayer.deal();
+        return true;
     }
 
     /**
@@ -311,6 +425,8 @@ public class Game extends InputAdapter {
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
         setMyPlayer(idPlayerHash.get(client.getId()));
+        host = false;
+        myPlayer.deal();
     }
 
     public int getId(){
@@ -405,5 +521,65 @@ public class Game extends InputAdapter {
      */
     public boolean getConnection(){
         return client.getConnection();
+    }
+
+    public Player getMyPlayer() {
+        return myPlayer;
+    }
+
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready to play
+     */
+    public void sendReadySignal() {
+        Packets.Packet06ReadySignal signal = new Packets.Packet06ReadySignal();
+        signal.signal = true;
+        client.sendReady(signal);
+    }
+
+    /**
+     * Takes a list of booleans representing the players who are ready
+     * @param allReady
+     */
+    public void receiveAllReady(boolean[] allReady){
+        this.allReady = allReady;
+    }
+
+    /**
+     *
+     * @return Returns a list of booleans that holds which players that are ready
+     */
+    public boolean[] getAllReady() {
+        return allReady;
+    }
+
+    /**
+     *
+     * @return Returns a list of booleans describing which players have shut down their robot
+     */
+    public boolean[] getPlayersShutdown() {
+        return playersShutdown;
+    }
+
+    /**
+     * Sets the playersShutdown list to a new list
+     * @param tempPlayersShutdown
+     */
+    public void setPlayersShutdown(boolean[] tempPlayersShutdown) {
+        playersShutdown = tempPlayersShutdown;
+    }
+
+    /**
+     * Call this when myPlayers robot needs to shut down
+     */
+    public void shutdownRobot(){
+        client.sendShutdownRobot();
+    }
+
+    public void setRenderRobotLasers(boolean bool) {
+        renderRobotLasers = bool;
+    }
+
+    public void removeOnePlayerFromServer() {
+        client.removeOnePlayerFromServer();
     }
 }
