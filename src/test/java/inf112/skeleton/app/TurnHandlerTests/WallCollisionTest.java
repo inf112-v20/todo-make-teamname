@@ -64,7 +64,7 @@ public class WallCollisionTest {
 
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.NORTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -77,7 +77,7 @@ public class WallCollisionTest {
         board.addObject(wall, 1, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.SOUTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -90,7 +90,7 @@ public class WallCollisionTest {
         board.addObject(wall, 1, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.SOUTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -103,7 +103,7 @@ public class WallCollisionTest {
         board.addObject(wall, 2, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(2, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.EAST);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());

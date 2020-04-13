@@ -15,6 +15,7 @@ import inf112.skeleton.app.objects.player.Robot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 import static inf112.skeleton.app.board.DirectionConverter.*;
@@ -99,8 +100,10 @@ public class TurnHandler {
                 ArrayList<Packets.Packet02Cards> allCards = game.getAllCards();
                 for (Packets.Packet02Cards packet: allCards) {
                     cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                    //Only add cards for this turn
                 }
-                for (NonTextureProgramCard card: cards.keySet()) {
+                NonTextureProgramCard[] keySet = sortByPriority(cards);
+                for (NonTextureProgramCard card: keySet) {
                     if (game.getPlayersShutdown()[cards.get(card)]) continue;
                     cardMove(card, idPlayerHash.get(cards.get(card)).getRobot()); // moves robot
                 }
@@ -632,6 +635,28 @@ public class TurnHandler {
         }
 
         return !wallCollision(robot, direction);
+    }
+
+    /**
+     * Sorts the program cards by priority using selection sort
+     * @param map The HashMap being used for the program cards and id
+     * @return Returns a sorted array of {@link NonTextureProgramCard}s
+     */
+    public NonTextureProgramCard[] sortByPriority(HashMap<NonTextureProgramCard, Integer> map){
+        int size = map.size();
+        NonTextureProgramCard[] temp = map.keySet().toArray(new NonTextureProgramCard[0]);
+        for (int i = 0; i < size - 1; i++) {
+            int maxIndex = i;
+            for (int j = i + 1; j < size; j++) {
+                if(temp[j].getPriority() > temp[maxIndex].getPriority()){
+                    maxIndex = j;
+                }
+            }
+            NonTextureProgramCard card = temp[maxIndex];
+            temp[maxIndex] = temp[i];
+            temp[i] = card;
+        }
+        return temp;
     }
 
     public boolean getGameIsDone(){

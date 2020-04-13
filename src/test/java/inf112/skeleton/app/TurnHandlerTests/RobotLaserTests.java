@@ -26,7 +26,6 @@ public class RobotLaserTests {
     private static Robot[] robots;
     private static Board board;
     private static TurnHandler turnHandler;
-    private static ConveyorBelt conveyorBelt0, conveyorBelt1;
     private static Wall westWall, eastWall;
 
     @BeforeClass

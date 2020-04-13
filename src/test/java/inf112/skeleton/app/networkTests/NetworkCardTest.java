@@ -49,7 +49,7 @@ public class NetworkCardTest {
             e.printStackTrace();
         }
         for (int i = 0; i < cards.length; i++) {
-            assertEquals(cards[i].getValue(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getValue());
+            assertEquals((long) cards[i].getValue(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getValue());
             assertEquals(cards[i].getRotate(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotate());
             assertEquals(cards[i].getRotateLeft(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotateLeft());
             assertEquals(cards[i].getRotateRight(), CardTranslator.intToProgramCard(server.getLastCards().get(i)).getRotateRight());
@@ -74,7 +74,7 @@ public class NetworkCardTest {
             e.printStackTrace();
         }
         for (int i = 0; i < cards.length; i++) {
-            assertEquals(cards[i].getValue(), client.getLastCardTransfer()[i].getValue());
+            assertEquals((long) cards[i].getValue(), client.getLastCardTransfer()[i].getValue());
             assertEquals(cards[i].getRotate(), client.getLastCardTransfer()[i].getRotate());
             assertEquals(cards[i].getRotateLeft(), client.getLastCardTransfer()[i].getRotateLeft());
             assertEquals(cards[i].getRotateRight(), client.getLastCardTransfer()[i].getRotateRight());
