@@ -10,5 +10,6 @@ public class Packets {
     public static class Packet05Name{ public String[] name; public int playerId;}
     public static class Packet06ReadySignal{ public boolean signal; public boolean[] allReady;}
     public static class Packet07ShutdownRobot{ public boolean[] playersShutdown;}
+    public static class Packet08RemovePlayer{public int playerId;}
 
 }

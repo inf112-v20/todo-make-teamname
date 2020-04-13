@@ -112,8 +112,8 @@ public class Game{
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
             myPlayer.setReadyButton(true);
-            if (myPlayer.getArrayCards().length == 5) client.sendCards(myPlayer.getArrayCards());
-            else if (myPlayer.getArrayCards().length == myPlayer.getRobot().getHealth()){
+            if (myPlayer.getArrayCards().length == 5 && !myPlayer.getDead()) client.sendCards(myPlayer.getArrayCards());
+            else if (myPlayer.getArrayCards().length == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
             }
         }
@@ -577,5 +577,9 @@ public class Game{
 
     public void setRenderRobotLasers(boolean bool) {
         renderRobotLasers = bool;
+    }
+
+    public void removeOnePlayerFromServer() {
+        client.removeOnePlayerFromServer();
     }
 }

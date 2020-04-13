@@ -33,11 +33,11 @@ public class CardTranslatorTest {
     }
     @Test
     public void intCardToProgramCard(){
-        int[] card0 = {1, 0, 0, 0};
-        int[] card1 = {0, 1, 0, 0};
-        int[] card2 = {0, 1, 1, 0};
-        int[] card3 = {2, 0, 0, 0};
-        int[] card4 = {0, 1, 0, 1};
+        int[] card0 = {1, 0, 0, 0, 0};
+        int[] card1 = {0, 1, 0, 0, 0};
+        int[] card2 = {0, 1, 1, 0, 0};
+        int[] card3 = {2, 0, 0, 0, 0};
+        int[] card4 = {0, 1, 0, 1, 0};
         int[][] intCards = {card0, card1, card2, card3, card4};
         NonTextureProgramCard[] cards = new NonTextureProgramCard[intCards.length];
         for (int i = 0; i < intCards.length; i++) {

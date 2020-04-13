@@ -154,4 +154,9 @@ public class ClientNetworkListener extends Listener {
         Packets.Packet07ShutdownRobot shutdownRobot = new Packets.Packet07ShutdownRobot();
         client.sendTCP(shutdownRobot);
     }
+
+    public void removeOnePlayerFromServer() {
+        Packets.Packet08RemovePlayer removePlayer = new Packets.Packet08RemovePlayer();
+        client.sendTCP(removePlayer);
+    }
 }

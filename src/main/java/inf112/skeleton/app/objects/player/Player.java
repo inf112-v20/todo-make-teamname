@@ -21,6 +21,7 @@ public class Player {
     private Boolean readyButton = false;
     private Deck deck;
     private ArrayList<ProgramCard> lockedCards;
+    private boolean dead;
 
     /**
      * This constructor creates the player's robot and deck, also initializes some lists.
@@ -34,6 +35,7 @@ public class Player {
         lockedCards = new ArrayList<>();
         flags = new ArrayList<>();
         deck = new Deck(robot);
+        dead = false;
     }
 
     public boolean hasWon(){return true;}
@@ -168,5 +170,13 @@ public class Player {
 
     public void clearLockedCards(){
         lockedCards.clear();
+    }
+
+    public void die() {
+        this.dead = true;
+    }
+
+    public boolean getDead() {
+        return dead;
     }
 }

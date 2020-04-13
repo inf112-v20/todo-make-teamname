@@ -107,6 +107,8 @@ public class MPClient {
         kryo.register(Packets.Packet04StartSignal.class);
         kryo.register(Packets.Packet05Name.class);
         kryo.register(Packets.Packet06ReadySignal.class);
+        kryo.register(Packets.Packet07ShutdownRobot.class);
+        kryo.register(Packets.Packet08RemovePlayer.class);
         kryo.register(String[].class);
         kryo.register(boolean.class);
         kryo.register(boolean[].class);
@@ -194,5 +196,9 @@ public class MPClient {
 
     public void sendShutdownRobot() {
         cnl.sendShutdownRobot();
+    }
+
+    public void removeOnePlayerFromServer() {
+        cnl.removeOnePlayerFromServer();
     }
 }

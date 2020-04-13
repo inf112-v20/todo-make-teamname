@@ -104,6 +104,11 @@ public class ServerNetworkListener extends Listener {
             playersShutdown[c.getID()] = true;
             shutdownRobot.playersShutdown = playersShutdown;
             server.sendToAllTCP(shutdownRobot);
+        }else if(o instanceof Packets.Packet08RemovePlayer){
+            playerNr--;
+            Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
+            nrOfPlayers.playerNr = playerNr;
+            server.sendToAllTCP(nrOfPlayers);
         }
     }
 

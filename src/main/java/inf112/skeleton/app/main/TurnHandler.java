@@ -104,7 +104,7 @@ public class TurnHandler {
                 }
                 NonTextureProgramCard[] keySet = sortByPriority(cards);
                 for (NonTextureProgramCard card: keySet) {
-                    if (game.getPlayersShutdown()[cards.get(card)]) continue;
+                    if (game.getPlayersShutdown()[cards.get(card)] || idPlayerHash.get(cards.get(card)).getLife() == 0) continue;
                     cardMove(card, idPlayerHash.get(cards.get(card)).getRobot()); // moves robot
                 }
                 for (int id: idPlayerHash.keySet()) {
@@ -188,14 +188,17 @@ public class TurnHandler {
                 board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
                 robot.respawn();
                 System.out.println("respawn");
-            } else {
-                //Not the case if there are more players
-                gameIsDone = true;
             }
         }
         if (myPlayer.equals(game.getMyPlayer())) {
+            if(game.getMyPlayer().getLife() == 0 && !game.getMyPlayer().getDead()){
+                game.getMyPlayer().die();
+                game.removeOnePlayerFromServer();
+                return;
+            }
             game.getMyPlayer().discard();
             game.getMyPlayer().deal();
+
             myPlayer.setReadyButton(false);
         }
     }
