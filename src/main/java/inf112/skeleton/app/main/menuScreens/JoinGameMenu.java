@@ -4,16 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.main.Game;
-import inf112.skeleton.app.main.ScreenHandler;
-import inf112.skeleton.app.main.ScreenState;
-import inf112.skeleton.app.main.Settings;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import inf112.skeleton.app.main.*;
 
 /**
  * The JoinGameMenu class gives a prompt to enter an IP Address and the tries to connect to a server at that IP.
  */
 public class JoinGameMenu {
     private Game game;
+    private Stage stage;
+    private TextField ipAddressTextField;
 
     /**
      * The constructor sets the game i the parameter to the field variable game.
@@ -30,25 +34,33 @@ public class JoinGameMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-        font.draw(batch, "Type the Host's IP address in the popup", (Settings.SCREEN_WIDTH / 2)-150, (Settings.SCREEN_HEIGHT / 2) + 50);
+        font.draw(batch, "Type the Host's IP address", (Settings.SCREEN_WIDTH / 2)-150, (Settings.SCREEN_HEIGHT / 2) + 50);
+        ipAddressTextField.draw(batch, 1);
     }
 
     /**
      * Creates an TextInput prompt to enter the IP Address of the server.
      */
     public void create() {
-        Gdx.input.getTextInput(new Input.TextInputListener() {
+        stage = new Stage();
+        ipAddressTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
+        ipAddressTextField.setPosition((Settings.SCREEN_WIDTH/80) * 31,Settings.SCREEN_HEIGHT/60 * 29);
+        ipAddressTextField.setSize(150, 40);
+        ipAddressTextField.addListener(new ClickListener(){
             @Override
-            public void input (String text) {
-                joinGame(text);
+            public boolean keyUp(InputEvent event, int keycode) {
+                String ipAddress = "";
+                if(keycode == 66){
+                    ipAddress = ipAddressTextField.getText();
+                    joinGame(ipAddress);
+                    ipAddressTextField.setDisabled(true);
+                }
 
+                return false;
             }
-
-            @Override
-            public void canceled () {
-                ScreenHandler.changeScreenState(ScreenState.MAINMENU);
-            }
-        }, "Enter IP:", "", "");
+        });
+        stage.addActor(ipAddressTextField);
+        Gdx.input.setInputProcessor(stage);
     }
 
     /**
@@ -57,6 +69,6 @@ public class JoinGameMenu {
      */
     private void joinGame(String text) {
         if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
-        else create();
+
     }
 }

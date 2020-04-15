@@ -277,6 +277,7 @@ public class TurnHandler {
             if(laserCurrentTileCollision(robot)) return;
             for (int y = robot.getTileY() + 1; y < board.getHeight(); y++) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
+                if(boardTile == null) return;
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
                     arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
@@ -286,6 +287,7 @@ public class TurnHandler {
             if(laserCurrentTileCollision(robot)) return;
             for (int y = robot.getTileY() - 1; y >= 0; y--) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
+                if(boardTile == null) return;
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
                     arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
@@ -295,6 +297,7 @@ public class TurnHandler {
             if(laserCurrentTileCollision(robot)) return;
             for (int x = robot.getTileX() + 1; x < board.getWidth(); x++) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
+                if(boardTile == null) return;
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
                     arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
@@ -304,6 +307,7 @@ public class TurnHandler {
             if(laserCurrentTileCollision(robot)) return;
             for (int x = robot.getTileX() - 1; x >= 0; x--) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
+                if(boardTile == null) return;
                 if(laserCollision(boardTile, robot.getDirection()))break;
                 else {
                     arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
