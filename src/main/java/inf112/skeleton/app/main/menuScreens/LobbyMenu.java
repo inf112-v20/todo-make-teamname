@@ -57,7 +57,7 @@ public class LobbyMenu {
         stage = new Stage();
         usernameTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
         usernameTextField.setPosition((Settings.SCREEN_WIDTH/80) * 8,Settings.SCREEN_HEIGHT/60 * 40);
-        usernameTextField.setSize(150, 40);
+        usernameTextField.setSize(150, 25);
         usernameTextField.addListener(new ClickListener(){
             @Override
             public boolean keyUp(InputEvent event, int keycode) {

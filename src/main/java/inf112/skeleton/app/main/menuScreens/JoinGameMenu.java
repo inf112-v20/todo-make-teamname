@@ -45,7 +45,7 @@ public class JoinGameMenu {
         stage = new Stage();
         ipAddressTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
         ipAddressTextField.setPosition((Settings.SCREEN_WIDTH/80) * 31,Settings.SCREEN_HEIGHT/60 * 29);
-        ipAddressTextField.setSize(150, 40);
+        ipAddressTextField.setSize(150, 25);
         ipAddressTextField.addListener(new ClickListener(){
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
