@@ -324,7 +324,7 @@ public class TurnHandler {
      */
     private boolean laserCurrentTileCollision(Robot robot) {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if(currentTile == null)return false;
+        if(currentTile == null)return true;
         if(currentTile.getObjects()[1] != null){
             if(robot.getDirection().equals(currentTile.getObjects()[1].getDirection())) return true;
         }
@@ -515,6 +515,7 @@ public class TurnHandler {
      * @return Returns true if the laser collides with something.
      */
     private boolean laserCollision(BoardTile boardTile, Direction direction){
+        if(boardTile == null) return true;
         if(boardTile.getObjects()[1] instanceof Wall){
             IBoardObject boardObject = boardTile.getObjects()[1];
             if(direction.equals(oppositeDirection(boardObject.getDirection()))) return true;
