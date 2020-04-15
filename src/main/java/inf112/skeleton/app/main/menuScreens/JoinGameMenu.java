@@ -36,6 +36,7 @@ public class JoinGameMenu {
     public void render(SpriteBatch batch, BitmapFont font) {
         font.draw(batch, "Type the Host's IP address", (Settings.SCREEN_WIDTH / 2)-150, (Settings.SCREEN_HEIGHT / 2) + 50);
         ipAddressTextField.draw(batch, 1);
+        stage.act();
     }
 
     /**
@@ -70,6 +71,7 @@ public class JoinGameMenu {
      */
     private void joinGame(String text) {
         if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+        else ipAddressTextField.setDisabled(false);
 
     }
 }

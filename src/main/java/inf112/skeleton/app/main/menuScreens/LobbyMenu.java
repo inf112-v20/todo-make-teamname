@@ -49,7 +49,7 @@ public class LobbyMenu {
     }
 
     /**
-     * Creates an TextInput prompt where the player can enter his/her username. Gets called when the screen changes
+     * Creates an TextField where the player can enter his/her username. Gets called when the screen changes
      * to the lobby menu.
      */
     public void create(){
@@ -98,6 +98,7 @@ public class LobbyMenu {
         font.setColor(Color.YELLOW);
         font.draw(batch, "Press ENTER to start the game", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-200);
         usernameTextField.draw(batch, 1);
+        stage.act();
     }
 
     /**
@@ -120,6 +121,17 @@ public class LobbyMenu {
             if (keyCode == Input.Keys.ENTER) {
                 game.sendReadySignal();
             }
+        }
+    }
+
+    public void touchDown(int screenX, int screenY, int pointer, int button){
+        float x = usernameTextField.getX();
+        float xPlusWidth = usernameTextField.getWidth() + usernameTextField.getX();
+        float y = Settings.SCREEN_HEIGHT - usernameTextField.getY();
+        float yPlusHeight = Settings.SCREEN_HEIGHT - (usernameTextField.getHeight() + usernameTextField.getY());
+        if(screenX >= x && screenX <= xPlusWidth && screenY <= y && screenY >= yPlusHeight) {
+            Gdx.input.setInputProcessor(stage);
+            usernameTextField.setDisabled(false);
         }
     }
 }
