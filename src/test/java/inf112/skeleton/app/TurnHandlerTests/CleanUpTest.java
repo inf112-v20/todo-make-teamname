@@ -60,14 +60,4 @@ public class CleanUpTest {
         turnHandler.cleanUp(player);
         assertFalse(robot.isDestroyed());
     }
-
-    @Test
-    public void cleanUpTestEndGame(){
-        assertFalse(turnHandler.getGameIsDone());
-        while(robot.getLife() > 0){
-            robot.destroy();
-        }
-        turnHandler.cleanUp(player);
-        assertTrue(turnHandler.getGameIsDone());
-    }
 }

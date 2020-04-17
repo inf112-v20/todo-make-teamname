@@ -112,9 +112,13 @@ public class Game{
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
             myPlayer.setReadyButton(true);
-            if (myPlayer.getArrayCards().length == 5 && !myPlayer.getDead()) client.sendCards(myPlayer.getArrayCards());
-            else if (myPlayer.getArrayCards().length == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
+            if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
+                myPlayer.setReadyButton(true);
+            }
+            else if (myPlayer.getSelectedCards().size == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
+                client.sendCards(myPlayer.getArrayCards());
+                myPlayer.setReadyButton(true);
             }
         }
         return false;
