@@ -1,13 +1,11 @@
 package inf112.skeleton.app.networking;
 
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.cards.ProgramCard;
-
 
 import java.io.IOException;
 import java.net.InetAddress;

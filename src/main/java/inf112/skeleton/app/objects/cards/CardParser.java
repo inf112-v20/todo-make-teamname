@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Random;
 import java.util.Scanner;
 
 public class CardParser {

@@ -1,8 +1,6 @@
 package inf112.skeleton.app.main;
 
-
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,8 +18,6 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-
-
 
 /**
  * The Game class is the centerpiece that ties all the different parts of the game together.<BR> It sends information to the

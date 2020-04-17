@@ -7,7 +7,6 @@ import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
 import inf112.skeleton.app.main.menuScreens.LobbyMenu;
 import inf112.skeleton.app.main.menuScreens.MainMenu;
 
-
 /**
  * The InputHandler class handles all the input for the game, whenever an input is registered <BR> InputHandler sends it to
  * the right class so that the right action is done.
