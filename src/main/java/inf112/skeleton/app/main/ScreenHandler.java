@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import inf112.skeleton.app.main.menuScreens.HostGameMenu;
-import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
-import inf112.skeleton.app.main.menuScreens.LobbyMenu;
-import inf112.skeleton.app.main.menuScreens.MainMenu;
+import inf112.skeleton.app.main.menuScreens.*;
 
 public class ScreenHandler implements ApplicationListener {
     private SpriteBatch batch;
@@ -20,6 +17,7 @@ public class ScreenHandler implements ApplicationListener {
     private static JoinGameMenu joinGameMenu;
     private static HostGameMenu hostGameMenu;
     private static LobbyMenu lobbyMenu;
+    private static LevelSelectMenu levelSelectMenu;
     private Texture background;
     private Texture mainLogo;
     private InputHandler inputHandler;
@@ -39,7 +37,8 @@ public class ScreenHandler implements ApplicationListener {
         hostGameMenu = new HostGameMenu(game);
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
-        inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, this);
+        levelSelectMenu = new LevelSelectMenu(game);
+        inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, levelSelectMenu, this);
         lobbyMenu.setInputHandler(inputHandler);
 
     }
@@ -69,6 +68,9 @@ public class ScreenHandler implements ApplicationListener {
             case LOBBYMENU:
                 lobbyMenu.render(batch, font);
                 batch.draw(mainLogo, 380, 500, 550, 160);
+                break;
+            case LEVELSELECT:
+                levelSelectMenu.render(batch, font);
                 break;
             default:
                 MainMenu.render(batch, font);
@@ -108,6 +110,10 @@ public class ScreenHandler implements ApplicationListener {
             joinGameMenu = null;
             lobbyMenu = null;
         }
+    }
+
+    public static void changetoHostGameMenu(String boardName) {
+        changeScreenState(ScreenState.HOSTGAME);
     }
 
     public ScreenState getScreenState(){

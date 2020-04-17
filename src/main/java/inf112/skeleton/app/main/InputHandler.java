@@ -2,10 +2,7 @@ package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import inf112.skeleton.app.main.menuScreens.HostGameMenu;
-import inf112.skeleton.app.main.menuScreens.JoinGameMenu;
-import inf112.skeleton.app.main.menuScreens.LobbyMenu;
-import inf112.skeleton.app.main.menuScreens.MainMenu;
+import inf112.skeleton.app.main.menuScreens.*;
 
 
 /**
@@ -18,15 +15,18 @@ public class InputHandler extends InputAdapter {
     private HostGameMenu hostGameMenu;
     private JoinGameMenu joinGameMenu;
     private LobbyMenu lobbyMenu;
+    private LevelSelectMenu levelSelectMenu;
     private ScreenState screenState;
     private Game game;
 
-    public InputHandler(Game game, LobbyMenu lobbyMenu, HostGameMenu hostGameMenu, JoinGameMenu joinGameMenu, ScreenHandler screenHandler){
+    public InputHandler(Game game, LobbyMenu lobbyMenu, HostGameMenu hostGameMenu,
+                        JoinGameMenu joinGameMenu, LevelSelectMenu levelSelectMenu, ScreenHandler screenHandler){
 
         this.game = game;
         this.lobbyMenu = lobbyMenu;
         this.hostGameMenu = hostGameMenu;
         this.joinGameMenu = joinGameMenu;
+        this.levelSelectMenu = levelSelectMenu;
         this.screenHandler = screenHandler;
         screenState = screenHandler.getScreenState();
         Gdx.input.setInputProcessor(this);
@@ -39,6 +39,7 @@ public class InputHandler extends InputAdapter {
         if(screenState.equals(ScreenState.MAINMENU)) MainMenu.input(keycode);
 
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.input(keycode);
+        if(screenState.equals(ScreenState.LEVELSELECT)) levelSelectMenu.input(keycode);
         if(screenState.equals(ScreenState.HOSTGAME)) hostGameMenu.input(keycode);
         return true;
     }
