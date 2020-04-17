@@ -48,6 +48,7 @@ public class InputHandler extends InputAdapter {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         screenState = screenHandler.getScreenState();
         if(screenState.equals(ScreenState.GAME)) return game.touchDown(screenX, screenY, pointer, button);
+        if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.touchDown(screenX, screenY, pointer, button);
         return true;
     }
 
@@ -57,5 +58,6 @@ public class InputHandler extends InputAdapter {
         if(screenState.equals(ScreenState.GAME)) return game.touchDragged(screenX, screenY, pointer);
         return true;
     }
+
 
 }

@@ -1,23 +1,10 @@
 package inf112.skeleton.app.main.menuScreens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.skeleton.app.main.Game;
-import inf112.skeleton.app.main.ScreenHandler;
-import inf112.skeleton.app.main.ScreenState;
-import inf112.skeleton.app.main.Settings;
+import inf112.skeleton.app.main.*;
 
 import java.net.InetAddress;
 
@@ -35,7 +22,6 @@ public class HostGameMenu {
     public HostGameMenu(Game game){
         this.game = game;
     }
-
     /**
      * Calls to game to create a server and a client, then saves the IP Address it gets in return.
      */
@@ -54,7 +40,6 @@ public class HostGameMenu {
         font.draw(batch, "IP address: " + ipAddress, (Settings.SCREEN_WIDTH / 2)-100, (Settings.SCREEN_HEIGHT / 2)+70);
         font.setColor(Color.YELLOW);
         font.draw(batch, "Press ENTER to go to lobby", (Settings.SCREEN_WIDTH / 2) -100, (Settings.SCREEN_HEIGHT / 2)-20);
-
     }
 
     /**
@@ -65,7 +50,6 @@ public class HostGameMenu {
             exitScreen();
         }
     }
-
     private void exitScreen() {
         ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
     }

@@ -40,6 +40,7 @@ public class ScreenHandler implements ApplicationListener {
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
         inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, this);
+        lobbyMenu.setInputHandler(inputHandler);
 
     }
 
