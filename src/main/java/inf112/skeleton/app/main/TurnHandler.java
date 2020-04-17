@@ -278,8 +278,9 @@ public class TurnHandler {
             for (int y = robot.getTileY() + 1; y < board.getHeight(); y++) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(boardTile == null) return;
-                if(laserCollision(boardTile, robot.getDirection())[0]){
-                    if(!laserCollision(boardTile, robot.getDirection())[1]){
+                boolean[] shot = laserCollision(boardTile, robot.getDirection());
+                if(shot[0]){
+                    if(!shot[1]){
                         arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
                     }
                     break;
@@ -293,8 +294,9 @@ public class TurnHandler {
             for (int y = robot.getTileY() - 1; y >= 0; y--) {
                 BoardTile boardTile = board.getTile(robot.getTileX(), y);
                 if(boardTile == null) return;
-                if(laserCollision(boardTile, robot.getDirection())[0]){
-                    if(!laserCollision(boardTile, robot.getDirection())[1]){
+                boolean[] shot = laserCollision(boardTile, robot.getDirection());
+                if(shot[0]){
+                    if(!shot[1]){
                         arrayOfCoordinates.add(new int[]{robot.getTileX(), y, 1});
                     }
                     break;
@@ -307,8 +309,9 @@ public class TurnHandler {
             for (int x = robot.getTileX() + 1; x < board.getWidth(); x++) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(boardTile == null) return;
-                if(laserCollision(boardTile, robot.getDirection())[0]){
-                    if(!laserCollision(boardTile, robot.getDirection())[1]){
+                boolean[] shot = laserCollision(boardTile, robot.getDirection());
+                if(shot[0]){
+                    if(!shot[1]){
                         arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
                     }
                     break;
@@ -321,8 +324,9 @@ public class TurnHandler {
             for (int x = robot.getTileX() - 1; x >= 0; x--) {
                 BoardTile boardTile = board.getTile(x, robot.getTileY());
                 if(boardTile == null) return;
-                if(laserCollision(boardTile, robot.getDirection())[0]){
-                    if(!laserCollision(boardTile, robot.getDirection())[1]){
+                boolean[] shot = laserCollision(boardTile, robot.getDirection());
+                if(shot[0]){
+                    if(!shot[1]){
                         arrayOfCoordinates.add(new int[]{x, robot.getTileY(), 0});
                     }
                     break;
@@ -544,7 +548,7 @@ public class TurnHandler {
             IBoardObject boardObject = boardTile.getObjects()[0];
             if(direction.equals(boardObject.getDirection())) return new boolean[]{true, true};
             else if(direction.equals(oppositeDirection(boardObject.getDirection()))){
-                shootRobot(boardTile);
+                if(shootRobot(boardTile)) return new boolean[]{true, true};
                 return new boolean[]{true, false};
             }
         }else return new boolean[]{shootRobot(boardTile), true};
