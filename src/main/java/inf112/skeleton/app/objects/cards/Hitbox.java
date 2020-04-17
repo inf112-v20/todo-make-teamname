@@ -14,8 +14,5 @@ public class Hitbox {
     public int[] getBound(int i){
         return bounds[i];
     }
-    public static void main(String[] args) {
-        Hitbox h = new Hitbox();
-        h.setBound(0, 1,0);
-    }
+
 }
