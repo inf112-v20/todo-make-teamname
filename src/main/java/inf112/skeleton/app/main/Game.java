@@ -111,7 +111,6 @@ public class Game{
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
-            myPlayer.setReadyButton(true);
             if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
