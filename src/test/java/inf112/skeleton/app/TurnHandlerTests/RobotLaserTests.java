@@ -13,14 +13,12 @@ import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
 import inf112.skeleton.app.objects.boardObjects.Wall;
 import inf112.skeleton.app.objects.player.Robot;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 
 public class RobotLaserTests {
 

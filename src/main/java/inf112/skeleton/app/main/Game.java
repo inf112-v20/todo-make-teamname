@@ -55,16 +55,20 @@ public class Game{
     private boolean[] allReady;
     private boolean[] playersShutdown;
     private boolean renderRobotLasers;
+    private String boardName;
 
 
     /**
      * This method calls all the methods needed to start the "playing" part of the game.
      */
     public void create() {
-        boardSetUp("riskyexchange");
-        playerSetup();
         textureSetUp();
         cardBoxSetUp();
+    }
+
+    public void createBoardAndPlayers(String board){
+        boardSetUp(board);
+        playerSetup();
     }
 
 
@@ -332,6 +336,8 @@ public class Game{
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        myPlayer.deal();
     }
 
     /**
@@ -393,12 +399,10 @@ public class Game{
      * The hostGame method starts a new {@link MPServer} and a {@link MPClient}. This should only be called by the one hosting the game.
      * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
      */
-    public InetAddress hostGame(){
-        server = new MPServer();
+    public InetAddress hostGame(String boardName){
+        server = new MPServer(boardName);
         server.run();
         client = new MPClient(server.getAddress(),this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
-        myPlayer.deal();
         host = true;
         return server.getAddress();
     }
@@ -411,9 +415,7 @@ public class Game{
     public boolean joinGame(String ipAddress){
         client = new MPClient(this);
         if(!client.connect(ipAddress)) return false;
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
         return true;
     }
 
@@ -423,9 +425,7 @@ public class Game{
      */
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
     }
 
     public int getId(){
@@ -580,5 +580,13 @@ public class Game{
 
     public void removeOnePlayerFromServer() {
         client.removeOnePlayerFromServer();
+    }
+
+    public void setBoardName(String boardName) {
+        this.boardName = boardName;
+    }
+
+    public String getBoardName(){
+        return boardName;
     }
 }

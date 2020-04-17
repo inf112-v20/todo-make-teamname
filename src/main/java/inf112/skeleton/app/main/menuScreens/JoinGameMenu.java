@@ -25,7 +25,6 @@ public class JoinGameMenu {
      */
     public JoinGameMenu(Game game){
         this.game = game;
-
     }
 
     /**
@@ -55,7 +54,6 @@ public class JoinGameMenu {
                 if(keycode == 66){
                     ipAddress = ipAddressTextField.getText();
                     joinGame(ipAddress);
-                    ipAddressTextField.setDisabled(true);
                 }
 
                 return false;
@@ -63,6 +61,8 @@ public class JoinGameMenu {
         });
         stage.addActor(ipAddressTextField);
         Gdx.input.setInputProcessor(stage);
+
+
     }
 
     /**
@@ -70,7 +70,12 @@ public class JoinGameMenu {
      * @param text The ip of the server
      */
     private void joinGame(String text) {
-        if (game.joinGame(text))ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+        if (game.joinGame(text)){
+            while(this.game.getBoardName() == null){}
+            game.createBoardAndPlayers(game.getBoardName());
+            ScreenHandler.changeScreenState(ScreenState.LOBBYMENU);
+        }
+
         else ipAddressTextField.setDisabled(false);
 
     }

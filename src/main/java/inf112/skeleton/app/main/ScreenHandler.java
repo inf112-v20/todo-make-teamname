@@ -98,7 +98,7 @@ public class ScreenHandler implements ApplicationListener {
     public static void changeScreenState(ScreenState newState) {
         screenState = newState;
         if(screenState == ScreenState.HOSTGAME) {
-            hostGameMenu.create();
+            hostGameMenu.create("riskyexchange");
             lobbyMenu.setHost(true);
         }
         if(screenState == ScreenState.JOINGAME) joinGameMenu.create();
