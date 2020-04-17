@@ -7,18 +7,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jcraft.jogg.Packet;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
-import inf112.skeleton.app.objects.boardObjects.BoardLaser;
-import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import org.lwjgl.Sys;
 
 import java.net.InetAddress;
 import java.util.ArrayList;

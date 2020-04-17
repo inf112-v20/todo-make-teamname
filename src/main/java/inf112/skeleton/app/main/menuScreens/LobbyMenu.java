@@ -69,8 +69,24 @@ public class LobbyMenu {
                     Gdx.input.setInputProcessor(inputHandler);
                     usernameTextField.setDisabled(true);
                 }
-
+                if(keycode == Input.Keys.ESCAPE){
+                    Gdx.input.setInputProcessor(inputHandler);
+                    usernameTextField.setDisabled(true);
+                }
                 return false;
+            }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float userX = usernameTextField.getX();
+                float xPlusWidth = usernameTextField.getWidth() + usernameTextField.getX();
+                float userY = Settings.SCREEN_HEIGHT - usernameTextField.getY();
+                float yPlusHeight = Settings.SCREEN_HEIGHT - (usernameTextField.getHeight() + usernameTextField.getY());
+                if (!(x >= userX && x <= xPlusWidth && y <= userY && y >= yPlusHeight)) {
+                    Gdx.input.setInputProcessor(inputHandler);
+                    usernameTextField.setDisabled(true);
+                }
+                return true;
             }
         });
         stage.addActor(usernameTextField);
