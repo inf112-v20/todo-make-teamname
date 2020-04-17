@@ -192,8 +192,7 @@ public class TurnHandler {
                 game.removeOnePlayerFromServer();
                 return;
             }
-            game.getMyPlayer().discard();
-            game.getMyPlayer().deal();
+            game.discardAndDeal();
 
             myPlayer.setReadyButton(false);
         }
