@@ -29,12 +29,17 @@ public class LanSetUpTest {
         Gdx.gl = mock(GL20.class);
         game1 = new Game();
         game2 = new Game();
-        game1.boardSetUp("riskyexchange");
-        game2.boardSetUp("riskyexchange");
-        game1.playerSetup();
-        game2.playerSetup();
-        InetAddress ip = game1.hostGame();
+//        game1.boardSetUp("riskyexchange");
+//        game2.boardSetUp("riskyexchange");
+//        game1.playerSetup();
+//        game2.playerSetup();
+        InetAddress ip = game1.hostGame("riskyexchange");
         game2.joinGame(ip);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
