@@ -7,14 +7,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.jcraft.jogg.Packet;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.boardObjects.BoardLaser;
+import inf112.skeleton.app.objects.cards.Hitbox;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
+import org.lwjgl.Sys;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -35,10 +40,8 @@ public class Game{
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
     private String[] names;
-    private int cardBoxLeft;
-    private int cardBoxRight;
-    private int buttonReadyLeftX;
-    private int buttonReadyLeftY;
+    private Hitbox cardHitbox;
+
     private ArrayList<Packets.Packet02Cards> allCards;
     private MPServer server;
     private TurnHandler turnHandler;
@@ -55,6 +58,7 @@ public class Game{
     private boolean[] allReady;
     private boolean[] playersShutdown;
     private boolean renderRobotLasers;
+    private Hitbox readyButtonHitbox;
 
 
     /**
@@ -65,9 +69,8 @@ public class Game{
         playerSetup();
         textureSetUp();
         cardBoxSetUp();
+        readyButtonSetUp();
     }
-
-
 
 
     public boolean keyUp(int keycode) {
@@ -92,21 +95,22 @@ public class Game{
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
-
-        if (screenX > cardBoxLeft &&
-                screenX < cardBoxRight &&
-                screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
-                screenY < Settings.SCREEN_HEIGHT) {
-            int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
-            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 6) {
+        if (screenX > cardHitbox.getBound(0)[0] &&
+                screenY < Settings.SCREEN_HEIGHT-cardHitbox.getBound(0)[1]&&
+                screenX < cardHitbox.getBound(2)[0] &&
+                screenY > Settings.SCREEN_HEIGHT-cardHitbox.getBound(2)[1]){
+            int card = (screenX - cardHitbox.getBound(0)[0]) / Settings.CARD_WIDTH;
+            if(myPlayer.getSelectedCards().size < 6){
                 myPlayer.addSelectedCard(card);
             }
         }
+
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
+            myPlayer.setReadyButton(true);
             if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
@@ -159,9 +163,9 @@ public class Game{
      * @param batch
      */
     private void renderReadyButton(SpriteBatch batch) {
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        batch.draw(buttonReady, readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         if (myPlayer.getReadyButton()){
-            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+            batch.draw(buttonReadySelected,  readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         }
     }
 
@@ -210,10 +214,10 @@ public class Game{
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
-                batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                batch.draw(myPlayer.getCards()[i].getImage(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                 if (myPlayer.getCards()[i].getSelected()) {
-                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
-                    batch.draw(selectedFrame, cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
+                    batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                 }
             }
         }
@@ -363,10 +367,23 @@ public class Game{
      * This method sets the settings for the card boxes and button.
      */
     private void cardBoxSetUp() {
-        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
-        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
-        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
-        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
+        cardHitbox = new Hitbox();
+    }
+    private void readyButtonSetUp(){
+        readyButtonHitbox = new Hitbox();
+    }
+
+    private void configureHitbox() {
+        cardHitbox.setBound(0, Settings.SCREEN_WIDTH/2-(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), 0);
+        cardHitbox.setBound(1, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), 0);
+        cardHitbox.setBound(2, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
+        cardHitbox.setBound(3, Settings.SCREEN_WIDTH/2-(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
+
+
+        readyButtonHitbox.setBound(0, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(1, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(2, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
+        readyButtonHitbox.setBound(3, Settings.SCREEN_WIDTH+(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
     }
 
     /**
@@ -433,6 +450,7 @@ public class Game{
     }
     public void setMyPlayer(Player player){
         myPlayer = player;
+        configureHitbox();
     }
 
     /**
@@ -580,5 +598,11 @@ public class Game{
 
     public void removeOnePlayerFromServer() {
         client.removeOnePlayerFromServer();
+    }
+
+    public void discardAndDeal() {
+        myPlayer.discard();
+        myPlayer.deal();
+        configureHitbox();
     }
 }
