@@ -40,12 +40,8 @@ public class Game{
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
     private String[] names;
-    private int cardBoxLeft;
-    private int cardBoxRight;
     private Hitbox cardHitbox;
 
-    private int buttonReadyLeftX;
-    private int buttonReadyLeftY;
     private ArrayList<Packets.Packet02Cards> allCards;
     private MPServer server;
     private TurnHandler turnHandler;
@@ -62,6 +58,7 @@ public class Game{
     private boolean[] allReady;
     private boolean[] playersShutdown;
     private boolean renderRobotLasers;
+    private Hitbox readyButtonHitbox;
 
 
     /**
@@ -72,9 +69,8 @@ public class Game{
         playerSetup();
         textureSetUp();
         cardBoxSetUp();
+        readyButtonSetUp();
     }
-
-
 
 
     public boolean keyUp(int keycode) {
@@ -99,28 +95,16 @@ public class Game{
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
-        System.out.println(screenX + ", "+ screenY);
-        System.out.println("leftbotcor: " + cardHitbox.getBound(0)[0] + ", " + cardHitbox.getBound(0)[1]);
-        System.out.println("righttopcor: " + cardHitbox.getBound(2)[0] + ", " + cardHitbox.getBound(2)[1]);
         if (screenX > cardHitbox.getBound(0)[0] &&
                 screenY < Settings.SCREEN_HEIGHT-cardHitbox.getBound(0)[1]&&
                 screenX < cardHitbox.getBound(2)[0] &&
                 screenY > Settings.SCREEN_HEIGHT-cardHitbox.getBound(2)[1]){
-            System.out.println(screenX + ", " + screenY);
             int card = (screenX - cardHitbox.getBound(0)[0]) / Settings.CARD_WIDTH;
-            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 5){
+            if(myPlayer.getSelectedCards().size < 6){
                 myPlayer.addSelectedCard(card);
             }
         }
-        /*if (screenX > cardBoxLeft &&
-                screenX < cardBoxRight &&
-                screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
-                screenY < Settings.SCREEN_HEIGHT) {
-            int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
-            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 6) {
-                myPlayer.addSelectedCard(card);
-            }
-        }*/
+
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
@@ -179,9 +163,9 @@ public class Game{
      * @param batch
      */
     private void renderReadyButton(SpriteBatch batch) {
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        batch.draw(buttonReady, readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         if (myPlayer.getReadyButton()){
-            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+            batch.draw(buttonReadySelected,  readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         }
     }
 
@@ -384,10 +368,9 @@ public class Game{
      */
     private void cardBoxSetUp() {
         cardHitbox = new Hitbox();
-        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
-        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
-        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
-        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
+    }
+    private void readyButtonSetUp(){
+        readyButtonHitbox = new Hitbox();
     }
 
     private void configureHitbox() {
@@ -395,6 +378,12 @@ public class Game{
         cardHitbox.setBound(1, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), 0);
         cardHitbox.setBound(2, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
         cardHitbox.setBound(3, Settings.SCREEN_WIDTH/2-(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
+
+
+        readyButtonHitbox.setBound(0, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(1, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(2, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
+        readyButtonHitbox.setBound(3, Settings.SCREEN_WIDTH+(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
     }
 
     /**

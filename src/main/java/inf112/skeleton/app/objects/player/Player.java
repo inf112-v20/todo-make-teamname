@@ -85,6 +85,8 @@ public class Player {
                 selectedCards.removeIndex(i);
             }
         }
+
+        if (selectedCards.size >= 5)return;
         //if it hasnt been unselected then it must be selected
         if(!sel){
             selectedCards.addLast(cards[card]);
