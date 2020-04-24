@@ -17,29 +17,39 @@ public class ProgramCard implements ICard {
     public ProgramCard(String cardName, Texture sprite, int priorityValue){
         this.priorityValue = priorityValue;
         this.sprite = sprite;
+        name = cardName;
         switch (cardName){
             case "UTurn":
                 rotate = true;
+                text = "Turns the robot 180 degrees around";
                 break;
             case "RotateLeft":
                 rotate = true;
                 rotateLeft = true;
+                text = "Turns the robot 90 degrees to the left";
                 break;
             case "RotateRight":
                 rotate = true;
                 rotateRight = true;
+                text = "Turns the robot 90 degrees to the right";
                 break;
             case "Move1":
                 value = 1;
+
+                text = "Moves the robot 1 space in the direction its facing";
                 break;
             case "Move2":
                 value = 2;
+
+                text = "Moves the robot 2 spaces in the direction its facing";
                 break;
             case "Move3":
                 value = 3;
+                text = "Moves the robot 3 spaces in the direction its facing";
                 break;
             case "BackUp":
                 value = -1;
+                text = "Moves the robot 1 space backwards";
                 break;
             default:
 
