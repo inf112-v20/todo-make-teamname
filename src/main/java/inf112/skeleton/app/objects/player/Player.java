@@ -21,6 +21,7 @@ public class Player {
     private Deck deck;
     private ArrayList<ProgramCard> lockedCards;
     private boolean dead;
+    private int id;
 
     /**
      * This constructor creates the player's robot and deck, also initializes some lists.
@@ -28,8 +29,6 @@ public class Player {
      */
     public Player(Texture[] textures){
         robot = new Robot(textures);
-//        robot.setTileX(0);
-//        robot.setTileY(0);
         selectedCards = new Queue<ProgramCard>();
         lockedCards = new ArrayList<>();
         flags = new ArrayList<>();
@@ -179,5 +178,14 @@ public class Player {
 
     public boolean getDead() {
         return dead;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        robot.setId(id);
+    }
+
+    public int getId(){
+        return id;
     }
 }

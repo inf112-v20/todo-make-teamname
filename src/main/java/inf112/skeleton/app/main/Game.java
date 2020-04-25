@@ -13,12 +13,9 @@ import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
-import inf112.skeleton.app.objects.boardObjects.BoardLaser;
 import inf112.skeleton.app.objects.cards.Hitbox;
-import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import org.lwjgl.Sys;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -336,6 +333,7 @@ public class Game{
         for (int i = 1; i < 5; i++) {
             Player player = new Player(textures[i-1]);
             player.deal();
+            player.setId(i);
             board.addObject(player.getRobot(), i+1, 0);
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
@@ -612,5 +610,9 @@ public class Game{
 
     public String getBoardName(){
         return boardName;
+    }
+
+    public void setClient(MPClient client){
+        this.client = client;
     }
 }

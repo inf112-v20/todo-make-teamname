@@ -27,8 +27,6 @@ public class NetworkCardTest {
         server = new MPServer(40000, 42000);
         server.run();
         client = new MPClient(server.getAddress(), game, 40000, 42000);
-
-
     }
 
     @Test
