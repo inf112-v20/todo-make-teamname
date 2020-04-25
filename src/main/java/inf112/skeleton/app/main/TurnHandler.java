@@ -167,6 +167,7 @@ public class TurnHandler {
                 //Robot falls into pit
                 board.removeObject(robot);
                 robot.destroy();
+                log.addFirst(game.getNames()[robot.getId()] + " fell into a pit.");
             }
         }
     }
@@ -189,7 +190,7 @@ public class TurnHandler {
                 board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
                 robot.respawn();
                 System.out.println("respawn");
-                log.addFirst(game.getNames()[myPlayer.getId()] + "'s robot respawned.");
+                log.addFirst(game.getNames()[myPlayer.getId()] + " respawned.");
             }
         }
         if (myPlayer.equals(game.getMyPlayer())) {
@@ -272,6 +273,7 @@ public class TurnHandler {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[3] instanceof BoardLaser) {
             robot.takeDamage();
+            log.addFirst(game.getNames()[robot.getId()] + " got hit by a laser.");
         }
     }
 

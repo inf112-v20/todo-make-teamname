@@ -22,7 +22,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-
+import java.util.LinkedList;
 
 
 /**
@@ -139,6 +139,7 @@ public class Game{
         renderHealthAndLife(batch);
         renderReadyButton(batch);
         renderNames(batch, font);
+        renderLog(batch, font);
         if(renderRobotLasers) renderRobotLasers(batch);
     }
 
@@ -209,6 +210,17 @@ public class Game{
         }
     }
 
+    public void renderLog(SpriteBatch batch, BitmapFont font){
+        LinkedList<String> log = turnHandler.getLog();
+        font.setColor(Color.GRAY);
+        if(log.isEmpty()) return;
+        int size = 10;
+        if(log.size() < size) size = log.size();
+        for (int i = 0; i < size; i++) {
+            font.draw(batch, log.get(i), Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/40 * (30 + i));
+        }
+    }
+
     /**
      * Renders the cards in myPlayers hand
      * @param batch
@@ -229,11 +241,11 @@ public class Game{
                 }
             }
         }
-        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * 7);
+        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/10 * 7);
         int j = 5;
         for (int i = 0; i < myPlayer.getLockedCards().size(); i++) {
-            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * (6-i));
-            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/12 * 11, Settings.SCREEN_HEIGHT/10 * (6-i),
+            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/20 * (15+i), Settings.SCREEN_HEIGHT/10 * 6);
+            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/20 * (15+i), Settings.SCREEN_HEIGHT/10 * 6,
                     Settings.CARD_WIDTH/4, Settings.CARD_HEIGHT/4);
         }
     }
@@ -341,7 +353,7 @@ public class Game{
             Player player = new Player(textures[i-1]);
             player.deal();
             player.setId(i);
-            board.addObject(player.getRobot(), i+1, 0);
+            board.addObject(player.getRobot(), 0+i, 0);
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }

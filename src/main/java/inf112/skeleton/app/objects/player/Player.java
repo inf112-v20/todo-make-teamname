@@ -113,6 +113,9 @@ public class Player {
         }
         if(newHand.length < 5){
             ProgramCard[] newHand5 = new ProgramCard[5];
+            for (int i = 0; i < newHand.length; i++) {
+                newHand5[i] = newHand[i];
+            }
             for (int i = 0; i < lockedCards.size(); i++) {
                 newHand5[newHand.length+i] = lockedCards.get(lockedCards.size()-(i+1));
             }
