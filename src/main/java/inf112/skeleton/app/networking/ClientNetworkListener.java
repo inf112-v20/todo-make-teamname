@@ -123,6 +123,8 @@ public class ClientNetworkListener extends Listener {
         else if(o instanceof Packets.Packet07ShutdownRobot){
             Packets.Packet07ShutdownRobot shutdownRobot = (Packets.Packet07ShutdownRobot) o;
             game.setPlayersShutdown(shutdownRobot.playersShutdown);
+        }else if(o instanceof  String){
+            game.setBoardName((String) o);
         }
     }
 

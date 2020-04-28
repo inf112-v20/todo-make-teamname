@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jcraft.jogg.Packet;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
@@ -19,6 +18,7 @@ import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.lwjgl.Sys;
 
+import javax.print.attribute.SetOfIntegerSyntax;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -48,6 +48,7 @@ public class Game{
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture buttonReadySelected;
+    private Texture cardBG;
     private Texture[] robotLaser;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
@@ -55,18 +56,24 @@ public class Game{
     private boolean[] playersShutdown;
     private boolean renderRobotLasers;
     private Hitbox readyButtonHitbox;
+    private String boardName;
 
 
     /**
      * This method calls all the methods needed to start the "playing" part of the game.
      */
     public void create() {
-        boardSetUp("riskyexchange");
-        playerSetup();
         textureSetUp();
         cardBoxSetUp();
         readyButtonSetUp();
     }
+
+    public void createBoardAndPlayers(String board){
+        boardSetUp(board);
+        playerSetup();
+    }
+
+
 
 
     public boolean keyUp(int keycode) {
@@ -106,7 +113,6 @@ public class Game{
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
-            myPlayer.setReadyButton(true);
             if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
@@ -210,9 +216,14 @@ public class Game{
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
-                batch.draw(myPlayer.getCards()[i].getImage(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                font.setColor(Color.GRAY);
+                batch.draw(cardBG, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                font.draw(batch, myPlayer.getCards()[i].getName(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                font.draw(batch, myPlayer.getCards()[i].getText(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT/2-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                font.draw(batch, myPlayer.getCards()[i].getPriorityValue() +"", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH *7/ 10), Settings.CARD_HEIGHT/10);
+                batch.draw(myPlayer.getCards()[i].getImage(), (cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH))+(Settings.CARD_WIDTH*1/4), Settings.CARD_HEIGHT*1/2, Settings.CARD_WIDTH/2, Settings.CARD_HEIGHT/3);
                 if (myPlayer.getCards()[i].getSelected()) {
-                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
+                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), (Settings.CARD_HEIGHT / 10));
                     batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                 }
             }
@@ -332,6 +343,8 @@ public class Game{
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        myPlayer.deal();
     }
 
     /**
@@ -390,6 +403,7 @@ public class Game{
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
         buttonReadySelected = new Texture("assets/button_ready_selected.png");
+        cardBG = new Texture("assets/cards/card_front.png");
         damageTokens = new Texture[3];
         damageTokens[0] = new Texture("assets/damage-dead.png");
         damageTokens[1] = new Texture("assets/Damage-not-taken.png");
@@ -406,12 +420,10 @@ public class Game{
      * The hostGame method starts a new {@link MPServer} and a {@link MPClient}. This should only be called by the one hosting the game.
      * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
      */
-    public InetAddress hostGame(){
-        server = new MPServer();
+    public InetAddress hostGame(String boardName){
+        server = new MPServer(boardName);
         server.run();
         client = new MPClient(server.getAddress(),this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
-        myPlayer.deal();
         host = true;
         return server.getAddress();
     }
@@ -424,9 +436,7 @@ public class Game{
     public boolean joinGame(String ipAddress){
         client = new MPClient(this);
         if(!client.connect(ipAddress)) return false;
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
         return true;
     }
 
@@ -436,9 +446,7 @@ public class Game{
      */
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
     }
 
     public int getId(){
@@ -600,5 +608,13 @@ public class Game{
         myPlayer.discard();
         myPlayer.deal();
         configureHitbox();
+    }
+
+    public void setBoardName(String boardName) {
+        this.boardName = boardName;
+    }
+
+    public String getBoardName(){
+        return boardName;
     }
 }

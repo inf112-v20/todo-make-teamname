@@ -15,6 +15,7 @@ import java.util.Arrays;
  * Use run() to start the server
  */
 public class MPServer implements Runnable{
+    private String board = "riskyexchange";
     //Connection info
     int udp;
     int tcp;
@@ -34,11 +35,11 @@ public class MPServer implements Runnable{
         this.tcp = tcp;
     }
 
-    public MPServer(){
+    public MPServer(String board){
+        this.board = board;
         tcp = 54555;
         udp = 54777;
     }
-
     /**
      * Register the classes sent over the server.
      */
@@ -67,7 +68,7 @@ public class MPServer implements Runnable{
     @Override
     public void run() {
         server = new Server();
-        snl = new ServerNetworkListener(server);
+        snl = new ServerNetworkListener(server, board);
 
         server.addListener(snl);
         try {
