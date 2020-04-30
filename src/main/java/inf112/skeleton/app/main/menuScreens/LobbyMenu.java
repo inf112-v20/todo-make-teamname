@@ -102,7 +102,6 @@ public class LobbyMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-
         String[] names = game.getNames();
         font.setColor(Color.WHITE);
         font.draw(batch, "Players joined:", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) + 50);

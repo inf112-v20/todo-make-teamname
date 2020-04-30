@@ -78,7 +78,7 @@ public class ServerNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
-            server.sendToAllExceptTCP(c.getID(), p);
+            server.sendToAllTCP(p);
         }else if (o instanceof Packets.Packet02Cards){
             Packets.Packet02Cards cards = (Packets.Packet02Cards) o;
             receivedCards.add(cards);
