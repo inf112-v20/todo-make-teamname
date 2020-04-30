@@ -1,12 +1,18 @@
 package inf112.skeleton.app.main;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
@@ -16,8 +22,6 @@ import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.cards.Hitbox;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-
-import javax.print.attribute.SetOfIntegerSyntax;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -58,6 +62,10 @@ public class Game{
     private boolean renderRobotLasers;
     private Hitbox readyButtonHitbox;
     private String boardName;
+    private LinkedList<String> log;
+    private Stage stage;
+    private TextField chatTextField;
+    private InputHandler inputHandler;
 
 
     /**
@@ -67,6 +75,7 @@ public class Game{
         textureSetUp();
         cardBoxSetUp();
         readyButtonSetUp();
+        logSetUp();
     }
 
     public void createBoardAndPlayers(String board){
@@ -123,6 +132,12 @@ public class Game{
                 myPlayer.setReadyButton(true);
             }
         }
+        else if(screenX >= chatTextField.getX() && screenX <= chatTextField.getWidth() + chatTextField.getX()
+                && screenY <= Settings.SCREEN_HEIGHT - chatTextField.getY()
+                && screenY >= Settings.SCREEN_HEIGHT - (chatTextField.getHeight() + chatTextField.getY())) {
+            Gdx.input.setInputProcessor(stage);
+            chatTextField.setDisabled(false);
+        }
         return false;
     }
 
@@ -139,8 +154,8 @@ public class Game{
         renderHealthAndLife(batch);
         renderReadyButton(batch);
         renderNames(batch, font);
-        renderLog(batch, font);
         if(renderRobotLasers) renderRobotLasers(batch);
+        renderLog(batch, font);
     }
 
     /**
@@ -211,14 +226,16 @@ public class Game{
     }
 
     public void renderLog(SpriteBatch batch, BitmapFont font){
-        LinkedList<String> log = turnHandler.getLog();
         font.setColor(Color.GRAY);
+        chatTextField.draw(batch, 1);
+        stage.act();
         if(log.isEmpty()) return;
         int size = 10;
         if(log.size() < size) size = log.size();
         for (int i = 0; i < size; i++) {
             font.draw(batch, log.get(i), Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/40 * (30 + i));
         }
+
     }
 
     /**
@@ -300,6 +317,62 @@ public class Game{
     public void gamePhasesSetUp() {
         turnHandler = new TurnHandler();
         turnHandler.create(this);
+    }
+
+    public void logSetUp(){
+        log = new LinkedList<>();
+        stage = new Stage();
+        chatTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
+        chatTextField.setPosition((Settings.SCREEN_WIDTH/80) * 59,Settings.SCREEN_HEIGHT/60 * 42);
+        chatTextField.setSize(150, 18);
+        stage.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float userX = chatTextField.getX();
+                float xPlusWidth = chatTextField.getWidth() + chatTextField.getX();
+                float userY = chatTextField.getY();
+                float yPlusHeight = (chatTextField.getHeight() + chatTextField.getY());
+                if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
+                    Gdx.input.setInputProcessor(inputHandler);
+                    chatTextField.setDisabled(true);
+                }
+                return true;
+            }
+        });
+        chatTextField.addListener(new ClickListener(){
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if(keycode == 66){
+                    String text = chatTextField.getText();
+                    client.sendMessage(text);
+                    chatTextField.setText("");
+                }
+                if(keycode == Input.Keys.ESCAPE){
+                    Gdx.input.setInputProcessor(inputHandler);
+                    chatTextField.setDisabled(true);
+                }
+                return false;
+            }
+        });
+        stage.addActor(chatTextField);
+    }
+
+    public void addToLog(String text){
+        if(log.size() > 10){
+            while (log.size() > 10){
+                log.removeLast();
+            }
+        }
+        log.addFirst(text);
+    }
+
+    public void addToLog(Packets.Packet01Message packet) {
+        if(log.size() > 10){
+            while (log.size() > 10){
+                log.removeLast();
+            }
+        }
+        log.addFirst(names[packet.playerId] + ": " + packet.message);
     }
 
     /**
@@ -634,5 +707,9 @@ public class Game{
 
     public void setClient(MPClient client){
         this.client = client;
+    }
+
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

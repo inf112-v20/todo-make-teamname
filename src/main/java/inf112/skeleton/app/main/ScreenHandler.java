@@ -35,12 +35,14 @@ public class ScreenHandler implements ApplicationListener {
         background = new Texture("assets/grey_background.png");
         mainLogo = new Texture("assets/main_logo.png");
         game = new Game();
-        game.create();
+
         hostGameMenu = new HostGameMenu(game);
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
         inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, this);
         lobbyMenu.setInputHandler(inputHandler);
+        game.setInputHandler(inputHandler);
+        game.create();
 
     }
 

@@ -35,7 +35,6 @@ public class TurnHandler {
     private Thread phase;
     private Board board;
     private ArrayList<ArrayList<int[]>> allArraysOfCoordinates;
-    private LinkedList<String> log;
 
 
     /**
@@ -53,7 +52,6 @@ public class TurnHandler {
         idPlayerHash = game.getIdPlayerHash();
         board = game.getBoard();
         allArraysOfCoordinates = new ArrayList<>();
-        log = new LinkedList<>();
         phase = new Thread(this::doTurn);
         phase.start();
     }
@@ -167,7 +165,7 @@ public class TurnHandler {
                 //Robot falls into pit
                 board.removeObject(robot);
                 robot.destroy();
-                log.addFirst(game.getNames()[robot.getId()] + " fell into a pit.");
+                game.addToLog(game.getNames()[robot.getId()] + " fell into a pit.");
             }
         }
     }
@@ -190,14 +188,14 @@ public class TurnHandler {
                 board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
                 robot.respawn();
                 System.out.println("respawn");
-                log.addFirst(game.getNames()[myPlayer.getId()] + " respawned.");
+                game.addToLog(game.getNames()[myPlayer.getId()] + " respawned.");
             }
         }
         if (myPlayer.equals(game.getMyPlayer())) {
             if(game.getMyPlayer().getLife() == 0 && !game.getMyPlayer().getDead()){
                 game.getMyPlayer().die();
                 game.removeOnePlayerFromServer();
-                log.addFirst("You lost.");
+                game.addToLog("You lost.");
                 return;
             }
             game.discardAndDeal();
@@ -205,7 +203,7 @@ public class TurnHandler {
             myPlayer.setReadyButton(false);
         }else {
             if(myPlayer.getLife() == 0 && !myPlayer.getDead()) {
-                log.addFirst(game.getNames()[myPlayer.getId()] + " lost the game.");
+                game.addToLog(game.getNames()[myPlayer.getId()] + " lost the game.");
             }
         }
     }
@@ -224,7 +222,7 @@ public class TurnHandler {
             robot.healDamage();
             robot.setRespawn(robot.getTileX(), robot.getTileY());
             RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-            log.addFirst(game.getNames()[myPlayer.getId()] + " healed one damage token.");
+            game.addToLog(game.getNames()[myPlayer.getId()] + " healed one damage token.");
             if (repairSite.getHammer()) {
                 //Player gets an option card
                 //TODO implement optionCards
@@ -251,10 +249,10 @@ public class TurnHandler {
             Flag flag = (Flag) currentTile.getObjects()[0];
             if (!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()) {
                 myPlayer.addFlag(flag);
-                log.addFirst(game.getNames()[myPlayer.getId()] + " picked up a flag.");
+                game.addToLog(game.getNames()[myPlayer.getId()] + " picked up a flag.");
                 if (myPlayer.getFlags().size() == board.getFlagNr()) {
                     //TODO endscreen
-                    log.addFirst(game.getNames()[myPlayer.getId()] + " won the game.");
+                    game.addToLog(game.getNames()[myPlayer.getId()] + " won the game.");
                     ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                     gameIsDone = true;
                 }
@@ -273,7 +271,7 @@ public class TurnHandler {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[3] instanceof BoardLaser) {
             robot.takeDamage();
-            log.addFirst(game.getNames()[robot.getId()] + " got hit by a laser.");
+            game.addToLog(game.getNames()[robot.getId()] + " got hit by a laser.");
         }
     }
 
@@ -375,7 +373,7 @@ public class TurnHandler {
         if(boardTile.getObjects()[2] instanceof Robot){
             Robot robot = (Robot) boardTile.getObjects()[2];
             robot.takeDamage();
-            log.addFirst(game.getNames()[robot.getId()] + " got hit by a laser.");
+            game.addToLog(game.getNames()[robot.getId()] + " got hit by a laser.");
             return true;
         }
         return false;
@@ -391,13 +389,13 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof GearClockwise) {
             //Rotate right
             robot.rotateRight();
-            log.addFirst(game.getNames()[robot.getId()] + " was rotated right by a rotating gear.");
+            game.addToLog(game.getNames()[robot.getId()] + " was rotated right by a rotating gear.");
         }
 
         if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
             //Rotate left
             robot.rotateLeft();
-            log.addFirst(game.getNames()[robot.getId()] + " was rotated left by a rotating gear.");
+            game.addToLog(game.getNames()[robot.getId()] + " was rotated left by a rotating gear.");
         }
     }
 
@@ -412,7 +410,7 @@ public class TurnHandler {
             //Robot gets pushed
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
             moveRobot(robot, pusher.getDirection());
-            log.addFirst(game.getNames()[robot.getId()] + " got pushed by a pusher.");
+            game.addToLog(game.getNames()[robot.getId()] + " got pushed by a pusher.");
         }
     }
 
@@ -430,14 +428,14 @@ public class TurnHandler {
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
                 moveRobot(robot, conveyorBelt.getDirection());
-                log.addFirst(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
+                game.addToLog(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
                 if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {// if the new conveyor belt can rotate the robot it does it
                         conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                         if (conveyorBelt.canRotate()) {
                             robot.setDirection(conveyorBelt.getDirection());
-                            log.addFirst(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
+                            game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                         }
                     }
                 }
@@ -464,14 +462,14 @@ public class TurnHandler {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
             if(robotCollision(robot, conveyorBelt.getDirection()) || conveyorCollision(conveyorBelt, robot)) return;
             moveRobot(robot, conveyorBelt.getDirection());
-            log.addFirst(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
+            game.addToLog(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
             if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
                 currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                 if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                     conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
                     if (conveyorBelt.canRotate()) { // if the new conveyor belt can rotate the robot it does it
                         robot.setDirection(conveyorBelt.getDirection());
-                        log.addFirst(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
+                        game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                     }
                 }
             }
@@ -508,14 +506,14 @@ public class TurnHandler {
             Wall wall = (Wall) currentTile.getObjects()[1];
             if (compareWallDirection(direction, wall.getDirection())) {
                 System.out.println("hit wall");
-                log.addFirst(game.getNames()[robot.getId()] + " hit a wall.");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(currentTile.getObjects()[0] instanceof Pusher){
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
             if(compareWallDirection(direction, oppositeDirection(pusher.getDirection()))){
                 System.out.println("hit pusher");
-                log.addFirst(game.getNames()[robot.getId()] + " hit a pusher.");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
         }
@@ -525,14 +523,14 @@ public class TurnHandler {
             Wall nextWall = (Wall) nextTile(robot, direction).getObjects()[1];
             if (compareWallDirection(direction, oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
-                log.addFirst(game.getNames()[robot.getId()] + " hit a wall.");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(nextTile.getObjects()[0] instanceof Pusher){
             Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
             if(compareWallDirection(direction, nextPusher.getDirection())){
                 System.out.println("hit pusher");
-                log.addFirst(game.getNames()[robot.getId()] + " hit a pusher.");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
         }
@@ -640,25 +638,20 @@ public class TurnHandler {
                 if(robot.isDestroyed()) break;
                 //Move robot
                 moveRobot(robot, robot.getDirection());
-                log.addFirst(game.getNames()[robot.getId()] + " moved one forwards.");
             }
         }
         else if (card.getRotate()) {
             if (card.getRotateLeft()) {
                 robot.rotateLeft();
-                log.addFirst(game.getNames()[robot.getId()] + " rotated left.");
             } else if (card.getRotateRight()) {
                 robot.rotateRight();
-                log.addFirst(game.getNames()[robot.getId()] + " rotated right.");
             } else {
                 robot.rotateRight();
                 robot.rotateRight();
-                log.addFirst(game.getNames()[robot.getId()] + " turned around.");
             }
         }
         else if(card.getValue() == -1){
             moveRobot(robot, oppositeDirection(robot.getDirection()));
-            log.addFirst(game.getNames()[robot.getId()] + " moved one backwards.");
         }
     }
 
@@ -732,10 +725,6 @@ public class TurnHandler {
      */
     public ArrayList<ArrayList<int[]>> getAllArraysOfCoordinates(){
         return allArraysOfCoordinates;
-    }
-
-    public LinkedList<String> getLog(){
-        return log;
     }
 
     /**
