@@ -433,8 +433,12 @@ public class TurnHandler {
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {// if the new conveyor belt can rotate the robot it does it
                         conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                        if (conveyorBelt.canRotate()) {
-                            robot.setDirection(conveyorBelt.getDirection());
+                        if (!conveyorBelt.canRotate().equals("")) {
+                            if(conveyorBelt.canRotate().equals("left")){
+                                robot.rotateLeft();
+                            }else {
+                                robot.rotateRight();
+                            }
                             game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                         }
                     }
@@ -467,8 +471,12 @@ public class TurnHandler {
                 currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                 if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                     conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                    if (conveyorBelt.canRotate()) { // if the new conveyor belt can rotate the robot it does it
-                        robot.setDirection(conveyorBelt.getDirection());
+                    if (!conveyorBelt.canRotate().equals("")) {
+                        if(conveyorBelt.canRotate().equals("left")){
+                            robot.rotateLeft();
+                        }else {
+                            robot.rotateRight();
+                        }
                         game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                     }
                 }
