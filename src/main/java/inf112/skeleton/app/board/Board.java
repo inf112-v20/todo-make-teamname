@@ -174,10 +174,10 @@ public class Board  {
 
     public void setSpawns() {
         spawns.add(0, new Pair(0, 0));
-        spawns.add(1, new Pair(0, 7));
-        spawns.add(2, new Pair(0, 6));
-        spawns.add(3, new Pair(1, 9));
-        spawns.add(4, new Pair(1, 4));
+        spawns.add(1, new Pair(0, 6));
+        spawns.add(2, new Pair(0, 5));
+        spawns.add(3, new Pair(1, 8));
+        spawns.add(4, new Pair(1, 3));
     }
 
     public Pair getSpawn(int player) {
