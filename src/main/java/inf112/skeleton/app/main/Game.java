@@ -1,30 +1,32 @@
 package inf112.skeleton.app.main;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.jcraft.jogg.Packet;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardParser;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.networking.MPClient;
 import inf112.skeleton.app.networking.MPServer;
 import inf112.skeleton.app.networking.Packets;
-import inf112.skeleton.app.objects.boardObjects.BoardLaser;
-import inf112.skeleton.app.objects.cards.ProgramCard;
+import inf112.skeleton.app.objects.cards.Hitbox;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-import org.lwjgl.Sys;
-
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-
+import java.util.LinkedList;
 
 
 /**
@@ -39,10 +41,8 @@ public class Game{
     private int nrOfPlayers;
     private HashMap<Integer, Player> idPlayerHash;
     private String[] names;
-    private int cardBoxLeft;
-    private int cardBoxRight;
-    private int buttonReadyLeftX;
-    private int buttonReadyLeftY;
+    private Hitbox cardHitbox;
+
     private ArrayList<Packets.Packet02Cards> allCards;
     private MPServer server;
     private TurnHandler turnHandler;
@@ -53,22 +53,34 @@ public class Game{
     private Texture selectedFrame;
     private Texture buttonReady;
     private Texture buttonReadySelected;
+    private Texture cardBG;
     private Texture[] robotLaser;
     private Texture[] damageTokens;
     private Texture[] lifeTokens;
     private boolean[] allReady;
     private boolean[] playersShutdown;
     private boolean renderRobotLasers;
+    private Hitbox readyButtonHitbox;
+    private String boardName;
+    private LinkedList<String> log;
+    private Stage stage;
+    private TextField chatTextField;
+    private InputHandler inputHandler;
 
 
     /**
      * This method calls all the methods needed to start the "playing" part of the game.
      */
     public void create() {
-        boardSetUp("riskyexchange");
-        playerSetup();
         textureSetUp();
         cardBoxSetUp();
+        readyButtonSetUp();
+        logSetUp();
+    }
+
+    public void createBoardAndPlayers(String board){
+        boardSetUp(board);
+        playerSetup();
     }
 
 
@@ -96,16 +108,16 @@ public class Game{
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button){
         //checks if the click occurs in the "cardbox"
-
-        if (screenX > cardBoxLeft &&
-                screenX < cardBoxRight &&
-                screenY > Settings.SCREEN_HEIGHT - Settings.CARD_HEIGHT &&
-                screenY < Settings.SCREEN_HEIGHT) {
-            int card = (screenX - cardBoxLeft) / Settings.CARD_WIDTH;
-            if(myPlayer.getCards()[0] != null && myPlayer.getSelectedCards().size < 6) {
+        if (screenX > cardHitbox.getBound(0)[0] &&
+                screenY < Settings.SCREEN_HEIGHT-cardHitbox.getBound(0)[1]&&
+                screenX < cardHitbox.getBound(2)[0] &&
+                screenY > Settings.SCREEN_HEIGHT-cardHitbox.getBound(2)[1]){
+            int card = (screenX - cardHitbox.getBound(0)[0]) / Settings.CARD_WIDTH;
+            if(myPlayer.getSelectedCards().size < 6){
                 myPlayer.addSelectedCard(card);
             }
         }
+
         //checks if the click occurs on the "ready-button"
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
@@ -119,6 +131,12 @@ public class Game{
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
             }
+        }
+        else if(screenX >= chatTextField.getX() && screenX <= chatTextField.getWidth() + chatTextField.getX()
+                && screenY <= Settings.SCREEN_HEIGHT - chatTextField.getY()
+                && screenY >= Settings.SCREEN_HEIGHT - (chatTextField.getHeight() + chatTextField.getY())) {
+            Gdx.input.setInputProcessor(stage);
+            chatTextField.setDisabled(false);
         }
         return false;
     }
@@ -137,6 +155,7 @@ public class Game{
         renderReadyButton(batch);
         renderNames(batch, font);
         if(renderRobotLasers) renderRobotLasers(batch);
+        renderLog(batch, font);
     }
 
     /**
@@ -163,9 +182,9 @@ public class Game{
      * @param batch
      */
     private void renderReadyButton(SpriteBatch batch) {
-        batch.draw(buttonReady, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+        batch.draw(buttonReady, readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         if (myPlayer.getReadyButton()){
-            batch.draw(buttonReadySelected, buttonReadyLeftX, buttonReadyLeftY   , 64, 32);
+            batch.draw(buttonReadySelected,  readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         }
     }
 
@@ -206,6 +225,19 @@ public class Game{
         }
     }
 
+    public void renderLog(SpriteBatch batch, BitmapFont font){
+        font.setColor(Color.GRAY);
+        chatTextField.draw(batch, 1);
+        stage.act();
+        if(log.isEmpty()) return;
+        int size = 10;
+        if(log.size() < size) size = log.size();
+        for (int i = 0; i < size; i++) {
+            font.draw(batch, log.get(i), Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/40 * (30 + i));
+        }
+
+    }
+
     /**
      * Renders the cards in myPlayers hand
      * @param batch
@@ -214,18 +246,23 @@ public class Game{
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
-                batch.draw(myPlayer.getCards()[i].getImage(), cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                font.setColor(Color.GRAY);
+                batch.draw(cardBG, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                font.draw(batch, myPlayer.getCards()[i].getName(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                font.draw(batch, myPlayer.getCards()[i].getText(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT/2-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                font.draw(batch, myPlayer.getCards()[i].getPriorityValue() +"", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH *7/ 10), Settings.CARD_HEIGHT/10);
+                batch.draw(myPlayer.getCards()[i].getImage(), (cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH))+(Settings.CARD_WIDTH*1/4), Settings.CARD_HEIGHT*1/2, Settings.CARD_WIDTH/2, Settings.CARD_HEIGHT/3);
                 if (myPlayer.getCards()[i].getSelected()) {
-                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardBoxLeft + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), Settings.CARD_HEIGHT - (Settings.CARD_HEIGHT / 10));
-                    batch.draw(selectedFrame, cardBoxLeft + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), (Settings.CARD_HEIGHT / 10));
+                    batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                 }
             }
         }
-        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * 7);
+        font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/10 * 7);
         int j = 5;
         for (int i = 0; i < myPlayer.getLockedCards().size(); i++) {
-            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/12 * 10, Settings.SCREEN_HEIGHT/10 * (6-i));
-            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/12 * 11, Settings.SCREEN_HEIGHT/10 * (6-i),
+            font.draw(batch, j-- + " ", Settings.SCREEN_WIDTH/20 * (15+i), Settings.SCREEN_HEIGHT/10 * 6);
+            batch.draw(myPlayer.getLockedCards().get(i).getImage(), Settings.SCREEN_WIDTH/20 * (15+i), Settings.SCREEN_HEIGHT/10 * 6,
                     Settings.CARD_WIDTH/4, Settings.CARD_HEIGHT/4);
         }
     }
@@ -282,6 +319,62 @@ public class Game{
         turnHandler.create(this);
     }
 
+    public void logSetUp(){
+        log = new LinkedList<>();
+        stage = new Stage();
+        chatTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
+        chatTextField.setPosition((Settings.SCREEN_WIDTH/80) * 59,Settings.SCREEN_HEIGHT/60 * 42);
+        chatTextField.setSize(150, 18);
+        stage.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float userX = chatTextField.getX();
+                float xPlusWidth = chatTextField.getWidth() + chatTextField.getX();
+                float userY = chatTextField.getY();
+                float yPlusHeight = (chatTextField.getHeight() + chatTextField.getY());
+                if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
+                    Gdx.input.setInputProcessor(inputHandler);
+                    chatTextField.setDisabled(true);
+                }
+                return true;
+            }
+        });
+        chatTextField.addListener(new ClickListener(){
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if(keycode == 66){
+                    String text = chatTextField.getText();
+                    client.sendMessage(text);
+                    chatTextField.setText("");
+                }
+                if(keycode == Input.Keys.ESCAPE){
+                    Gdx.input.setInputProcessor(inputHandler);
+                    chatTextField.setDisabled(true);
+                }
+                return false;
+            }
+        });
+        stage.addActor(chatTextField);
+    }
+
+    public void addToLog(String text){
+        if(log.size() > 10){
+            while (log.size() > 10){
+                log.removeLast();
+            }
+        }
+        log.addFirst(text);
+    }
+
+    public void addToLog(Packets.Packet01Message packet) {
+        if(log.size() > 10){
+            while (log.size() > 10){
+                log.removeLast();
+            }
+        }
+        log.addFirst(names[packet.playerId] + ": " + packet.message);
+    }
+
     /**
      * This method calls {@link BoardParser#parse(String boardName)} to make a new board matching the string name, it the
      * calls setBoard to set the Game.board = BoardParser.parse(String boardName).
@@ -332,10 +425,13 @@ public class Game{
         for (int i = 1; i < 5; i++) {
             Player player = new Player(textures[i-1]);
             player.deal();
-            board.addObject(player.getRobot(), i+1, 0);
+            player.setId(i);
+            board.addObject(player.getRobot(), 0+i, 0);
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }
+        setMyPlayer(idPlayerHash.get(client.getId()));
+        myPlayer.deal();
     }
 
     /**
@@ -367,10 +463,23 @@ public class Game{
      * This method sets the settings for the card boxes and button.
      */
     private void cardBoxSetUp() {
-        cardBoxLeft = (Settings.CARD_WIDTH/2) * (10-5);
-        cardBoxRight = (Settings.CARD_WIDTH/2) * (10+5);
-        buttonReadyLeftX = Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4);
-        buttonReadyLeftY = Settings.SCREEN_HEIGHT/3;
+        cardHitbox = new Hitbox();
+    }
+    private void readyButtonSetUp(){
+        readyButtonHitbox = new Hitbox();
+    }
+
+    private void configureHitbox() {
+        cardHitbox.setBound(0, Settings.SCREEN_WIDTH/2-(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), 0);
+        cardHitbox.setBound(1, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), 0);
+        cardHitbox.setBound(2, Settings.SCREEN_WIDTH/2+(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
+        cardHitbox.setBound(3, Settings.SCREEN_WIDTH/2-(Settings.CARD_WIDTH/2*(myPlayer.getCards().length)), Settings.CARD_HEIGHT);
+
+
+        readyButtonHitbox.setBound(0, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(1, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3);
+        readyButtonHitbox.setBound(2, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+(Settings.CARD_WIDTH/2), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
+        readyButtonHitbox.setBound(3, Settings.SCREEN_WIDTH+(Settings.SCREEN_WIDTH/4), Settings.SCREEN_HEIGHT/3+(Settings.CARD_WIDTH/4));
     }
 
     /**
@@ -381,6 +490,7 @@ public class Game{
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
         buttonReadySelected = new Texture("assets/button_ready_selected.png");
+        cardBG = new Texture("assets/cards/card_front.png");
         damageTokens = new Texture[3];
         damageTokens[0] = new Texture("assets/damage-dead.png");
         damageTokens[1] = new Texture("assets/Damage-not-taken.png");
@@ -397,12 +507,10 @@ public class Game{
      * The hostGame method starts a new {@link MPServer} and a {@link MPClient}. This should only be called by the one hosting the game.
      * @return Returns an InetAddress that is the IP Address that other players need to connect to the server.
      */
-    public InetAddress hostGame(){
-        server = new MPServer();
+    public InetAddress hostGame(String boardName){
+        server = new MPServer(boardName);
         server.run();
         client = new MPClient(server.getAddress(),this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
-        myPlayer.deal();
         host = true;
         return server.getAddress();
     }
@@ -415,9 +523,7 @@ public class Game{
     public boolean joinGame(String ipAddress){
         client = new MPClient(this);
         if(!client.connect(ipAddress)) return false;
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
         return true;
     }
 
@@ -427,9 +533,7 @@ public class Game{
      */
     public void joinGame(InetAddress ipAddress){
         client = new MPClient(ipAddress, this);
-        setMyPlayer(idPlayerHash.get(client.getId()));
         host = false;
-        myPlayer.deal();
     }
 
     public int getId(){
@@ -437,6 +541,7 @@ public class Game{
     }
     public void setMyPlayer(Player player){
         myPlayer = player;
+        configureHitbox();
     }
 
     /**
@@ -584,5 +689,27 @@ public class Game{
 
     public void removeOnePlayerFromServer() {
         client.removeOnePlayerFromServer();
+    }
+
+    public void discardAndDeal() {
+        myPlayer.discard();
+        myPlayer.deal();
+        configureHitbox();
+    }
+
+    public void setBoardName(String boardName) {
+        this.boardName = boardName;
+    }
+
+    public String getBoardName(){
+        return boardName;
+    }
+
+    public void setClient(MPClient client){
+        this.client = client;
+    }
+
+    public void setInputHandler(InputHandler inputHandler) {
+        this.inputHandler = inputHandler;
     }
 }

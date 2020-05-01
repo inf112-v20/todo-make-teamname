@@ -17,6 +17,7 @@ public class Robot implements IBoardObject {
     private int respawnX, respawnY;
     private boolean isDestroyed = false;
     private int life = 3;
+    private int id;
 
     /**
      * This constructor takes a {@link Direction} and a list of {@link Texture},<BR>
@@ -279,5 +280,13 @@ public class Robot implements IBoardObject {
      */
     public Texture getNonRotatingTexture() {
         return textures[1];
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
     }
 }

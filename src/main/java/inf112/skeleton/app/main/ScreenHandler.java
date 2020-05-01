@@ -33,13 +33,15 @@ public class ScreenHandler implements ApplicationListener {
         background = new Texture("assets/grey_background.png");
         mainLogo = new Texture("assets/main_logo.png");
         game = new Game();
-        game.create();
+
         hostGameMenu = new HostGameMenu(game);
         joinGameMenu = new JoinGameMenu(game);
         lobbyMenu = new LobbyMenu(game);
         levelSelectMenu = new LevelSelectMenu(game);
         inputHandler = new InputHandler(game, lobbyMenu, hostGameMenu, joinGameMenu, levelSelectMenu, this);
         lobbyMenu.setInputHandler(inputHandler);
+        game.setInputHandler(inputHandler);
+        game.create();
 
     }
 
@@ -100,7 +102,7 @@ public class ScreenHandler implements ApplicationListener {
     public static void changeScreenState(ScreenState newState) {
         screenState = newState;
         if(screenState == ScreenState.HOSTGAME) {
-            hostGameMenu.create();
+            hostGameMenu.create("riskyexchange");
             lobbyMenu.setHost(true);
         }
         if(screenState == ScreenState.JOINGAME) joinGameMenu.create();

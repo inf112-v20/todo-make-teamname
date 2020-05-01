@@ -59,6 +59,21 @@ public class LobbyMenu {
         usernameTextField.setPosition((Settings.SCREEN_WIDTH/80) * 8,Settings.SCREEN_HEIGHT/60 * 40);
         usernameTextField.setSize(150, 25);
         usernameTextField.setMessageText("User name");
+        stage.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                float userX = usernameTextField.getX();
+                float xPlusWidth = usernameTextField.getWidth() + usernameTextField.getX();
+                float userY = usernameTextField.getY();
+                float yPlusHeight = (usernameTextField.getHeight() + usernameTextField.getY());
+                if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
+                    Gdx.input.setInputProcessor(inputHandler);
+                    usernameTextField.setDisabled(true);
+                }
+                return true;
+            }
+        });
+
         usernameTextField.addListener(new ClickListener(){
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
@@ -69,7 +84,10 @@ public class LobbyMenu {
                     Gdx.input.setInputProcessor(inputHandler);
                     usernameTextField.setDisabled(true);
                 }
-
+                if(keycode == Input.Keys.ESCAPE){
+                    Gdx.input.setInputProcessor(inputHandler);
+                    usernameTextField.setDisabled(true);
+                }
                 return false;
             }
         });
@@ -84,7 +102,6 @@ public class LobbyMenu {
      * @param font The bitmapFont used for the game.
      */
     public void render(SpriteBatch batch, BitmapFont font) {
-
         String[] names = game.getNames();
         font.setColor(Color.WHITE);
         font.draw(batch, "Players joined:", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 2) + 50);

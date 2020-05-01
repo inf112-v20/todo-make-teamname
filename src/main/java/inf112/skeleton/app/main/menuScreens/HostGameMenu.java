@@ -25,8 +25,11 @@ public class HostGameMenu {
     /**
      * Calls to game to create a server and a client, then saves the IP Address it gets in return.
      */
-    public void create(){
-        ipAddress = game.hostGame();
+    public void create(String boardName){
+        ipAddress = game.hostGame(boardName);
+
+        while(game.getBoardName() == null){}
+        game.createBoardAndPlayers(game.getBoardName());
     }
 
     /**

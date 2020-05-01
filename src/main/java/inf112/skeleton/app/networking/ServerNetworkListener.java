@@ -9,6 +9,7 @@ import java.util.ArrayList;
  * This listener class receives data from clients and then sends it to all clients.
  */
 public class ServerNetworkListener extends Listener {
+    private final String board;
     private Server server;
     private boolean[] allReady;
     private ArrayList<Packets.Packet02Cards> receivedCards;
@@ -21,8 +22,9 @@ public class ServerNetworkListener extends Listener {
      * Sets the field variable server to the Kryonet server, then initializes some lists for storing data.
      * @param server The Kryonet server being used
      */
-    public ServerNetworkListener(Server server){
+    public ServerNetworkListener(Server server , String board){
         this.server = server;
+        this.board = board;
         names = new String[5];
         receivedCards = new ArrayList<>();
         copyReceivedCards = new ArrayList<>();
@@ -46,6 +48,7 @@ public class ServerNetworkListener extends Listener {
         Packets.Packet03PlayerNr nrOfPlayers = new Packets.Packet03PlayerNr();
         nrOfPlayers.playerNr = playerNr;
         server.sendToAllTCP(nrOfPlayers);
+        server.sendToTCP(c.getID(), board);
 
     }
 
@@ -75,7 +78,7 @@ public class ServerNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message p = (Packets.Packet01Message) o;
-            server.sendToAllExceptTCP(c.getID(), p);
+            server.sendToAllTCP(p);
         }else if (o instanceof Packets.Packet02Cards){
             Packets.Packet02Cards cards = (Packets.Packet02Cards) o;
             receivedCards.add(cards);

@@ -21,6 +21,7 @@ public class Player {
     private Deck deck;
     private ArrayList<ProgramCard> lockedCards;
     private boolean dead;
+    private int id;
 
     /**
      * This constructor creates the player's robot and deck, also initializes some lists.
@@ -28,8 +29,6 @@ public class Player {
      */
     public Player(Texture[] textures){
         robot = new Robot(textures);
-//        robot.setTileX(0);
-//        robot.setTileY(0);
         selectedCards = new Queue<ProgramCard>();
         lockedCards = new ArrayList<>();
         flags = new ArrayList<>();
@@ -85,6 +84,8 @@ public class Player {
                 selectedCards.removeIndex(i);
             }
         }
+
+        if (selectedCards.size >= 5)return;
         //if it hasnt been unselected then it must be selected
         if(!sel){
             selectedCards.addLast(cards[card]);
@@ -112,6 +113,9 @@ public class Player {
         }
         if(newHand.length < 5){
             ProgramCard[] newHand5 = new ProgramCard[5];
+            for (int i = 0; i < newHand.length; i++) {
+                newHand5[i] = newHand[i];
+            }
             for (int i = 0; i < lockedCards.size(); i++) {
                 newHand5[newHand.length+i] = lockedCards.get(lockedCards.size()-(i+1));
             }
@@ -177,5 +181,14 @@ public class Player {
 
     public boolean getDead() {
         return dead;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        robot.setId(id);
+    }
+
+    public int getId(){
+        return id;
     }
 }
