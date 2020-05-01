@@ -175,11 +175,24 @@ public class Game{
         font.draw(batch, "Players in game:", Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 18) * 11);
         for (int i = 0; i < names.length; i++) {
             if(names[i] == null) continue;
-            font.draw(batch, names[i], Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 36) * (22 - i));
+            font.draw(batch, names[i], Settings.SCREEN_WIDTH / 16, (Settings.SCREEN_HEIGHT / 36) * (22 - 2*i));
+            Player player = idPlayerHash.get(i);
             batch.draw(idPlayerHash.get(i).getRobot().getNonRotatingTexture(),
                     Settings.SCREEN_WIDTH / 21,
-                    (Settings.SCREEN_HEIGHT / 64) * (39 - (2*i)),
+                    (Settings.SCREEN_HEIGHT / 64) * (39 - (4*i)),
                     Settings.TILE_WIDTH/2, Settings.TILE_HEIGHT/2);
+            for (int j = 0 ; j < player.getRobot().getHealth(); j++){
+                batch.draw(damageTokens[1], Settings.SCREEN_WIDTH / 74 *(8+j),
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i), 16, 16);
+            }
+            for (int j = player.getRobot().getHealth() ; j < 9; j++){
+                batch.draw(damageTokens[2], Settings.SCREEN_WIDTH / 74 *(8+j),
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i), 16, 16);
+            }
+            for (int j = 0; j < player.getRobot().getLife(); j++) {
+                batch.draw(lifeTokens[1],Settings.SCREEN_WIDTH / 74 *(8+j),
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) -18, 16, 16);
+            }
 
         }
     }
@@ -314,6 +327,20 @@ public class Game{
         allCards.add(packet);
 
         if(allCards.size() == nrOfPlayers){
+            for (int id: idPlayerHash.keySet()) {
+                boolean contains = false;
+                for (Packets.Packet02Cards pack: allCards) {
+                    if (pack.playerId == id) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if(!contains){
+                    board.removeObject(idPlayerHash.get(id).getRobot());
+                    idPlayerHash.get(id).getRobot().setTileX(-1);
+                    idPlayerHash.get(id).getRobot().setTileY(-1);
+                }
+            }
             turnHandler.isReady();
         }
     }
