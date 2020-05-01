@@ -21,7 +21,7 @@ public class Deck {
         ProgramCard[] newHand = new ProgramCard[robot.getHealth()];
         for (int i = 0; i < robot.getHealth(); i++) {
             if (drawPile.isEmpty()) {
-                drawPile = discardPile;
+                drawPile = (ArrayList<ProgramCard>) discardPile.clone();
                 discardPile.clear();
 
                 randShuffle();
@@ -40,5 +40,6 @@ public class Deck {
             Collections.shuffle(drawPile);
         }
     }
+
 }
 
