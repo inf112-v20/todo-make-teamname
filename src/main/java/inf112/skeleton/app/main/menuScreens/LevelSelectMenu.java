@@ -50,7 +50,6 @@ public class LevelSelectMenu {
             case Input.Keys.ENTER:
                 if (selected == 0) {
                     ScreenHandler.changetoHostGameMenu("riskyexchange");
-                    ScreenHandler.changeScreenState(ScreenState.HOSTGAME);
                 }
                 else if (selected == 1) {
                     ScreenHandler.changetoHostGameMenu("checkmate");

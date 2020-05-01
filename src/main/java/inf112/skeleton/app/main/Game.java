@@ -78,7 +78,12 @@ public class Game{
         logSetUp();
     }
 
+    private void mapTexture() {
+        tempMap = new Texture("assets/maps/" + boardName + ".png");
+    }
+
     public void createBoardAndPlayers(String board){
+        mapTexture();
         boardSetUp(board);
         playerSetup();
     }
@@ -486,7 +491,6 @@ public class Game{
      * This method initializes the textures needed in the {@link Game} class.
      */
     private void textureSetUp() {
-        tempMap = new Texture("assets/maps/riskyexchange.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
         buttonReadySelected = new Texture("assets/button_ready_selected.png");
