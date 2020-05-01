@@ -22,6 +22,8 @@ import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.cards.Hitbox;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
+import org.javatuples.Pair;
+
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -431,7 +433,8 @@ public class Game{
             Player player = new Player(textures[i-1]);
             player.deal();
             player.setId(i);
-            board.addObject(player.getRobot(), 0+i, 0);
+            Pair spawn = board.getSpawn(i);
+            board.addObject(player.getRobot(), (int) spawn.getValue0(), (int) spawn.getValue1());
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }

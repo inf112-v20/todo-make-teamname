@@ -2,8 +2,10 @@ package inf112.skeleton.app.board;
 
 import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 import inf112.skeleton.app.objects.player.Robot;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Board class is used to represent the board that is being played on,<BR>
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public class Board  {
 
     private final int flags;
+    List<Pair<Integer, Integer>> spawns = new ArrayList<>();
     private BoardTile [][] grid;
     private int width, height;
     private ArrayList<Robot> robots;
@@ -39,6 +42,7 @@ public class Board  {
                 grid[y][x] = new BoardTile(x, y);
             }
         }
+        setSpawns();
     }
 
     public BoardTile[][] getGrid(){
@@ -167,4 +171,17 @@ public class Board  {
     public int getFlagNr() {
         return flags;
     }
+
+    public void setSpawns() {
+        spawns.add(0, new Pair(0, 0));
+        spawns.add(1, new Pair(0, 7));
+        spawns.add(2, new Pair(0, 6));
+        spawns.add(3, new Pair(1, 9));
+        spawns.add(4, new Pair(1, 4));
+    }
+
+    public Pair getSpawn(int player) {
+        return spawns.get(player);
+    }
+
 }
