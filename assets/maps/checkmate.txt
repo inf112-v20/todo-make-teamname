@@ -1,6 +1,6 @@
 12,16,2
 ----r-----------
------EEEEEEEEEE-
+-----EEEEEEEEES-
 -----N-s-s-s-sS-
 -----Ns2s-s-P-S-
 -----N-s-s-s-sS-

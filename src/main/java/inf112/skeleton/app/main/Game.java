@@ -266,7 +266,8 @@ public class Game{
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
-                font.setColor(Color.GRAY);
+                
+                font.setColor(Color.WHITE);
                 batch.draw(cardBG, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                 font.draw(batch, myPlayer.getCards()[i].getName(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
                 font.draw(batch, myPlayer.getCards()[i].getText(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT/2-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
