@@ -463,7 +463,7 @@ public class Game{
             player.setId(i);
             Pair spawn = board.getSpawn(i);
             board.addObject(player.getRobot(), (int) spawn.getValue0(), (int) spawn.getValue1());
-            player.getRobot().setRespawn((int) spawn.getValue0(),(int) spawn.getValue0());
+            player.getRobot().setRespawn((int) spawn.getValue0(), (int) spawn.getValue1());
             idPlayerHash.put(i, player);
             playersShutdown[i] = false;
         }

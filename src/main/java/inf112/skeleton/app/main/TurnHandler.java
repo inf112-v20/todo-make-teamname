@@ -192,7 +192,7 @@ public class TurnHandler {
             }
         }
         if (myPlayer.equals(game.getMyPlayer())) {
-            if(game.getMyPlayer().getLife() == 0 && !game.getMyPlayer().getDead()){
+            if(game.getMyPlayer().getLife() <= 0 && !game.getMyPlayer().getDead()){
                 game.getMyPlayer().die();
                 game.removeOnePlayerFromServer();
                 game.addToLog("You lost.");
@@ -202,7 +202,8 @@ public class TurnHandler {
 
             myPlayer.setReadyButton(false);
         }else {
-            if(myPlayer.getLife() == 0 && !myPlayer.getDead()) {
+            if(myPlayer.getLife() <= 0 && !myPlayer.getDead()) {
+                myPlayer.die();
                 game.addToLog(game.getNames()[myPlayer.getId()] + " lost the game.");
             }
         }
