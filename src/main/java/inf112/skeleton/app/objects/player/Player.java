@@ -155,6 +155,8 @@ public class Player {
      * Discard the hand of cards the player has.
      */
     public void discard() {
+        for (ProgramCard card: cards)
+            card.setSelected(false);
         deck.discard(cards);
         Arrays.fill(cards, null);
         if(robot.getHealth() >= 5){
