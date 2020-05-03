@@ -38,6 +38,14 @@ public class LevelSelectMenu {
                 font.draw(batch, "Checkmate", (Settings.SCREEN_WIDTH / 2)-50, Settings.SCREEN_HEIGHT / 2);
                 board = checkmate;
                 break;
+            case 2:
+                font.setColor(Color.WHITE);
+                font.draw(batch, "RiskyExchange", (Settings.SCREEN_WIDTH / 2)-60, (Settings.SCREEN_HEIGHT / 18) * 10);
+                font.draw(batch, "Checkmate", (Settings.SCREEN_WIDTH / 2)-60, Settings.SCREEN_HEIGHT / 2);
+                font.setColor(Color.YELLOW);
+                font.draw(batch, "Go Back", (Settings.SCREEN_WIDTH / 2)-50, (Settings.SCREEN_HEIGHT / 18) * 8);
+                board = checkmate;
+                break;
             default:
                 font.setColor(Color.WHITE);
                 font.draw(batch, "RiskyExchange", Settings.SCREEN_WIDTH / 2, (Settings.SCREEN_HEIGHT / 18) * 10);
