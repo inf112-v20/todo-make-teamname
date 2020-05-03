@@ -179,7 +179,7 @@ public class Game{
             Player player = idPlayerHash.get(i);
             batch.draw(idPlayerHash.get(i).getRobot().getNonRotatingTexture(),
                     Settings.SCREEN_WIDTH / 21,
-                    (Settings.SCREEN_HEIGHT / 64) * (39 - (4*i)),
+                    (Settings.SCREEN_HEIGHT / 64) * 39 - (Settings.SCREEN_HEIGHT/18 * i),
                     Settings.TILE_WIDTH/2, Settings.TILE_HEIGHT/2);
             for (int j = 0 ; j < player.getRobot().getHealth(); j++){
                 batch.draw(damageTokens[1], Settings.SCREEN_WIDTH / 74 *(8+j),
