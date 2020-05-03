@@ -25,10 +25,7 @@ import inf112.skeleton.app.objects.player.Robot;
 import org.javatuples.Pair;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 
 /**
@@ -68,6 +65,9 @@ public class Game{
     private Stage stage;
     private TextField chatTextField;
     private InputHandler inputHandler;
+    private Texture powerDownGreen;
+    private Texture powerDownRed;
+    private boolean shutdown = true;
 
 
     /**
@@ -145,6 +145,13 @@ public class Game{
             Gdx.input.setInputProcessor(stage);
             chatTextField.setDisabled(false);
         }
+        else if(screenX >= Settings.SCREEN_WIDTH/16 * 3
+                && screenX <= Settings.SCREEN_WIDTH/16 * 3 + Settings.CARD_WIDTH/4
+                && screenY <= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6)
+                && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6 + Settings.CARD_WIDTH/4)
+                && shutdown){
+            shutdownRobot();
+        }
         return false;
     }
 
@@ -205,6 +212,15 @@ public class Game{
         batch.draw(buttonReady, readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         if (myPlayer.getReadyButton()){
             batch.draw(buttonReadySelected,  readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
+        }
+        if(!playersShutdown[getId()]){
+            batch.draw(powerDownGreen, Settings.SCREEN_WIDTH/16 * 3,
+                    Settings.SCREEN_HEIGHT/16 * 6,
+                    Settings.CARD_WIDTH/4, Settings.CARD_WIDTH/4);
+        }else {
+            batch.draw(powerDownRed, Settings.SCREEN_WIDTH/16 * 3,
+                    Settings.SCREEN_HEIGHT/16 * 6,
+                    Settings.CARD_WIDTH/4, Settings.CARD_WIDTH/4);
         }
     }
 
@@ -523,6 +539,8 @@ public class Game{
      * This method initializes the textures needed in the {@link Game} class.
      */
     private void textureSetUp() {
+        powerDownGreen = new Texture("assets/PowerDownGreen.png");
+        powerDownRed = new Texture("assets/PowerDownRed.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");
         buttonReady = new Texture("assets/button_ready.png");
         buttonReadySelected = new Texture("assets/button_ready_selected.png");
@@ -717,6 +735,7 @@ public class Game{
      */
     public void shutdownRobot(){
         client.sendShutdownRobot();
+        addToLog(names[getId()] + " is shutting down their robot!");
     }
 
     public void setRenderRobotLasers(boolean bool) {
@@ -747,5 +766,9 @@ public class Game{
 
     public void setInputHandler(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
+    }
+
+    public void setShutdown(boolean b) {
+        shutdown = b;
     }
 }

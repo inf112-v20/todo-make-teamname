@@ -93,7 +93,7 @@ public class TurnHandler {
             }
             if(Thread.interrupted()) return;
 
-
+            game.setShutdown(false);
             for (int i = 0; i < 5; i++) {
                 HashMap<NonTextureProgramCard, Integer> cards = new HashMap<>();
                 ArrayList<Packets.Packet02Cards> allCards = game.getAllCards();
@@ -128,6 +128,7 @@ public class TurnHandler {
                 }
                 for (int id: idPlayerHash.keySet()) {
                     Robot robot = idPlayerHash.get(id).getRobot();
+                    if (game.getPlayersShutdown()[id] || idPlayerHash.get(id).getLife() == 0) continue;
                     robotLasersShoot(robot);
                 }
                 game.setRenderRobotLasers(true);
@@ -151,6 +152,7 @@ public class TurnHandler {
             for (int id: idPlayerHash.keySet()) {
                 cleanUp(idPlayerHash.get(id));
             }
+            game.setShutdown(true);
             game.clearAllCards();
         }
     }
@@ -179,9 +181,12 @@ public class TurnHandler {
         Robot robot = myPlayer.getRobot();
         boolean[] tempPlayersShutdown = game.getPlayersShutdown();
         for (int i = 0; i < game.getPlayersShutdown().length; i++) {
+            if(tempPlayersShutdown[i] && !robot.isDestroyed()){
+                idPlayerHash.get(i).getRobot().fullHealth();
+                game.addToLog(game.getNames()[i] + " healed to full!");
+            }
             tempPlayersShutdown[i] = false;
         }
-        game.setPlayersShutdown(tempPlayersShutdown);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
@@ -191,6 +196,7 @@ public class TurnHandler {
                 game.addToLog(game.getNames()[myPlayer.getId()] + " respawned.");
             }
         }
+        game.setPlayersShutdown(tempPlayersShutdown);
         if (myPlayer.equals(game.getMyPlayer())) {
             if(game.getMyPlayer().getLife() <= 0 && !game.getMyPlayer().getDead()){
                 game.getMyPlayer().die();
