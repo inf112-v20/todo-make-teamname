@@ -228,16 +228,19 @@ public class TurnHandler {
         Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof RepairSite) {
+        if (currentTile.getObjects()[0] instanceof RepairSite || currentTile.getObjects()[0] instanceof Flag) {
             //Heals a damage token if robot
             robot.healDamage();
             robot.setRespawn(robot.getTileX(), robot.getTileY());
-            RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-            game.addToLog(game.getNames()[myPlayer.getId()] + " healed one damage token.");
-            if (repairSite.getHammer()) {
-                //Player gets an option card
-                //TODO implement optionCards
-                myPlayer.giveOptionCard();
+            if (currentTile.getObjects()[0] instanceof RepairSite) {
+
+                RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
+                game.addToLog(game.getNames()[myPlayer.getId()] + " healed one damage token.");
+                if (repairSite.getHammer()) {
+                    //Player gets an option card
+                    //TODO implement optionCards
+                    myPlayer.giveOptionCard();
+                }
             }
         }
     }
