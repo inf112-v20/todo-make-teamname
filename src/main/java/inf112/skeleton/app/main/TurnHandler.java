@@ -98,7 +98,11 @@ public class TurnHandler {
                 HashMap<NonTextureProgramCard, Integer> cards = new HashMap<>();
                 ArrayList<Packets.Packet02Cards> allCards = game.getAllCards();
                 for (Packets.Packet02Cards packet: allCards) {
-                    cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                    if(packet.programCards != null){
+                        cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                    }else {
+                        cards.put(null, packet.playerId);
+                    }
                     //Only add cards for this turn
                 }
                 NonTextureProgramCard[] keySet = sortByPriority(cards);
@@ -712,7 +716,15 @@ public class TurnHandler {
         for (int i = 0; i < size - 1; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < size; j++) {
-                if(temp[j].getPriority() > temp[maxIndex].getPriority()){
+                int currentPriority = 0;
+                int maxPriority = 0;
+                if(temp[j] != null){
+                    currentPriority = temp[j].getPriority();
+                }
+                if(temp[i] != null){
+                    maxPriority = temp[maxIndex].getPriority();
+                }
+                if(currentPriority > maxPriority){
                     maxIndex = j;
                 }
             }

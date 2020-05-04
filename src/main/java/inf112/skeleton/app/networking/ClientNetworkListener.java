@@ -56,9 +56,13 @@ public class ClientNetworkListener extends Listener {
      */
     public void sendCards(ProgramCard[] programCards){
         Packets.Packet02Cards newCards = new Packets.Packet02Cards();
-        newCards.programCards = new int[programCards.length][4];
-        for (int i = 0; i < programCards.length; i++) {
-            newCards.programCards[i] = CardTranslator.programCardsToInt(programCards[i]);
+        if(programCards != null){
+            newCards.programCards = new int[programCards.length][4];
+            for (int i = 0; i < programCards.length; i++) {
+                newCards.programCards[i] = CardTranslator.programCardsToInt(programCards[i]);
+            }
+        }else {
+            newCards.programCards = null;
         }
         newCards.playerId = client.getID();
         client.sendTCP(newCards);

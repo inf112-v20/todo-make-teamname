@@ -201,4 +201,8 @@ public class MPClient {
     public void removeOnePlayerFromServer() {
         cnl.removeOnePlayerFromServer();
     }
+
+    public void sendEmptyCards() {
+        cnl.sendCards(null);
+    }
 }

@@ -129,13 +129,17 @@ public class Game{
         else if (screenX > Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) &&
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
-                screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3)) && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
+                screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))
+                && !myPlayer.getReadyButton() && (myPlayer.getArrayCards().length == 5 || playersShutdown[getId()])){
             if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
             }
             else if (myPlayer.getSelectedCards().size == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
+                myPlayer.setReadyButton(true);
+            }else if(playersShutdown[getId()]){
+                client.sendEmptyCards();
                 myPlayer.setReadyButton(true);
             }
         }
@@ -146,10 +150,10 @@ public class Game{
             chatTextField.setDisabled(false);
         }
         else if(screenX >= Settings.SCREEN_WIDTH/16 * 3
-                && screenX <= Settings.SCREEN_WIDTH/16 * 3 + Settings.CARD_WIDTH/4
+                && screenX <= Settings.SCREEN_WIDTH/16 * 3 + Settings.CARD_WIDTH/2
                 && screenY <= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6)
-                && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6 + Settings.CARD_WIDTH/4)
-                && shutdown){
+                && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6 + Settings.CARD_WIDTH/2)
+                && shutdown && !playersShutdown[getId()]){
             shutdownRobot();
         }
         return false;
@@ -200,6 +204,13 @@ public class Game{
                 batch.draw(lifeTokens[1],Settings.SCREEN_WIDTH / 74 *(8+j),
                         (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) -18, 16, 16);
             }
+            if(playersShutdown[i]){
+                batch.draw(powerDownRed, Settings.SCREEN_WIDTH / 74 * 12,
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) -18, 16, 16);
+            }else {
+                batch.draw(powerDownGreen, Settings.SCREEN_WIDTH / 74 * 12,
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) -18, 16, 16);
+            }
 
         }
     }
@@ -216,11 +227,11 @@ public class Game{
         if(!playersShutdown[getId()]){
             batch.draw(powerDownGreen, Settings.SCREEN_WIDTH/16 * 3,
                     Settings.SCREEN_HEIGHT/16 * 6,
-                    Settings.CARD_WIDTH/4, Settings.CARD_WIDTH/4);
+                    Settings.CARD_WIDTH/2, Settings.CARD_WIDTH/2);
         }else {
             batch.draw(powerDownRed, Settings.SCREEN_WIDTH/16 * 3,
                     Settings.SCREEN_HEIGHT/16 * 6,
-                    Settings.CARD_WIDTH/4, Settings.CARD_WIDTH/4);
+                    Settings.CARD_WIDTH/2, Settings.CARD_WIDTH/2);
         }
     }
 
@@ -344,7 +355,7 @@ public class Game{
         allCards.add(packet);
 
         if(allCards.size() == nrOfPlayers){
-            for (int id: idPlayerHash.keySet()) {
+            for (int id = 1; id <= nrOfPlayers; id++) {
                 boolean contains = false;
                 for (Packets.Packet02Cards pack: allCards) {
                     if (pack.playerId == id) {
@@ -352,10 +363,11 @@ public class Game{
                         break;
                     }
                 }
-                if(!contains){
+                if(!contains && !playersShutdown[id]){
                     board.removeObject(idPlayerHash.get(id).getRobot());
                     idPlayerHash.get(id).getRobot().setTileX(-1);
                     idPlayerHash.get(id).getRobot().setTileY(-1);
+                    idPlayerHash.remove(id);
                 }
             }
             turnHandler.isReady();
