@@ -149,10 +149,10 @@ public class Game{
             Gdx.input.setInputProcessor(stage);
             chatTextField.setDisabled(false);
         }
-        else if(screenX >= Settings.SCREEN_WIDTH/16 * 3
-                && screenX <= Settings.SCREEN_WIDTH/16 * 3 + Settings.CARD_WIDTH/2
-                && screenY <= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6)
-                && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/16 * 6 + Settings.CARD_WIDTH/2)
+        else if(screenX >= Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)
+                && screenX <= Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) + Settings.CARD_WIDTH/2
+                && screenY <= Settings.SCREEN_HEIGHT - Settings.SCREEN_HEIGHT/12 * 5
+                && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/12 * 5 + Settings.CARD_WIDTH/2)
                 && shutdown && !playersShutdown[getId()]){
             shutdownRobot();
         }
@@ -225,12 +225,12 @@ public class Game{
             batch.draw(buttonReadySelected,  readyButtonHitbox.getBound(0)[0], readyButtonHitbox.getBound(0)[1]   , 64, 32);
         }
         if(!playersShutdown[getId()]){
-            batch.draw(powerDownGreen, Settings.SCREEN_WIDTH/16 * 3,
-                    Settings.SCREEN_HEIGHT/16 * 6,
+            batch.draw(powerDownGreen, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4),
+                    Settings.SCREEN_HEIGHT/12 * 5,
                     Settings.CARD_WIDTH/2, Settings.CARD_WIDTH/2);
         }else {
-            batch.draw(powerDownRed, Settings.SCREEN_WIDTH/16 * 3,
-                    Settings.SCREEN_HEIGHT/16 * 6,
+            batch.draw(powerDownRed, Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4),
+                    Settings.SCREEN_HEIGHT/12 * 5,
                     Settings.CARD_WIDTH/2, Settings.CARD_WIDTH/2);
         }
     }
