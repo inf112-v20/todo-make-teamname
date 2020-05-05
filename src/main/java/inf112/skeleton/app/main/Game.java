@@ -293,17 +293,23 @@ public class Game{
     public void renderCards(SpriteBatch batch, BitmapFont font){
         for (int i = 0; i < myPlayer.getCards().length; i++){
             if(myPlayer.getCards()[i] != null) {
-                
-                font.setColor(Color.GRAY);
-                batch.draw(cardBG, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
-                font.draw(batch, myPlayer.getCards()[i].getName(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
-                font.draw(batch, myPlayer.getCards()[i].getText(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT/2-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
-                font.draw(batch, myPlayer.getCards()[i].getPriorityValue() +"", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH *7/ 10), Settings.CARD_HEIGHT/10);
-                batch.draw(myPlayer.getCards()[i].getImage(), (cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH))+(Settings.CARD_WIDTH*1/4), Settings.CARD_HEIGHT*1/2, Settings.CARD_WIDTH/2, Settings.CARD_HEIGHT/3);
-                if (myPlayer.getCards()[i].getSelected()) {
-                    font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), (Settings.CARD_HEIGHT / 10));
-                    batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                try{
+                    font.setColor(Color.GRAY);
+                    batch.draw(cardBG, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                    font.draw(batch, myPlayer.getCards()[i].getName(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                    font.draw(batch, myPlayer.getCards()[i].getText(), cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH)+ Settings.CARD_WIDTH/20, Settings.CARD_HEIGHT/2-Settings.CARD_HEIGHT/10, Settings.CARD_WIDTH-(Settings.CARD_WIDTH/10), 1, true);
+                    font.draw(batch, myPlayer.getCards()[i].getPriorityValue() +"", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH *7/ 10), Settings.CARD_HEIGHT/10);
+                    batch.draw(myPlayer.getCards()[i].getImage(), (cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH))+(Settings.CARD_WIDTH*1/4), Settings.CARD_HEIGHT*1/2, Settings.CARD_WIDTH/2, Settings.CARD_HEIGHT/3);
+                    if (myPlayer.getCards()[i].getSelected()) {
+                        font.draw(batch, myPlayer.getSelectedCards().indexOf(myPlayer.getCards()[i], true) + 1 + "", cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH) + (Settings.CARD_WIDTH / 5), (Settings.CARD_HEIGHT / 10));
+                        batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
+                    }
+                } catch (NullPointerException e){
+                    //skipped a frame
+                    e.printStackTrace();
+                    System.err.println(cardHitbox + " " + myPlayer + " " + myPlayer.getCards());
                 }
+
             }
         }
         font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/10 * 7);
