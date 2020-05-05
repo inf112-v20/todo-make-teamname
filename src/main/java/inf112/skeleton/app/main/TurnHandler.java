@@ -716,7 +716,7 @@ public class TurnHandler {
     public NonTextureProgramCard[] sortByPriority(HashMap<NonTextureProgramCard, Integer> map){
         int size = map.size();
         NonTextureProgramCard[] temp = map.keySet().toArray(new NonTextureProgramCard[0]);
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < size; j++) {
                 int currentPriority = 0;
