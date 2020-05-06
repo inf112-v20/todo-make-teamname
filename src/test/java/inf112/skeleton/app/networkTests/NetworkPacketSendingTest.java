@@ -1,10 +1,12 @@
 package inf112.skeleton.app.networkTests;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.networking.MPClient;
@@ -28,13 +30,16 @@ public class NetworkPacketSendingTest {
         new HeadlessApplication(new EmptyApplicationListener(), conf);
         Gdx.gl = mock(GL20.class);
         game = new Game();
-        Game game1 = mock(Game.class);
+        Game game1 = new Game();
         server = new MPServer(20000, 22000);
         server.run();
         client = new MPClient(server.getAddress(), game, 20000, 22000);
         newClient = new MPClient(server.getAddress(),game1, 20000, 22000);
         game.setClient(client);
-        game.create();
+        game.textureSetUp();
+        game.cardBoxSetUp();
+        game.readyButtonSetUp();
+        game.logSetUp();
         game.createBoardAndPlayers("riskyexchange");
     }
 

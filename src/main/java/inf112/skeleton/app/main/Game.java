@@ -78,6 +78,11 @@ public class Game{
         cardBoxSetUp();
         readyButtonSetUp();
         logSetUp();
+        textFieldSetUp(new Stage());
+    }
+
+    public void logSetUp() {
+        log = new LinkedList<>();
     }
 
     private void mapTexture() {
@@ -388,9 +393,8 @@ public class Game{
         turnHandler.create(this);
     }
 
-    public void logSetUp(){
-        log = new LinkedList<>();
-        stage = new Stage();
+    public void textFieldSetUp(Stage newStage){
+        this.stage = newStage;
         chatTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
         chatTextField.setPosition((Settings.SCREEN_WIDTH/80) * 59,Settings.SCREEN_HEIGHT/60 * 42);
         chatTextField.setSize(150, 18);
@@ -533,10 +537,10 @@ public class Game{
     /**
      * This method sets the settings for the card boxes and button.
      */
-    private void cardBoxSetUp() {
+    public void cardBoxSetUp() {
         cardHitbox = new Hitbox();
     }
-    private void readyButtonSetUp(){
+    public void readyButtonSetUp(){
         readyButtonHitbox = new Hitbox();
     }
 
@@ -556,7 +560,7 @@ public class Game{
     /**
      * This method initializes the textures needed in the {@link Game} class.
      */
-    private void textureSetUp() {
+    public void textureSetUp() {
         powerDownGreen = new Texture("assets/PowerDownGreen.png");
         powerDownRed = new Texture("assets/PowerDownRed.png");
         selectedFrame = new Texture("assets/cards/card_selected.png");

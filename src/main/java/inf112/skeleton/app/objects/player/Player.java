@@ -158,6 +158,8 @@ public class Player {
         for (ProgramCard card: cards)
             card.setSelected(false);
         deck.discard(cards);
+        //Fixme
+        //Draw directly here maybe to avoid nullpointer
         Arrays.fill(cards, null);
         if(robot.getHealth() >= 5){
             selectedCards.clear();

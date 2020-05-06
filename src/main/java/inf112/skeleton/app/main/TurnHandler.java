@@ -14,7 +14,6 @@ import inf112.skeleton.app.objects.player.Robot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 
 import static inf112.skeleton.app.board.DirectionConverter.*;
@@ -100,8 +99,6 @@ public class TurnHandler {
                 for (Packets.Packet02Cards packet: allCards) {
                     if(packet.programCards != null){
                         cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
-                    }else {
-                        cards.put(null, packet.playerId);
                     }
                     //Only add cards for this turn
                 }
@@ -716,18 +713,10 @@ public class TurnHandler {
     public NonTextureProgramCard[] sortByPriority(HashMap<NonTextureProgramCard, Integer> map){
         int size = map.size();
         NonTextureProgramCard[] temp = map.keySet().toArray(new NonTextureProgramCard[0]);
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size - 1; i++) {
             int maxIndex = i;
             for (int j = i + 1; j < size; j++) {
-                int currentPriority = 0;
-                int maxPriority = 0;
-                if(temp[j] != null){
-                    currentPriority = temp[j].getPriority();
-                }
-                if(temp[i] != null){
-                    maxPriority = temp[maxIndex].getPriority();
-                }
-                if(currentPriority > maxPriority){
+                if(temp[j].getPriority() > temp[maxIndex].getPriority()){
                     maxIndex = j;
                 }
             }
@@ -735,6 +724,13 @@ public class TurnHandler {
             temp[maxIndex] = temp[i];
             temp[i] = card;
         }
+        for (NonTextureProgramCard card: temp) {
+            if(card == null) System.out.println("null");
+            else {
+                System.out.println(card.getPriority());
+            }
+        }
+        System.out.println();
         return temp;
     }
 
