@@ -1,14 +1,17 @@
 # Obligatorisk Oppgave 4
 
 ## Deloppgave 1 - Team og prosjekt
-*   [ ] Møtereferater
-*   Rollene i teamet har fungert veldig bra, og har egentlig ikke blitt endret siden de ble satt. Vi er fortsatt førnøyd med rollene
+*   *Rollene* i teamet har fungert veldig bra, og har egentlig ikke blitt endret siden de ble satt. Vi er fortsatt førnøyd med rollene
 og hvordan de har fungert - vi deler en del på rollene slik at teamet kan få jobbe med det de har lyst til, og dette har fungert.
-*   Erfaringer team-messig eller mtp prosjektmetodikk?
-*   Retrospektiv:
+*   *Erfaringer team-messig*: For vår gruppe har vi funnet ut at vi får gjort mindre nå med nedstengningen enn når vi kunne møtes fysisk.
+*   *Retrospektiv*: Nå som vi har jobbet remote en stund og virkelig har fått føle på hvordan det er å jobbe slik.
+Vårt team har kjent på dette og har funnet ut at vi foretrekker å jobbe fysisk sammen, og føler at vi fikk holdt oppe trykket i arbeidet bedre da vi kunne møtes.
+Vi hadde en tilvennings-periode men har nå blitt mer vant til å jobbe remote og føler det går bedre nå enn det gikk i starten.
+I forhold til nestengningen så har kommunikasjonen og gruppedynamikken fungert like bra om ikke bedre - vi kommuniserer mye oftere nå via Slack og Discord.
+Vi føler at nedstengningen har påvirket vår gruppe negativt når det gjelder fremdriften og arbeidsinnsatsen i prosjektet, arbeidslysten er ikke like høy og har ikke fått til like mye på disse siste ukene enn på de tidligere ukene.
+Det vi kunne gjort annerledes med tanke på denne obligen var at vi kunne møtes digitalt oftere enn vi gjorde.
+*   Siden dette var siste innlevering i prosjektet så gikk fokuset vårt angående prioritering av oppgaver på å ferdigstille programmet vårt, squashe bugs og fikse andre feil som vi har funnet når vi playtestet spillet.
 *   [] Skjermbilde av trello - passe på at det er fra når vi er klar til å levere inn
-*   Hvordan fungerer gruppedynamikken og kommunikasjonen nå i forhold til i starten? Hvordan påvirket karantene og nedstengning teamet og fremdriften?
-
 
 ## Deloppgave 2 - Krav
 *   Oppdater hvilke krav dere har prioritert, hvor langt dere har kommet og hva dere har gjort siden forrige gang
