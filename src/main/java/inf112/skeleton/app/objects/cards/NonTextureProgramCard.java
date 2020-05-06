@@ -8,7 +8,6 @@ public class NonTextureProgramCard {
     private boolean rotateRight;
     private int value;
 
-
     public NonTextureProgramCard(int value, boolean rotate, boolean rotateLeft, boolean rotateRight, int priority) {
         this.value = value;
         this.rotate = rotate;
@@ -20,7 +19,6 @@ public class NonTextureProgramCard {
     public int getValue() {
         return value;
     }
-
 
     public boolean getRotateLeft() {
         return rotateLeft;

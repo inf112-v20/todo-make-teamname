@@ -14,11 +14,6 @@ public class ConveyorBelt implements IBoardObject {
         direction = newDir;
         rotate = "";
     }
-    public ConveyorBelt(boolean express, Direction newDir, String rotate){
-        this.express = express;
-        this.direction = newDir;
-        this.rotate = rotate;
-    }
 
     @Override
     public Direction getDirection() {

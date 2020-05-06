@@ -52,17 +52,17 @@ public class ProgramCard implements ICard {
                 text = "Moves the robot 1 space backwards";
                 break;
             default:
-
         }
-
     }
 
     public void setSelected(Boolean b){
         this.selected = b;
     }
+
     public boolean getSelected(){
         return this.selected;
     }
+
     @Override
     public String getName() {
         return this.name;
@@ -81,11 +81,6 @@ public class ProgramCard implements ICard {
     @Override
     public Integer getValue() {
         return value;
-    }
-
-    // Flips the texture of the card between front and back
-    public void flip(){
-
     }
 
     public boolean getRotateLeft() {
