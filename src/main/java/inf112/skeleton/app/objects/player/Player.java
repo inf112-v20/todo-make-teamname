@@ -36,15 +36,12 @@ public class Player {
         dead = false;
     }
 
-    public boolean hasWon(){return true;}
-
     /**
      * Deals a new hand to the player.
      */
     public void deal(){
         cards = deck.draw();
     }
-
 
     public void setCards(ProgramCard[] cards){this.cards = cards;}
 
@@ -63,6 +60,7 @@ public class Player {
     public Queue<ProgramCard> getSelectedCards(){
         return selectedCards;
     }
+
     public void giveOptionCard() {
         //Get an option card from the common option card deck
     }

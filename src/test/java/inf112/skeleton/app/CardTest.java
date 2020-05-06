@@ -1,10 +1,10 @@
 package inf112.skeleton.app;
 
 import org.junit.Before;
-import inf112.skeleton.app.objects.cards.OptionCard;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 
 public class CardTest {
-    OptionCard testCard;
+    ProgramCard testCard;
     @Before
     public void setUp(){
         //testCard = new OptionCard();
