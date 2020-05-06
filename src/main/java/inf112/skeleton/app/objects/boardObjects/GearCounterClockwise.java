@@ -6,7 +6,6 @@ public class GearCounterClockwise implements IBoardObject {
 
     private int x, y;
 
-
     @Override
     public Direction getDirection() {
         return null;

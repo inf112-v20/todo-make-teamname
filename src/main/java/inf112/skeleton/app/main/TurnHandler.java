@@ -1,6 +1,5 @@
 package inf112.skeleton.app.main;
 
-
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
@@ -10,7 +9,6 @@ import inf112.skeleton.app.objects.cards.CardTranslator;
 import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
-
 
 import java.util.ArrayList;
 import java.util.HashMap;

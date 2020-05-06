@@ -93,7 +93,6 @@ public class LobbyMenu {
         });
         stage.addActor(usernameTextField);
         Gdx.input.setInputProcessor(stage);
-
     }
 
     /**

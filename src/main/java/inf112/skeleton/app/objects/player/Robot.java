@@ -59,7 +59,6 @@ public class Robot implements IBoardObject {
             default:
                 return textures[1];
         }
-
     }
 
     /**
@@ -258,20 +257,6 @@ public class Robot implements IBoardObject {
      */
     public int getLife(){
         return life;
-    }
-
-    public float getRotation() {
-        switch (this.getDirection()){
-            case NORTH:
-                return 90;
-            case WEST:
-                return 180;
-            case EAST:
-                return 0;
-            case SOUTH:
-                return 270;
-        }
-        return 0;
     }
 
     /**

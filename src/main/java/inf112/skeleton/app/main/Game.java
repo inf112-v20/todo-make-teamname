@@ -1,6 +1,5 @@
 package inf112.skeleton.app.main;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -26,7 +25,6 @@ import org.javatuples.Pair;
 
 import java.net.InetAddress;
 import java.util.*;
-
 
 /**
  * The Game class is the centerpiece that ties all the different parts of the game together.<BR> It sends information to the
@@ -69,7 +67,6 @@ public class Game{
     private Texture powerDownRed;
     private boolean shutdown = true;
 
-
     /**
      * This method calls all the methods needed to start the "playing" part of the game.
      */
@@ -94,9 +91,6 @@ public class Game{
         boardSetUp(board);
         playerSetup();
     }
-
-
-
 
     public boolean keyUp(int keycode) {
             switch (keycode) {
@@ -287,7 +281,6 @@ public class Game{
         for (int i = 0; i < size; i++) {
             font.draw(batch, log.get(i), Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/40 * (30 + i));
         }
-
     }
 
     /**

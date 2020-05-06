@@ -21,8 +21,6 @@ public class Board  {
     private Robot selected;
 
     //Object numbers:
-    public final static int CONVEYORBELT = 0; //CONVEYORBELT
-    public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
 
     /**
@@ -32,7 +30,7 @@ public class Board  {
      * @param flags Number of flags on the board.
      */
     public Board(int width, int height, int flags) {
-        this.robots = new ArrayList<Robot>();
+        this.robots = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.flags = flags;
@@ -43,10 +41,6 @@ public class Board  {
             }
         }
         setSpawns();
-    }
-
-    public BoardTile[][] getGrid(){
-        return grid;
     }
 
     /**
@@ -125,12 +119,6 @@ public class Board  {
         moveObject(selected, dir);
     }
 
-    //moves selected robot to a new location
-    public void moveSelected(int x, int y){
-        if (selected == null)return;
-        moveObject(selected,x,y);
-    }
-
     /**
      * Removes a specific object
      */
@@ -147,13 +135,6 @@ public class Board  {
     public IBoardObject removeObject(int x, int y){
         if(x == -1 || y == -1) return null;
         return grid[y][x].remove(ROBOT);
-    }
-
-
-    //sets a robot as the selected robot
-    //Keep for later use when placing robots
-    public void setSelected(Robot r){
-        this.selected = r;
     }
 
     /**
@@ -183,5 +164,4 @@ public class Board  {
     public Pair getSpawn(int player) {
         return spawns.get(player);
     }
-
 }

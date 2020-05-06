@@ -27,6 +27,4 @@ public interface ICard {
      * @return Card value
      */
     Integer getValue();
-
-    
 }

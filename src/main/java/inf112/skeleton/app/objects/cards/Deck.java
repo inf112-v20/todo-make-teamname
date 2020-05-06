@@ -1,7 +1,6 @@
 package inf112.skeleton.app.objects.cards;
 
 import inf112.skeleton.app.objects.player.Robot;
-
 import java.util.*;
 
 public class Deck {

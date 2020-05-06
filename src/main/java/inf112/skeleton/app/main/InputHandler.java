@@ -59,6 +59,4 @@ public class InputHandler extends InputAdapter {
         if(screenState.equals(ScreenState.GAME)) return game.touchDragged(screenX, screenY, pointer);
         return true;
     }
-
-
 }
