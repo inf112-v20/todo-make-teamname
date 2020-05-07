@@ -193,14 +193,23 @@ public class MPClient {
         cnl.sendReady(signal);
     }
 
+    /**
+     * Sends a message tot he server that this player is powering down their robot
+     */
     public void sendShutdownRobot() {
         cnl.sendShutdownRobot();
     }
 
+    /**
+     * Removes this player from playing anymore cards.
+     */
     public void removeOnePlayerFromServer() {
         cnl.removeOnePlayerFromServer();
     }
 
+    /**
+     * Sends a empty list of cards
+     */
     public void sendEmptyCards() {
         cnl.sendCards(null);
     }

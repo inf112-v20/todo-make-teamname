@@ -144,12 +144,14 @@ public class Game{
                 myPlayer.setReadyButton(true);
             }
         }
+        //Enters the textfield to write a message
         else if(screenX >= chatTextField.getX() && screenX <= chatTextField.getWidth() + chatTextField.getX()
                 && screenY <= Settings.SCREEN_HEIGHT - chatTextField.getY()
                 && screenY >= Settings.SCREEN_HEIGHT - (chatTextField.getHeight() + chatTextField.getY())) {
             Gdx.input.setInputProcessor(stage);
             chatTextField.setDisabled(false);
         }
+        //Powers down the robot and sends null cards to all other players
         else if(screenX >= Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)
                 && screenX <= Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4) + Settings.CARD_WIDTH/2
                 && screenY <= Settings.SCREEN_HEIGHT - Settings.SCREEN_HEIGHT/12 * 5
@@ -275,6 +277,11 @@ public class Game{
         }
     }
 
+    /**
+     * Renders the chat log
+     * @param batch
+     * @param font
+     */
     public void renderLog(SpriteBatch batch, BitmapFont font){
         font.setColor(Color.GRAY);
         chatTextField.draw(batch, 1);
@@ -389,6 +396,10 @@ public class Game{
         turnHandler.create(this);
     }
 
+    /**
+     * Set up method for textfield, used for chat log
+     * @param newStage Takes in then stage controlling the textfields in this screen
+     */
     public void textFieldSetUp(Stage newStage){
         this.stage = newStage;
         chatTextField = new TextField("", new Skin(Gdx.files.internal("assets/textFieldTest/uiskin.json")));
@@ -430,6 +441,10 @@ public class Game{
         stage.addActor(chatTextField);
     }
 
+    /**
+     * Adds a string to the chat log. DOES NOT send it to other players. Use this when receiving messages.
+     * @param text Text you want to show on screen
+     */
     public void addToLog(String text){
         if(log.size() > 10){
             while (log.size() > 10){
@@ -439,6 +454,10 @@ public class Game{
         log.addFirst(text);
     }
 
+    /**
+     * Adds a packet with a string and a id to the chat log. DOES NOT send it to other players. Use this when receiving messages.
+     * @param packet Packet with String and id
+     */
     public void addToLog(Packets.Packet01Message packet) {
         if(log.size() > 10){
             while (log.size() > 10){
@@ -760,36 +779,64 @@ public class Game{
         addToLog(names[getId()] + " is shutting down their robot!");
     }
 
+    /**
+     * Set this to true if you want to render lasers for 1 second
+     * @param bool
+     */
     public void setRenderRobotLasers(boolean bool) {
         renderRobotLasers = bool;
     }
 
+    /**
+     * Removes you form playing anymore cards, if you are dead etc... Can still watch and chat
+     */
     public void removeOnePlayerFromServer() {
         client.removeOnePlayerFromServer();
     }
 
+    /**
+     * Discards the old hand of cards and draws a new one.
+     */
     public void discardAndDeal() {
         myPlayer.discard();
         myPlayer.deal();
         configureHitbox();
     }
 
+    /**
+     *
+     * @param boardName Name of the board you are going to play
+     */
     public void setBoardName(String boardName) {
         this.boardName = boardName;
     }
 
+    /**
+     *
+     * @return Name of the board you are going to play
+     */
     public String getBoardName(){
         return boardName;
     }
 
+    /**
+     * Sets the client the game is going to use, mainly used for testing so
+     * that multiple server test can run and not cause a crash.
+     * @param client
+     */
     public void setClient(MPClient client){
         this.client = client;
     }
+
 
     public void setInputHandler(InputHandler inputHandler) {
         this.inputHandler = inputHandler;
     }
 
+    /**
+     * If true you can power down you robot, if false you have to wait until the start of the next turn.
+     * @param b
+     */
     public void setShutdown(boolean b) {
         shutdown = b;
     }

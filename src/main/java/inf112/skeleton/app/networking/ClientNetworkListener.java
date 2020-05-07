@@ -155,11 +155,17 @@ public class ClientNetworkListener extends Listener {
         client.sendTCP(signal);
     }
 
+    /**
+     * Sends a message tot he server that this player is powering down their robot
+     */
     public void sendShutdownRobot() {
         Packets.Packet07ShutdownRobot shutdownRobot = new Packets.Packet07ShutdownRobot();
         client.sendTCP(shutdownRobot);
     }
 
+    /**
+     * Removes this player from playing anymore cards.
+     */
     public void removeOnePlayerFromServer() {
         Packets.Packet08RemovePlayer removePlayer = new Packets.Packet08RemovePlayer();
         client.sendTCP(removePlayer);
