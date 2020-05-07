@@ -191,7 +191,6 @@ public class TurnHandler {
                 //Respawn robot if player has more life left
                 board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
                 robot.respawn();
-                System.out.println("respawn");
                 game.addToLog(game.getNames()[myPlayer.getId()] + " respawned.");
             }
         }
@@ -522,14 +521,12 @@ public class TurnHandler {
         if (currentTile.getObjects()[1] instanceof Wall) {
             Wall wall = (Wall) currentTile.getObjects()[1];
             if (compareWallDirection(direction, wall.getDirection())) {
-                System.out.println("hit wall");
                 game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(currentTile.getObjects()[0] instanceof Pusher){
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
             if(compareWallDirection(direction, oppositeDirection(pusher.getDirection()))){
-                System.out.println("hit pusher");
                 game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
@@ -539,14 +536,12 @@ public class TurnHandler {
         if (nextTile.getObjects()[1] instanceof Wall) {
             Wall nextWall = (Wall) nextTile(robot, direction).getObjects()[1];
             if (compareWallDirection(direction, oppositeDirection(nextWall.getDirection()))) {
-                System.out.println("hit wall");
                 game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(nextTile.getObjects()[0] instanceof Pusher){
             Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
             if(compareWallDirection(direction, nextPusher.getDirection())){
-                System.out.println("hit pusher");
                 game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
@@ -726,13 +721,6 @@ public class TurnHandler {
             temp[maxIndex] = temp[i];
             temp[i] = card;
         }
-        for (NonTextureProgramCard card: temp) {
-            if(card == null) System.out.println("null");
-            else {
-                System.out.println(card.getPriority());
-            }
-        }
-        System.out.println();
         return temp;
     }
 

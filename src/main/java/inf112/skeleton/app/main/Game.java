@@ -134,16 +134,13 @@ public class Game{
                 screenX < Settings.SCREEN_WIDTH-(Settings.SCREEN_WIDTH/4)+64 &&
                 screenY > (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))-32&&
                 screenY < (Settings.SCREEN_HEIGHT-(Settings.SCREEN_HEIGHT/3))
-                && !myPlayer.getReadyButton() && (myPlayer.getArrayCards().length == 5 || playersShutdown[getId()])){
+                && !myPlayer.getReadyButton() && myPlayer.getArrayCards().length == 5){
             if (myPlayer.getSelectedCards().size == 5 && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
                 myPlayer.setReadyButton(true);
             }
             else if (myPlayer.getSelectedCards().size == myPlayer.getRobot().getHealth() && !myPlayer.getDead()){
                 client.sendCards(myPlayer.getArrayCards());
-                myPlayer.setReadyButton(true);
-            }else if(playersShutdown[getId()]){
-                client.sendEmptyCards();
                 myPlayer.setReadyButton(true);
             }
         }
@@ -159,6 +156,8 @@ public class Game{
                 && screenY >= Settings.SCREEN_HEIGHT - (Settings.SCREEN_HEIGHT/12 * 5 + Settings.CARD_WIDTH/2)
                 && shutdown && !playersShutdown[getId()]){
             shutdownRobot();
+            client.sendEmptyCards();
+            myPlayer.setReadyButton(true);
         }
         return false;
     }
