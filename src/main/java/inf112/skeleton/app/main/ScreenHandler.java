@@ -1,6 +1,7 @@
 package inf112.skeleton.app.main;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -47,7 +48,6 @@ public class ScreenHandler implements ApplicationListener {
 
     @Override
     public void resize(int i, int i1) {
-
     }
 
     @Override
@@ -73,6 +73,10 @@ public class ScreenHandler implements ApplicationListener {
                 break;
             case LEVELSELECT:
                 levelSelectMenu.render(batch, font);
+                break;
+            case OPTIONS:
+                OptionsMenu.render(batch, font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
                 break;
             default:
                 MainMenu.render(batch, font);

@@ -62,6 +62,8 @@ public class LobbyMenu {
         stage.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                x = (int)(x*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+                y = (int)(y*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
                 float userX = usernameTextField.getX();
                 float xPlusWidth = usernameTextField.getWidth() + usernameTextField.getX();
                 float userY = usernameTextField.getY();
@@ -69,6 +71,8 @@ public class LobbyMenu {
                 if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
                     Gdx.input.setInputProcessor(inputHandler);
                     usernameTextField.setDisabled(true);
+                }else{
+                    usernameTextField.getDefaultInputListener().touchDown(event, x, y, pointer, button);
                 }
                 return true;
             }
@@ -141,13 +145,20 @@ public class LobbyMenu {
     }
 
     public void touchDown(int screenX, int screenY, int pointer, int button){
+        screenX = (int)(screenX*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+        screenY = (int)(screenY*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
+        System.out.println(screenX + ", " + screenY);
         float x = usernameTextField.getX();
         float xPlusWidth = usernameTextField.getWidth() + usernameTextField.getX();
         float y = Settings.SCREEN_HEIGHT - usernameTextField.getY();
         float yPlusHeight = Settings.SCREEN_HEIGHT - (usernameTextField.getHeight() + usernameTextField.getY());
+
+        System.out.println(y + ", " + yPlusHeight);
+        System.out.println(x + ", " + xPlusWidth);
         if(screenX >= x && screenX <= xPlusWidth && screenY <= y && screenY >= yPlusHeight) {
             Gdx.input.setInputProcessor(stage);
             usernameTextField.setDisabled(false);
+            System.out.println("why not works|");
         }
     }
 }

@@ -1,5 +1,6 @@
 package inf112.skeleton.app.main;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -23,6 +24,7 @@ import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.javatuples.Pair;
 
+import javax.print.attribute.SetOfIntegerSyntax;
 import java.net.InetAddress;
 import java.util.*;
 
@@ -91,6 +93,9 @@ public class Game{
         boardSetUp(board);
         playerSetup();
     }
+
+
+
 
     public boolean keyUp(int keycode) {
             switch (keycode) {
@@ -307,7 +312,6 @@ public class Game{
                     e.printStackTrace();
                     System.err.println(cardHitbox + " " + myPlayer + " " + myPlayer.getCards());
                 }
-
             }
         }
         font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/10 * 7);
@@ -394,6 +398,8 @@ public class Game{
         stage.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                x = (int)(x*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+                y = (int)(y*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
                 float userX = chatTextField.getX();
                 float xPlusWidth = chatTextField.getWidth() + chatTextField.getX();
                 float userY = chatTextField.getY();
@@ -401,6 +407,8 @@ public class Game{
                 if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
                     Gdx.input.setInputProcessor(inputHandler);
                     chatTextField.setDisabled(true);
+                }else {
+                    chatTextField.getDefaultInputListener().touchDown(event, x, y, pointer, button);
                 }
                 return true;
             }
