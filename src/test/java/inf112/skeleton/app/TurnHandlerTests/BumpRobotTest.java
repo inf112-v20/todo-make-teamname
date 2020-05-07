@@ -12,6 +12,7 @@ import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.Pusher;
+import inf112.skeleton.app.objects.boardObjects.Wall;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.After;
@@ -38,7 +39,7 @@ public class BumpRobotTest {
         new HeadlessApplication(new EmptyApplicationListener(), conf);
         Gdx.gl = mock(GL20.class);
         game = new Game();
-        game.setBoard(new Board(3,1,1));
+        game.setBoard(new Board(3,5,1));
         game.gamePhasesSetUp();
         game.textureSetUp();
         game.cardBoxSetUp();
@@ -114,32 +115,95 @@ public class BumpRobotTest {
     }
     @Test
     public void bumpOneRobotIntoWallStop(){
-
+        Wall wall = new Wall(Direction.WEST);
+        board.addObject(wall, 2, 0);
+        assertEquals(robot0.getTileX(), 1);
+        turnHandler.moveRobot(robot, robot.getDirection());
+        assertEquals(robot0.getTileX(), 1);
+        board.removeObject(wall, 1);
     }
 
     @Test
     public void bumpOneRobotIntoWallDontStop(){
-
+        Wall wall = new Wall(Direction.EAST);
+        board.addObject(wall, 2, 0);
+        assertEquals(robot0.getTileX(), 1);
+        turnHandler.moveRobot(robot, robot.getDirection());
+        assertEquals(robot0.getTileX(), 2);
+        assertEquals(robot.getTileX(), 1);
+        board.removeObject(wall, 1);
     }
 
     @Test
     public void bumpTwoRobotIntoPusherStop(){
-
+        Pusher pusher = new Pusher(Direction.NORTH);
+        Robot robot1 = new Robot(mockImages);
+        board.addObject(pusher, 0, 3);
+        board.moveObject(robot0, 0, 1);
+        board.addObject(robot1, 0, 2);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        turnHandler.moveRobot(robot, Direction.NORTH);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        board.removeObject(pusher, 0);
+        board.removeObject(robot1);
     }
 
     @Test
     public void bumpTwoRobotIntoPusherDontStop(){
-
+        Pusher pusher = new Pusher(Direction.SOUTH);
+        Robot robot1 = new Robot(mockImages);
+        board.addObject(pusher, 0, 3);
+        board.moveObject(robot0, 0, 1);
+        board.addObject(robot1, 0, 2);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        turnHandler.moveRobot(robot, Direction.NORTH);
+        assertEquals(robot.getTileY(), 1);
+        assertEquals(robot0.getTileY(), 2);
+        assertEquals(robot1.getTileY(), 3);
+        board.removeObject(pusher, 0);
+        board.removeObject(robot1);
     }
 
     @Test
     public void bumpTwoRobotIntoWallStop(){
-
+        Wall wall = new Wall(Direction.SOUTH);
+        Robot robot1 = new Robot(mockImages);
+        board.addObject(wall, 0, 3);
+        board.moveObject(robot0, 0, 1);
+        board.addObject(robot1, 0, 2);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        turnHandler.moveRobot(robot, Direction.NORTH);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        board.removeObject(wall, 1);
+        board.removeObject(robot1);
     }
 
     @Test
     public void bumpTwoRobotIntoWallDontStop(){
-
+        Wall wall = new Wall(Direction.NORTH);
+        Robot robot1 = new Robot(mockImages);
+        board.addObject(wall, 0, 3);
+        board.moveObject(robot0, 0, 1);
+        board.addObject(robot1, 0, 2);
+        assertEquals(robot.getTileY(), 0);
+        assertEquals(robot0.getTileY(), 1);
+        assertEquals(robot1.getTileY(), 2);
+        turnHandler.moveRobot(robot, Direction.NORTH);
+        assertEquals(robot.getTileY(), 1);
+        assertEquals(robot0.getTileY(), 2);
+        assertEquals(robot1.getTileY(), 3);
+        board.removeObject(wall, 1);
+        board.removeObject(robot1);
     }
 
 

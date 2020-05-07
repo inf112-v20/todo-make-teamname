@@ -163,6 +163,16 @@ public class RobotLaserTests {
 
     @Test
     public void canShootWhenWallBehindTarget(){
+        
+    }
+
+    @Test
+    public void canShootWhenWallsOnTheSideOfTarget(){
+
+    }
+
+    @Test
+    public void cantShootWhenWallOnSameTile(){
 
     }
 
