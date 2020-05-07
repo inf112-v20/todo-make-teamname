@@ -31,7 +31,6 @@ public class DirectionConverter {
         return result;
     }
 
-
     /**
      * Returns the opposite direction
      * @param direction A direction

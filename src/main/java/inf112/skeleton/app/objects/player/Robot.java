@@ -17,6 +17,7 @@ public class Robot implements IBoardObject {
     private int respawnX, respawnY;
     private boolean isDestroyed = false;
     private int life = 3;
+    private int id;
 
     /**
      * This constructor takes a {@link Direction} and a list of {@link Texture},<BR>
@@ -58,7 +59,6 @@ public class Robot implements IBoardObject {
             default:
                 return textures[1];
         }
-
     }
 
     /**
@@ -259,25 +259,19 @@ public class Robot implements IBoardObject {
         return life;
     }
 
-    public float getRotation() {
-        switch (this.getDirection()){
-            case NORTH:
-                return 90;
-            case WEST:
-                return 180;
-            case EAST:
-                return 0;
-            case SOUTH:
-                return 270;
-        }
-        return 0;
-    }
-
     /**
      *
      * @return Returns the {@link Direction#EAST} {@link Texture} of the Robot.
      */
     public Texture getNonRotatingTexture() {
         return textures[1];
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId(){
+        return id;
     }
 }

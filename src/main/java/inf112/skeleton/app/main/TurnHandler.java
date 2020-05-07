@@ -1,10 +1,8 @@
 package inf112.skeleton.app.main;
 
-
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.BoardTile;
 import inf112.skeleton.app.board.Direction;
-import inf112.skeleton.app.board.DirectionConverter;
 import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.*;
 import inf112.skeleton.app.objects.cards.CardTranslator;
@@ -12,10 +10,8 @@ import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.concurrent.Semaphore;
 
 import static inf112.skeleton.app.board.DirectionConverter.*;
@@ -94,12 +90,14 @@ public class TurnHandler {
             }
             if(Thread.interrupted()) return;
 
-
+            game.setShutdown(false);
             for (int i = 0; i < 5; i++) {
                 HashMap<NonTextureProgramCard, Integer> cards = new HashMap<>();
                 ArrayList<Packets.Packet02Cards> allCards = game.getAllCards();
                 for (Packets.Packet02Cards packet: allCards) {
-                    cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                    if(packet.programCards != null){
+                        cards.put(CardTranslator.intToProgramCard(packet.programCards[i]), packet.playerId);
+                    }
                     //Only add cards for this turn
                 }
                 NonTextureProgramCard[] keySet = sortByPriority(cards);
@@ -129,6 +127,7 @@ public class TurnHandler {
                 }
                 for (int id: idPlayerHash.keySet()) {
                     Robot robot = idPlayerHash.get(id).getRobot();
+                    if (game.getPlayersShutdown()[id] || idPlayerHash.get(id).getLife() == 0) continue;
                     robotLasersShoot(robot);
                 }
                 game.setRenderRobotLasers(true);
@@ -152,6 +151,7 @@ public class TurnHandler {
             for (int id: idPlayerHash.keySet()) {
                 cleanUp(idPlayerHash.get(id));
             }
+            game.setShutdown(true);
             game.clearAllCards();
         }
     }
@@ -166,6 +166,7 @@ public class TurnHandler {
                 //Robot falls into pit
                 board.removeObject(robot);
                 robot.destroy();
+                game.addToLog(game.getNames()[robot.getId()] + " fell into a pit.");
             }
         }
     }
@@ -179,26 +180,37 @@ public class TurnHandler {
         Robot robot = myPlayer.getRobot();
         boolean[] tempPlayersShutdown = game.getPlayersShutdown();
         for (int i = 0; i < game.getPlayersShutdown().length; i++) {
+            if(tempPlayersShutdown[i] && !robot.isDestroyed()){
+                idPlayerHash.get(i).getRobot().fullHealth();
+                game.addToLog(game.getNames()[i] + " healed to full!");
+            }
             tempPlayersShutdown[i] = false;
         }
-        game.setPlayersShutdown(tempPlayersShutdown);
         if (robot.isDestroyed()) {
             if (myPlayer.getLife() > 0) {
                 //Respawn robot if player has more life left
                 board.addObject(robot, robot.getRespawnX(), robot.getRespawnY());
                 robot.respawn();
                 System.out.println("respawn");
+                game.addToLog(game.getNames()[myPlayer.getId()] + " respawned.");
             }
         }
+        game.setPlayersShutdown(tempPlayersShutdown);
         if (myPlayer.equals(game.getMyPlayer())) {
-            if(game.getMyPlayer().getLife() == 0 && !game.getMyPlayer().getDead()){
+            if(game.getMyPlayer().getLife() <= 0 && !game.getMyPlayer().getDead()){
                 game.getMyPlayer().die();
                 game.removeOnePlayerFromServer();
+                game.addToLog("You lost.");
                 return;
             }
             game.discardAndDeal();
 
             myPlayer.setReadyButton(false);
+        }else {
+            if(myPlayer.getLife() <= 0 && !myPlayer.getDead()) {
+                myPlayer.die();
+                game.addToLog(game.getNames()[myPlayer.getId()] + " lost the game.");
+            }
         }
     }
 
@@ -211,15 +223,19 @@ public class TurnHandler {
         Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
-        if (currentTile.getObjects()[0] instanceof RepairSite) {
+        if (currentTile.getObjects()[0] instanceof RepairSite || currentTile.getObjects()[0] instanceof Flag) {
             //Heals a damage token if robot
             robot.healDamage();
             robot.setRespawn(robot.getTileX(), robot.getTileY());
-            RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
-            if (repairSite.getHammer()) {
-                //Player gets an option card
-                //TODO implement optionCards
-                myPlayer.giveOptionCard();
+            if (currentTile.getObjects()[0] instanceof RepairSite) {
+
+                RepairSite repairSite = (RepairSite) currentTile.getObjects()[0];
+                game.addToLog(game.getNames()[myPlayer.getId()] + " healed one damage token.");
+                if (repairSite.getHammer()) {
+                    //Player gets an option card
+                    //TODO implement optionCards
+                    myPlayer.giveOptionCard();
+                }
             }
         }
     }
@@ -242,8 +258,10 @@ public class TurnHandler {
             Flag flag = (Flag) currentTile.getObjects()[0];
             if (!myPlayer.getFlags().contains(flag) && myPlayer.getFlags().size() + 1 == flag.getNr()) {
                 myPlayer.addFlag(flag);
+                game.addToLog(game.getNames()[myPlayer.getId()] + " picked up a flag.");
                 if (myPlayer.getFlags().size() == board.getFlagNr()) {
                     //TODO endscreen
+                    game.addToLog(game.getNames()[myPlayer.getId()] + " won the game.");
                     ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                     gameIsDone = true;
                 }
@@ -262,6 +280,7 @@ public class TurnHandler {
         BoardTile currentTile = board.getTile(robot.getTileX(), robot.getTileY());
         if (currentTile.getObjects()[3] instanceof BoardLaser) {
             robot.takeDamage();
+            game.addToLog(game.getNames()[robot.getId()] + " got hit by a laser.");
         }
     }
 
@@ -363,6 +382,7 @@ public class TurnHandler {
         if(boardTile.getObjects()[2] instanceof Robot){
             Robot robot = (Robot) boardTile.getObjects()[2];
             robot.takeDamage();
+            game.addToLog(game.getNames()[robot.getId()] + " got hit by a laser.");
             return true;
         }
         return false;
@@ -378,11 +398,13 @@ public class TurnHandler {
         if (currentTile.getObjects()[0] instanceof GearClockwise) {
             //Rotate right
             robot.rotateRight();
+            game.addToLog(game.getNames()[robot.getId()] + " was rotated right by a rotating gear.");
         }
 
         if (currentTile.getObjects()[0] instanceof GearCounterClockwise) {
             //Rotate left
             robot.rotateLeft();
+            game.addToLog(game.getNames()[robot.getId()] + " was rotated left by a rotating gear.");
         }
     }
 
@@ -397,6 +419,7 @@ public class TurnHandler {
             //Robot gets pushed
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
             moveRobot(robot, pusher.getDirection());
+            game.addToLog(game.getNames()[robot.getId()] + " got pushed by a pusher.");
         }
     }
 
@@ -414,12 +437,18 @@ public class TurnHandler {
             if (conveyorBelt.getExpress()) {
                 //Expressconveoyrbelt moves robot
                 moveRobot(robot, conveyorBelt.getDirection());
+                game.addToLog(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
                 if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
                     currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                     if (currentTile.getObjects()[0] instanceof ConveyorBelt) {// if the new conveyor belt can rotate the robot it does it
                         conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                        if (conveyorBelt.canRotate()) {
-                            robot.setDirection(conveyorBelt.getDirection());
+                        if (!conveyorBelt.canRotate().equals("")) {
+                            if(conveyorBelt.canRotate().equals("left")){
+                                robot.rotateLeft();
+                            }else {
+                                robot.rotateRight();
+                            }
+                            game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                         }
                     }
                 }
@@ -446,12 +475,18 @@ public class TurnHandler {
             ConveyorBelt conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
             if(robotCollision(robot, conveyorBelt.getDirection()) || conveyorCollision(conveyorBelt, robot)) return;
             moveRobot(robot, conveyorBelt.getDirection());
+            game.addToLog(game.getNames()[robot.getId()] + " was moved by a conveyor belt.");
             if(board.getTile(robot.getTileX(), robot.getTileY()) != null) {
                 currentTile = board.getTile(robot.getTileX(), robot.getTileY());
                 if (currentTile.getObjects()[0] instanceof ConveyorBelt) {
                     conveyorBelt = (ConveyorBelt) currentTile.getObjects()[0];
-                    if (conveyorBelt.canRotate()) { // if the new conveyor belt can rotate the robot it does it
-                        robot.setDirection(conveyorBelt.getDirection());
+                    if (!conveyorBelt.canRotate().equals("")) {
+                        if(conveyorBelt.canRotate().equals("left")){
+                            robot.rotateLeft();
+                        }else {
+                            robot.rotateRight();
+                        }
+                        game.addToLog(game.getNames()[robot.getId()] + " was rotated by a conveyor belt.");
                     }
                 }
             }
@@ -488,12 +523,14 @@ public class TurnHandler {
             Wall wall = (Wall) currentTile.getObjects()[1];
             if (compareWallDirection(direction, wall.getDirection())) {
                 System.out.println("hit wall");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(currentTile.getObjects()[0] instanceof Pusher){
             Pusher pusher = (Pusher) currentTile.getObjects()[0];
             if(compareWallDirection(direction, oppositeDirection(pusher.getDirection()))){
                 System.out.println("hit pusher");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
         }
@@ -503,12 +540,14 @@ public class TurnHandler {
             Wall nextWall = (Wall) nextTile(robot, direction).getObjects()[1];
             if (compareWallDirection(direction, oppositeDirection(nextWall.getDirection()))) {
                 System.out.println("hit wall");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a wall.");
                 return true;
             }
         }else if(nextTile.getObjects()[0] instanceof Pusher){
             Pusher nextPusher = (Pusher) nextTile.getObjects()[0];
             if(compareWallDirection(direction, nextPusher.getDirection())){
                 System.out.println("hit pusher");
+                game.addToLog(game.getNames()[robot.getId()] + " hit a pusher.");
                 return true;
             }
         }
@@ -629,9 +668,7 @@ public class TurnHandler {
             }
         }
         else if(card.getValue() == -1){
-            if (!wallCollision(robot, robot.getDirection()) && !robotCollision(robot, robot.getDirection())) {
-                moveRobot(robot, oppositeDirection(robot.getDirection()));
-            }
+            moveRobot(robot, oppositeDirection(robot.getDirection()));
         }
     }
 
@@ -685,6 +722,13 @@ public class TurnHandler {
             temp[maxIndex] = temp[i];
             temp[i] = card;
         }
+        for (NonTextureProgramCard card: temp) {
+            if(card == null) System.out.println("null");
+            else {
+                System.out.println(card.getPriority());
+            }
+        }
+        System.out.println();
         return temp;
     }
 

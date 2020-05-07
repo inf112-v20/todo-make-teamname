@@ -2,8 +2,10 @@ package inf112.skeleton.app.board;
 
 import inf112.skeleton.app.objects.boardObjects.IBoardObject;
 import inf112.skeleton.app.objects.player.Robot;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Board class is used to represent the board that is being played on,<BR>
@@ -12,14 +14,13 @@ import java.util.ArrayList;
 public class Board  {
 
     private final int flags;
+    List<Pair<Integer, Integer>> spawns = new ArrayList<>();
     private BoardTile [][] grid;
     private int width, height;
     private ArrayList<Robot> robots;
     private Robot selected;
 
     //Object numbers:
-    public final static int CONVEYORBELT = 0; //CONVEYORBELT
-    public final static int WALLLAYER = 1; //CONVEYORBELT
     public final static int ROBOT = 2;
 
     /**
@@ -29,7 +30,7 @@ public class Board  {
      * @param flags Number of flags on the board.
      */
     public Board(int width, int height, int flags) {
-        this.robots = new ArrayList<Robot>();
+        this.robots = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.flags = flags;
@@ -39,10 +40,7 @@ public class Board  {
                 grid[y][x] = new BoardTile(x, y);
             }
         }
-    }
-
-    public BoardTile[][] getGrid(){
-        return grid;
+        setSpawns();
     }
 
     /**
@@ -121,12 +119,6 @@ public class Board  {
         moveObject(selected, dir);
     }
 
-    //moves selected robot to a new location
-    public void moveSelected(int x, int y){
-        if (selected == null)return;
-        moveObject(selected,x,y);
-    }
-
     /**
      * Removes a specific object
      */
@@ -145,13 +137,6 @@ public class Board  {
         return grid[y][x].remove(ROBOT);
     }
 
-
-    //sets a robot as the selected robot
-    //Keep for later use when placing robots
-    public void setSelected(Robot r){
-        this.selected = r;
-    }
-
     /**
      *
      * @return Returns all robots on the board.
@@ -166,5 +151,17 @@ public class Board  {
      */
     public int getFlagNr() {
         return flags;
+    }
+
+    public void setSpawns() {
+        spawns.add(0, new Pair(0, 0));
+        spawns.add(1, new Pair(0, 6));
+        spawns.add(2, new Pair(0, 5));
+        spawns.add(3, new Pair(1, 8));
+        spawns.add(4, new Pair(1, 3));
+    }
+
+    public Pair getSpawn(int player) {
+        return spawns.get(player);
     }
 }

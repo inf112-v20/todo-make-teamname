@@ -34,8 +34,6 @@ public class BoardTile {
         else items[BOTTOMLAYER] = object;
     }
 
-
-
     //Removes a object
     public IBoardObject remove(int objectNr) {
         IBoardObject object = items[objectNr];

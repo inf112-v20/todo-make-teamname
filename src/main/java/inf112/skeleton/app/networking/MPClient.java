@@ -1,6 +1,5 @@
 package inf112.skeleton.app.networking;
 
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import inf112.skeleton.app.main.Game;
@@ -200,5 +199,9 @@ public class MPClient {
 
     public void removeOnePlayerFromServer() {
         cnl.removeOnePlayerFromServer();
+    }
+
+    public void sendEmptyCards() {
+        cnl.sendCards(null);
     }
 }

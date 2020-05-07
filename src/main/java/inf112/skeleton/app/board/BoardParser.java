@@ -41,6 +41,8 @@ public class BoardParser {
                     itemLayer[i] = row;
                 }
 
+                addLayer(board, itemLayer);
+
                 skip = sc.nextLine();
 
                 for (int i=0; i < height; i++) {

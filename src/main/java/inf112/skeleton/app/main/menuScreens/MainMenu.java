@@ -53,7 +53,7 @@ public class MainMenu {
                 break;
             case Input.Keys.ENTER:
                 if (selected == 0) {
-                    ScreenHandler.changeScreenState(ScreenState.HOSTGAME);
+                    ScreenHandler.changeScreenState(ScreenState.LEVELSELECT);
                 }
                 else if (selected == 1) {
                     ScreenHandler.changeScreenState(ScreenState.JOINGAME);

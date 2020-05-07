@@ -83,6 +83,46 @@ public class BumpRobotTest {
         assertTrue(robot1.isDestroyed());
     }
 
+    @Test
+    public void bumpOneRobotIntoPusherStop(){
+
+    }
+
+    @Test
+    public void bumpOneRobotIntoPusherDontStop(){
+
+    }
+    @Test
+    public void bumpOneRobotIntoWallStop(){
+
+    }
+
+    @Test
+    public void bumpOneRobotIntoWallDontStop(){
+
+    }
+
+    @Test
+    public void bumpTwoRobotIntoPusherStop(){
+
+    }
+
+    @Test
+    public void bumpTwoRobotIntoPusherDontStop(){
+
+    }
+
+    @Test
+    public void bumpTwoRobotIntoWallStop(){
+
+    }
+
+    @Test
+    public void bumpTwoRobotIntoWallDontStop(){
+
+    }
+
+
     @After
     public void removeRobots(){
         board.removeObject(robot0);

@@ -21,6 +21,7 @@ public class Player {
     private Deck deck;
     private ArrayList<ProgramCard> lockedCards;
     private boolean dead;
+    private int id;
 
     /**
      * This constructor creates the player's robot and deck, also initializes some lists.
@@ -28,8 +29,6 @@ public class Player {
      */
     public Player(Texture[] textures){
         robot = new Robot(textures);
-//        robot.setTileX(0);
-//        robot.setTileY(0);
         selectedCards = new Queue<ProgramCard>();
         lockedCards = new ArrayList<>();
         flags = new ArrayList<>();
@@ -37,15 +36,12 @@ public class Player {
         dead = false;
     }
 
-    public boolean hasWon(){return true;}
-
     /**
      * Deals a new hand to the player.
      */
     public void deal(){
         cards = deck.draw();
     }
-
 
     public void setCards(ProgramCard[] cards){this.cards = cards;}
 
@@ -64,6 +60,7 @@ public class Player {
     public Queue<ProgramCard> getSelectedCards(){
         return selectedCards;
     }
+
     public void giveOptionCard() {
         //Get an option card from the common option card deck
     }
@@ -114,6 +111,9 @@ public class Player {
         }
         if(newHand.length < 5){
             ProgramCard[] newHand5 = new ProgramCard[5];
+            for (int i = 0; i < newHand.length; i++) {
+                newHand5[i] = newHand[i];
+            }
             for (int i = 0; i < lockedCards.size(); i++) {
                 newHand5[newHand.length+i] = lockedCards.get(lockedCards.size()-(i+1));
             }
@@ -153,7 +153,11 @@ public class Player {
      * Discard the hand of cards the player has.
      */
     public void discard() {
+        for (ProgramCard card: cards)
+            card.setSelected(false);
         deck.discard(cards);
+        //Fixme
+        //Draw directly here maybe to avoid nullpointer
         Arrays.fill(cards, null);
         if(robot.getHealth() >= 5){
             selectedCards.clear();
@@ -179,5 +183,14 @@ public class Player {
 
     public boolean getDead() {
         return dead;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+        robot.setId(id);
+    }
+
+    public int getId(){
+        return id;
     }
 }
