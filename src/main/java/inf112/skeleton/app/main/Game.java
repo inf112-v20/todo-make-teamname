@@ -398,6 +398,8 @@ public class Game{
         stage.addListener(new ClickListener(){
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                x = (int)(x*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+                y = (int)(y*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
                 float userX = chatTextField.getX();
                 float xPlusWidth = chatTextField.getWidth() + chatTextField.getX();
                 float userY = chatTextField.getY();
@@ -405,6 +407,8 @@ public class Game{
                 if (x < userX || x > xPlusWidth || y < userY || y > yPlusHeight) {
                     Gdx.input.setInputProcessor(inputHandler);
                     chatTextField.setDisabled(true);
+                }else {
+                    chatTextField.getDefaultInputListener().touchDown(event, x, y, pointer, button);
                 }
                 return true;
             }

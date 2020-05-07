@@ -46,6 +46,21 @@ public class JoinGameMenu {
         ipAddressTextField.setPosition((Settings.SCREEN_WIDTH/80) * 31,Settings.SCREEN_HEIGHT/60 * 29);
         ipAddressTextField.setSize(150, 25);
         ipAddressTextField.setMessageText("IP Address");
+        stage.addListener(new ClickListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                x = (int)(x*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+                y = (int)(y*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
+                float userX = ipAddressTextField.getX();
+                float xPlusWidth = ipAddressTextField.getWidth() + ipAddressTextField.getX();
+                float userY = ipAddressTextField.getY();
+                float yPlusHeight = (ipAddressTextField.getHeight() + ipAddressTextField.getY());
+                if (!(x < userX || x > xPlusWidth || y < userY || y > yPlusHeight)) {
+                    ipAddressTextField.getDefaultInputListener().touchDown(event, x, y, pointer, button);
+                }
+                return true;
+            }
+        });
         ipAddressTextField.addListener(new ClickListener(){
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
