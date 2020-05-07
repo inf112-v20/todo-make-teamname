@@ -679,8 +679,10 @@ public class TurnHandler {
      * @return Returns true if the robot moved
      */
     public boolean moveRobot(Robot robot, Direction direction) {
+        boolean result = false;
         if (!wallCollision(robot, direction) && !robotCollision(robot, direction)) {
             board.moveObject(robot, direction);
+            result = true;
             try {
                 Thread.sleep(300);
             } catch (InterruptedException e) {
@@ -690,6 +692,7 @@ public class TurnHandler {
             Robot nextRobot = (Robot) nextTile(robot, direction).getObjects()[2];
             if(moveRobot(nextRobot, direction)){
                board.moveObject(robot, direction);
+               result = true;
             }
         }
 
@@ -697,10 +700,11 @@ public class TurnHandler {
             if (board.getTile(robot.getTileX(), robot.getTileY()).getObjects()[0] instanceof Pit) {
                 board.removeObject(robot);
                 robot.destroy();
+                result = true;
             }
         }
 
-        return !wallCollision(robot, direction);
+        return result;
     }
 
     /**

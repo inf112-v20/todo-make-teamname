@@ -36,8 +36,6 @@ public class RepairSiteTest {
         game = new Game();
         game.setBoard(new Board(2,1,1));
         game.gamePhasesSetUp();
-        game.gamePhasesSetUp();
-        game.gamePhasesSetUp();
         game.textureSetUp();
         game.cardBoxSetUp();
         game.readyButtonSetUp();

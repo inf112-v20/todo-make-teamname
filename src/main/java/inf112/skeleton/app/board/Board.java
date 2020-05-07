@@ -129,6 +129,13 @@ public class Board  {
         return grid[y][x].remove(ROBOT);
     }
 
+    public IBoardObject removeObject(IBoardObject object, int layer){
+        int x = object.getTileX();
+        int y = object.getTileY();
+        if(x == -1 || y == -1) return null;
+        return grid[y][x].remove(layer);
+    }
+
     /**
      * Removes a object at the x and y coordinate
      */

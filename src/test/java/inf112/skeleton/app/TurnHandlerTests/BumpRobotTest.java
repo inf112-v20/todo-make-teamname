@@ -10,6 +10,8 @@ import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
+import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.boardObjects.Pusher;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.After;
@@ -38,6 +40,13 @@ public class BumpRobotTest {
         game = new Game();
         game.setBoard(new Board(3,1,1));
         game.gamePhasesSetUp();
+        game.textureSetUp();
+        game.cardBoxSetUp();
+        game.readyButtonSetUp();
+        game.logSetUp();
+        Packets.Packet05Name packet05Name = new Packets.Packet05Name();
+        packet05Name.name = new String[]{"a","b"};
+        game.receiveNames(packet05Name);
         Texture mockTexture = mock(Texture.class);
         mockImages = new Texture[]{mockTexture};
         player = new Player(mockImages);
@@ -85,12 +94,23 @@ public class BumpRobotTest {
 
     @Test
     public void bumpOneRobotIntoPusherStop(){
-
+        Pusher pusher = new Pusher(Direction.EAST);
+        board.addObject(pusher, 2, 0);
+        assertEquals(robot0.getTileX(), 1);
+        turnHandler.moveRobot(robot, robot.getDirection());
+        assertEquals(robot0.getTileX(), 1);
+        board.removeObject(pusher, 0);
     }
 
     @Test
     public void bumpOneRobotIntoPusherDontStop(){
-
+        Pusher pusher = new Pusher(Direction.WEST);
+        board.addObject(pusher, 2, 0);
+        assertEquals(robot0.getTileX(), 1);
+        turnHandler.moveRobot(robot, robot.getDirection());
+        assertEquals(robot0.getTileX(), 2);
+        assertEquals(robot.getTileX(), 1);
+        board.removeObject(pusher, 0);
     }
     @Test
     public void bumpOneRobotIntoWallStop(){

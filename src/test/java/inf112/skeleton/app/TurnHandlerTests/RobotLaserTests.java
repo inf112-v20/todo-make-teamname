@@ -39,8 +39,6 @@ public class RobotLaserTests {
         game = new Game();
         game.setBoard(new Board(3, 1, 3));
         game.gamePhasesSetUp();
-        game.gamePhasesSetUp();
-        game.gamePhasesSetUp();
         game.textureSetUp();
         game.cardBoxSetUp();
         game.readyButtonSetUp();
@@ -70,8 +68,7 @@ public class RobotLaserTests {
     @Before
     public void remove(){
         for (Wall wall: walls) {
-            BoardTile boardTile = board.getTile(wall.getTileX(), wall.getTileY());
-            boardTile.remove(1);
+            board.removeObject(wall, 1);
         }
         for (Robot robot: robots) {
             board.removeObject(robot);
