@@ -37,7 +37,7 @@ public class InputHandler extends InputAdapter {
         screenState = screenHandler.getScreenState();
         if(screenState.equals(ScreenState.GAME))return game.keyUp(keycode);
         if(screenState.equals(ScreenState.MAINMENU)) MainMenu.input(keycode);
-
+        if(screenState.equals(ScreenState.OPTIONS)) OptionsMenu.input(keycode);
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.input(keycode);
         if(screenState.equals(ScreenState.LEVELSELECT)) levelSelectMenu.input(keycode);
         if(screenState.equals(ScreenState.HOSTGAME)) hostGameMenu.input(keycode);
@@ -47,6 +47,8 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        screenX = (int)(screenX*((double)(Settings.SCREEN_WIDTH))/(double)(Gdx.app.getGraphics().getWidth()));
+        screenY = (int)(screenY*((double)(Settings.SCREEN_HEIGHT))/(double)(Gdx.app.getGraphics().getHeight()));
         screenState = screenHandler.getScreenState();
         if(screenState.equals(ScreenState.GAME)) return game.touchDown(screenX, screenY, pointer, button);
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.touchDown(screenX, screenY, pointer, button);
