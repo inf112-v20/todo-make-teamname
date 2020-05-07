@@ -74,6 +74,10 @@ public class ScreenHandler implements ApplicationListener {
             case LEVELSELECT:
                 levelSelectMenu.render(batch, font);
                 break;
+            case OPTIONS:
+                OptionsMenu.render(batch, font);
+                batch.draw(mainLogo, 380, 500, 550, 160);
+                break;
             default:
                 MainMenu.render(batch, font);
                 batch.draw(mainLogo, 380, 500, 550, 160);

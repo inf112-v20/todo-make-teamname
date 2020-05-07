@@ -37,7 +37,7 @@ public class InputHandler extends InputAdapter {
         screenState = screenHandler.getScreenState();
         if(screenState.equals(ScreenState.GAME))return game.keyUp(keycode);
         if(screenState.equals(ScreenState.MAINMENU)) MainMenu.input(keycode);
-
+        if(screenState.equals(ScreenState.OPTIONS)) OptionsMenu.input(keycode);
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.input(keycode);
         if(screenState.equals(ScreenState.LEVELSELECT)) levelSelectMenu.input(keycode);
         if(screenState.equals(ScreenState.HOSTGAME)) hostGameMenu.input(keycode);

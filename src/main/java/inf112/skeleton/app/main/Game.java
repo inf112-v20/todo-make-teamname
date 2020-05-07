@@ -1,5 +1,6 @@
 package inf112.skeleton.app.main;
 
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -23,6 +24,7 @@ import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.javatuples.Pair;
 
+import javax.print.attribute.SetOfIntegerSyntax;
 import java.net.InetAddress;
 import java.util.*;
 
@@ -91,6 +93,9 @@ public class Game{
         boardSetUp(board);
         playerSetup();
     }
+
+
+
 
     public boolean keyUp(int keycode) {
             switch (keycode) {
@@ -307,7 +312,6 @@ public class Game{
                     e.printStackTrace();
                     System.err.println(cardHitbox + " " + myPlayer + " " + myPlayer.getCards());
                 }
-
             }
         }
         font.draw(batch, "Locked cards: ", Settings.SCREEN_WIDTH/12 * 9, Settings.SCREEN_HEIGHT/10 * 7);
