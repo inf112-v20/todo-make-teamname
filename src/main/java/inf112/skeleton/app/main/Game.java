@@ -794,4 +794,8 @@ public class Game{
     public void setShutdown(boolean b) {
         shutdown = b;
     }
+
+    public LinkedList<String> getLog(){
+        return log;
+    }
 }
