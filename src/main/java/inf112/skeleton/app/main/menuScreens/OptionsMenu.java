@@ -60,6 +60,7 @@ public class OptionsMenu {
     }
 
     public static void input(int keyCode) {
+        System.out.println(Gdx.graphics.getDisplayMode().width + "x"+Gdx.graphics.getDisplayMode().height);
         switch (keyCode){
             case Input.Keys.UP:
                 selected = selected == 0 ? 3 : selected - 1;
@@ -69,16 +70,21 @@ public class OptionsMenu {
                 break;
             case Input.Keys.ENTER:
                 if (selected == 1) {
-                    Gdx.app.getGraphics().setWindowedMode(1920, 1080);
-                    System.out.println("changed resolution to: " + Gdx.app.getGraphics().getWidth() + "x"+ Gdx.app.getGraphics().getHeight());
+                    if (Gdx.graphics.getDisplayMode().width <= 1920 || Gdx.graphics.getDisplayMode().height <=1080)
+                        Gdx.app.getGraphics().setFullscreenMode(Gdx.graphics.getDisplayMode());
+                    else Gdx.app.getGraphics().setWindowedMode(1920, 1080);
                     ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                 }
                 else if (selected == 0) {
-                    Gdx.app.getGraphics().setWindowedMode(1600, 900);
+                    if (Gdx.graphics.getDisplayMode().width <= 1600 || Gdx.graphics.getDisplayMode().height <=900)
+                        Gdx.app.getGraphics().setFullscreenMode(Gdx.graphics.getDisplayMode());
+                    else Gdx.app.getGraphics().setWindowedMode(1600, 900);
                     ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                 }
                 else if (selected == 2){
-                    Gdx.app.getGraphics().setWindowedMode(1280, 720);
+                    if (Gdx.graphics.getDisplayMode().width <= 1280 || Gdx.graphics.getDisplayMode().height <=720)
+                        Gdx.app.getGraphics().setFullscreenMode(Gdx.graphics.getDisplayMode());
+                    else Gdx.app.getGraphics().setWindowedMode(1280, 720);
                     ScreenHandler.changeScreenState(ScreenState.MAINMENU);
                 }
                 else {
