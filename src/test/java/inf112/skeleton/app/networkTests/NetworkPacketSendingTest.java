@@ -1,12 +1,9 @@
 package inf112.skeleton.app.networkTests;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.networking.MPClient;
@@ -51,7 +48,32 @@ public class NetworkPacketSendingTest {
     }
 
     @Test
-    public void illDoThisLater(){
+    public void messageTest(){
+
+    }
+
+    @Test
+    public void startSignalTest(){
+
+    }
+
+    @Test
+    public void sendNameTest(){
+
+    }
+
+    @Test
+    public void sendReadyTest(){
+
+    }
+
+    @Test
+    public void sendShutdownTest(){
+
+    }
+
+    @Test
+    public void removeRobotTest(){
 
     }
 }

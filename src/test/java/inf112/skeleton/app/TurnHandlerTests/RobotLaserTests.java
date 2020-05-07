@@ -163,17 +163,22 @@ public class RobotLaserTests {
 
     @Test
     public void canShootWhenWallBehindTarget(){
-        
+        board.addObject(robot, 0, 0);
+        board.addObject(robot0, 1, 0);
+        board.addObject(eastWall, 1, 0);
+        assertEquals(9, robot0.getHealth());
+        turnHandler.robotLasersShoot(robot);
+        assertEquals(8, robot0.getHealth());
     }
 
     @Test
     public void canShootWhenWallsOnTheSideOfTarget(){
-
-    }
-
-    @Test
-    public void cantShootWhenWallOnSameTile(){
-
+        board.addObject(robot, 0, 0);
+        board.addObject(robot0, 1, 0);
+        board.addObject(northWall, 1, 0);
+        assertEquals(9, robot0.getHealth());
+        turnHandler.robotLasersShoot(robot);
+        assertEquals(9, robot0.getHealth());
     }
 
 }

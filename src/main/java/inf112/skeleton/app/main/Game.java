@@ -303,7 +303,7 @@ public class Game{
                         batch.draw(selectedFrame, cardHitbox.getBound(0)[0] + (i * Settings.CARD_WIDTH), 0, Settings.CARD_WIDTH, Settings.CARD_HEIGHT);
                     }
                 } catch (NullPointerException e){
-                    //skipped a frame
+                    //skipped a frame, because cards were changed to null by another thread
                     e.printStackTrace();
                     System.err.println(cardHitbox + " " + myPlayer + " " + myPlayer.getCards());
                 }
