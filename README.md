@@ -25,3 +25,5 @@ by team **todo-make-teamname.**
 *   Currently throws "WARNING: An illegal reflective access operation has occurred", 
 when the java version used is >8. This has no effect on function or performance, and is just a warning.
 *   An InterruptedExepction is thrown when the game is closed.
+*   One case were the host didn't manage to have 4 players connected, but it resolved when changing host. <br>
+    Think it might be related to the modem that was being used.
