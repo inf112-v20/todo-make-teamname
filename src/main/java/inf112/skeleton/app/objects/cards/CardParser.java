@@ -1,14 +1,23 @@
 package inf112.skeleton.app.objects.cards;
 
+import com.badlogic.gdx.graphics.Texture;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * CardParser grabs the card-information from cards.txt and translates that into cards
+ * which can be read by the game.
+ */
 public class CardParser {
-    static Card[] cards = new Card[0];
+    static ProgramCard[] cards = new ProgramCard[0];
 
-    public static void cards() {
+    /**
+     * Read in card info from text file and makes them cards to use in game.
+     * @return cards
+     */
+    public static ProgramCard[] cards() {
         try{
             Scanner scanner = new Scanner(new File("assets/cards/cards.txt"));
             scanner.useDelimiter("[-\n]");
@@ -18,7 +27,7 @@ public class CardParser {
                     int valueCard = Integer.parseInt(cardValue[0]);
                     String cardName = cardValue[1];
 
-                    Card newCard = new Card(valueCard, cardName);
+                    ProgramCard newCard = new ProgramCard(cardName, new Texture("assets/cards/card_" + cardName + ".png"), valueCard);
                     cards = addCard(cards, newCard);
                 }
                 catch (NumberFormatException f){
@@ -28,12 +37,19 @@ public class CardParser {
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
+        return cards;
     }
-    private static Card[] addCard(Card[] cards, Card cardToAdd){
-        Card[] newCard = new Card[cards.length + 1];
+
+    /**
+     * Adds a card to the card list
+     * @param cards
+     * @param cardToAdd
+     * @return newCard
+     */
+    private static ProgramCard[] addCard(ProgramCard[] cards, ProgramCard cardToAdd){
+        ProgramCard[] newCard = new ProgramCard[cards.length + 1];
         System.arraycopy(cards, 0, newCard, 0, cards.length);
         newCard[newCard.length - 1] = cardToAdd;
         return newCard;
     }
-
 }

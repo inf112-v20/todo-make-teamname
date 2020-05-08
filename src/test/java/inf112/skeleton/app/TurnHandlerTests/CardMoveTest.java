@@ -52,7 +52,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestMoveOne(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
 
@@ -61,7 +61,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestMoveTwo(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(2,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(2,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(2, robot.getTileX());
 
@@ -70,7 +70,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestMoveThree(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(3,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(3,false,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(3, robot.getTileX());
 
@@ -79,7 +79,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestRotateLeft(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,true,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,true,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.NORTH, robot.getDirection());
@@ -89,7 +89,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestRotateRight(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,true);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,true, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.SOUTH, robot.getDirection());
@@ -100,7 +100,7 @@ public class CardMoveTest {
     @Test
     public void cardMoveTestUTurn(){
         assertEquals(0, robot.getTileX());
-        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(0,true,false,false, 0);
         turnHandler.cardMove(card, robot);
         assertEquals(0, robot.getTileX());
         assertEquals(Direction.WEST, robot.getDirection());

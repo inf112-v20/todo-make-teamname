@@ -1,6 +1,6 @@
 package inf112.skeleton.app.TurnHandlerTests;
 
-import com.badlogic.gdx.ApplicationListener;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
@@ -10,6 +10,8 @@ import inf112.skeleton.app.EmptyApplicationListener;
 import inf112.skeleton.app.board.Board;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
+import inf112.skeleton.app.networking.Packets;
+import inf112.skeleton.app.objects.cards.ProgramCard;
 import inf112.skeleton.app.objects.player.Player;
 import inf112.skeleton.app.objects.player.Robot;
 import org.junit.Before;
@@ -34,9 +36,17 @@ public class CleanUpTest {
         new HeadlessApplication(new EmptyApplicationListener(), conf);
         Gdx.gl = mock(GL20.class);
         game = new Game();
+        game.textureSetUp();
+        game.cardBoxSetUp();
+        game.readyButtonSetUp();
+        game.logSetUp();
         game.setBoard(new Board(1,1,1));
         game.gamePhasesSetUp();
         turnHandler = game.getTurnHandler();
+        game.setPlayersShutdown(new boolean[]{false, false});
+        Packets.Packet05Name packet05Name = new Packets.Packet05Name();
+        packet05Name.name = new String[]{"a","b"};
+        game.receiveNames(packet05Name);
     }
 
     @Before
@@ -44,6 +54,11 @@ public class CleanUpTest {
         Texture mockTexture = mock(Texture.class);
         Texture[] mockImages = {mockTexture};
         player = new Player(mockImages);
+        ProgramCard card = mock(ProgramCard.class);
+        ProgramCard[] cards = new ProgramCard[]{card};
+        player.setCards(cards);
+        game.setMyPlayer(player);
+        player.deal();
         board = game.getBoard();
         board.addObject(player.getRobot(), 0, 0);
         robot = player.getRobot();
@@ -56,15 +71,5 @@ public class CleanUpTest {
         assertEquals(2, robot.getLife());
         turnHandler.cleanUp(player);
         assertFalse(robot.isDestroyed());
-    }
-
-    @Test
-    public void cleanUpTestEndGame(){
-        assertFalse(turnHandler.getGameIsDone());
-        while(robot.getLife() > 0){
-            robot.destroy();
-        }
-        turnHandler.cleanUp(player);
-        assertTrue(turnHandler.getGameIsDone());
     }
 }

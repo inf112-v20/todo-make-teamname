@@ -37,9 +37,6 @@ public class ClientNetworkListener extends Listener {
      */
     public void connected(Connection c){
         System.out.println("[CLIENT] >> You have connected.");
-
-        firstMessage.message = "Hello, Server. How are you?";
-        client.sendTCP(firstMessage);
         connection = true;
     }
 
@@ -49,6 +46,7 @@ public class ClientNetworkListener extends Listener {
      */
     public void sendInfo(String message){
         firstMessage.message = message;
+        firstMessage.playerId = game.getId();
         client.sendTCP(firstMessage);
     }
 
@@ -58,9 +56,13 @@ public class ClientNetworkListener extends Listener {
      */
     public void sendCards(ProgramCard[] programCards){
         Packets.Packet02Cards newCards = new Packets.Packet02Cards();
-        newCards.programCards = new int[programCards.length][4];
-        for (int i = 0; i < programCards.length; i++) {
-            newCards.programCards[i] = CardTranslator.programCardsToInt(programCards[i]);
+        if(programCards != null){
+            newCards.programCards = new int[programCards.length][4];
+            for (int i = 0; i < programCards.length; i++) {
+                newCards.programCards[i] = CardTranslator.programCardsToInt(programCards[i]);
+            }
+        }else {
+            newCards.programCards = null;
         }
         newCards.playerId = client.getID();
         client.sendTCP(newCards);
@@ -102,6 +104,7 @@ public class ClientNetworkListener extends Listener {
     public void received(Connection c, Object o){
         if(o instanceof Packets.Packet01Message){
             Packets.Packet01Message packet = (Packets.Packet01Message) o;
+            game.addToLog(packet);
         }else if(o instanceof Packets.Packet02Cards) {
             Packets.Packet02Cards packet = (Packets.Packet02Cards) o;
             cards = packet;
@@ -115,6 +118,16 @@ public class ClientNetworkListener extends Listener {
         else if(o instanceof Packets.Packet05Name){
             Packets.Packet05Name name = (Packets.Packet05Name) o;
             game.receiveNames(name);
+        }
+        else if(o instanceof Packets.Packet06ReadySignal){
+            Packets.Packet06ReadySignal ready = (Packets.Packet06ReadySignal) o;
+            game.receiveAllReady(ready.allReady);
+        }
+        else if(o instanceof Packets.Packet07ShutdownRobot){
+            Packets.Packet07ShutdownRobot shutdownRobot = (Packets.Packet07ShutdownRobot) o;
+            game.setPlayersShutdown(shutdownRobot.playersShutdown);
+        }else if(o instanceof  String){
+            game.setBoardName((String) o);
         }
     }
 
@@ -134,4 +147,27 @@ public class ClientNetworkListener extends Listener {
         return connection;
     }
 
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready
+     * @param signal A packet with booleans
+     */
+    public void sendReady(Packets.Packet06ReadySignal signal) {
+        client.sendTCP(signal);
+    }
+
+    /**
+     * Sends a message tot he server that this player is powering down their robot
+     */
+    public void sendShutdownRobot() {
+        Packets.Packet07ShutdownRobot shutdownRobot = new Packets.Packet07ShutdownRobot();
+        client.sendTCP(shutdownRobot);
+    }
+
+    /**
+     * Removes this player from playing anymore cards.
+     */
+    public void removeOnePlayerFromServer() {
+        Packets.Packet08RemovePlayer removePlayer = new Packets.Packet08RemovePlayer();
+        client.sendTCP(removePlayer);
+    }
 }

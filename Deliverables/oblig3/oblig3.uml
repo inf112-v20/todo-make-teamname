@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>inf112.skeleton.app</OriginalElement>
+  <nodes>
+    <node x="224.14062499999994" y="328.8828125">inf112.skeleton.app.gameTests</node>
+    <node x="213.0" y="403.8828125">inf112.skeleton.app.objects</node>
+    <node x="947.4913194444445" y="328.8828125">inf112.skeleton.app.TurnHandlerTests</node>
+    <node x="448.88194444444446" y="8.8828125">inf112.skeleton.app.board</node>
+    <node x="0.0" y="403.8828125">inf112.skeleton.app.CardTests</node>
+    <node x="50.0" y="8.8828125">inf112.skeleton.app.networking</node>
+    <node x="455.5659722222223" y="178.8828125">inf112.skeleton.app.BoardTileTest</node>
+    <node x="767.5659722222223" y="178.8828125">inf112.skeleton.app.EmptyApplicationListener</node>
+    <node x="627.5659722222223" y="178.8828125">inf112.skeleton.app.RobotTest</node>
+    <node x="307.5659722222223" y="178.8828125">inf112.skeleton.app.BoardTests</node>
+    <node x="5.546875000000114" y="328.8828125">inf112.skeleton.app.networkTests</node>
+    <node x="159.56597222222229" y="178.8828125">inf112.skeleton.app.main</node>
+    <node x="1027.5659722222222" y="178.8828125">inf112.skeleton.app.BoardParserTest</node>
+    <node x="410.0" y="403.8828125">inf112.skeleton.app.CardTest</node>
+    <node x="567.0" y="403.8828125">inf112.skeleton.app.AppTest</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="0.7335526315789473" x="598.0" y="232.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

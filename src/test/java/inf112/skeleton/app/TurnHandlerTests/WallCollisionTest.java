@@ -11,6 +11,7 @@ import inf112.skeleton.app.board.Direction;
 import inf112.skeleton.app.main.Game;
 import inf112.skeleton.app.main.TurnHandler;
 
+import inf112.skeleton.app.networking.Packets;
 import inf112.skeleton.app.objects.boardObjects.Wall;
 import inf112.skeleton.app.objects.cards.NonTextureProgramCard;
 import inf112.skeleton.app.objects.player.Player;
@@ -41,6 +42,13 @@ public class WallCollisionTest {
         Texture mockTexture = mock(Texture.class);
         Texture[] mockImages = {mockTexture};
         player = new Player(mockImages);
+        game.textureSetUp();
+        game.cardBoxSetUp();
+        game.readyButtonSetUp();
+        game.logSetUp();
+        Packets.Packet05Name packet05Name = new Packets.Packet05Name();
+        packet05Name.name = new String[]{"a","b"};
+        game.receiveNames(packet05Name);
         Wall wall = new Wall(Direction.NORTH);
         turnHandler = game.getTurnHandler();
         board = game.getBoard();
@@ -64,7 +72,7 @@ public class WallCollisionTest {
 
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.NORTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -77,7 +85,7 @@ public class WallCollisionTest {
         board.addObject(wall, 1, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.SOUTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -90,7 +98,7 @@ public class WallCollisionTest {
         board.addObject(wall, 1, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(1, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.SOUTH);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());
@@ -98,12 +106,12 @@ public class WallCollisionTest {
     }
 
     @Test
-    public void robotDoesNotWalkThroughWallofNeighbourTile() {
+    public void robotDoesNotWalkThroughWallOfNeighbourTile() {
         Wall wall = new Wall(Direction.WEST);
         board.addObject(wall, 2, 0);
         assertTrue(board.getTile(1, 0).getObjects()[2] instanceof Robot);
         assertTrue(board.getTile(2, 0).getObjects()[1] instanceof Wall);
-        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false);
+        NonTextureProgramCard card = new NonTextureProgramCard(1,false,false,false, 0);
         robot.setDirection(Direction.EAST);
         turnHandler.cardMove(card, robot);
         assertEquals(1, robot.getTileX());

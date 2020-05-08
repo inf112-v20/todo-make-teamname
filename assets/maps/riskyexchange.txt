@@ -1,16 +1,16 @@
 12,16,3
--s---Pyny-nysynr
--sy--g-n-sn3s---
-swyj---n-sn-s-Pj
+-s---P-n--n-s-nr
+-s---g-n-sn3s---
+sw-----n-sn-s-P-
 s--heeec-sn-ceee
-s--j----msnb---j
-hh--WWWWW--wwwww
+s--------sn-----
+----WWWWW--wwwww
 -----eeee--eeeee
-n--u----RSnt--1j
+n-------RSn---1-
 n---wwwc-Sn-wwww
-nw-j---n2Sn-S--j
--ny-eCjn-Sn-S-Ce
--ny-rshnhSnhS-n-
+nw-----n2Sn-S---
+-n--eC-n-Sn-S-Ce
+-n--rs-n-Sn-S-n-
 
 ------y-y--y-y--
 --y--g----------

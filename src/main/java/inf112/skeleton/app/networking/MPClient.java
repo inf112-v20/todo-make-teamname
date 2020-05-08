@@ -1,6 +1,5 @@
 package inf112.skeleton.app.networking;
 
-
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import inf112.skeleton.app.main.Game;
@@ -71,10 +70,9 @@ public class MPClient {
     /**
      * The constructor initializes a Kryonet client and a ClientNetworkListener, registers the classes sent over the
      * server, starts the client and finally tries to connect to the server.
-     * @param ipAddress The server address
      * @param game The game it wants to send data from to the server, and send data to from the server.
      */
-    public MPClient(String ipAddress, Game game){
+    public MPClient(Game game){
         client = new Client();
         cnl = new ClientNetworkListener();
         tcp = 54555;
@@ -84,13 +82,16 @@ public class MPClient {
         registerPackets();
         client.addListener(cnl);
 
+    }
 
+    public boolean connect(String ipAddress) {
         new Thread(client).start();
-
         try {
             client.connect(5000, ipAddress, tcp, udp);
-        }catch (IOException e){
+            return true;
+        }catch (Exception e){
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -104,8 +105,12 @@ public class MPClient {
         kryo.register(Packets.Packet03PlayerNr.class);
         kryo.register(Packets.Packet04StartSignal.class);
         kryo.register(Packets.Packet05Name.class);
+        kryo.register(Packets.Packet06ReadySignal.class);
+        kryo.register(Packets.Packet07ShutdownRobot.class);
+        kryo.register(Packets.Packet08RemovePlayer.class);
         kryo.register(String[].class);
         kryo.register(boolean.class);
+        kryo.register(boolean[].class);
         kryo.register(int.class);
         kryo.register(int[].class);
         kryo.register(int[][].class);
@@ -178,5 +183,34 @@ public class MPClient {
             client.dispose();
         } catch (IOException e) {
         }
+    }
+
+    /**
+     * Sends a boolean to the server telling everybody that this player is ready
+     * @param signal A packet with booleans
+     */
+    public void sendReady(Packets.Packet06ReadySignal signal) {
+        cnl.sendReady(signal);
+    }
+
+    /**
+     * Sends a message tot he server that this player is powering down their robot
+     */
+    public void sendShutdownRobot() {
+        cnl.sendShutdownRobot();
+    }
+
+    /**
+     * Removes this player from playing anymore cards.
+     */
+    public void removeOnePlayerFromServer() {
+        cnl.removeOnePlayerFromServer();
+    }
+
+    /**
+     * Sends a empty list of cards
+     */
+    public void sendEmptyCards() {
+        cnl.sendCards(null);
     }
 }

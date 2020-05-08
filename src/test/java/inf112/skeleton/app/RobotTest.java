@@ -62,9 +62,10 @@ public class RobotTest {
 
     @Test
     public void testHealDamage(){
-        assertEquals(9, testBot.getHealth());
+        testBot.takeDamage();
+        assertEquals(8, testBot.getHealth());
         testBot.healDamage();
-        assertEquals(10, testBot.getHealth());
+        assertEquals(9, testBot.getHealth());
     }
 
     @Test
@@ -81,7 +82,7 @@ public class RobotTest {
         assertEquals(0, testBot.getHealth());
         testBot.respawn();
         assertFalse(testBot.isDestroyed());
-        assertEquals(9, testBot.getHealth());
+        assertEquals(7, testBot.getHealth()); // supposed to take 2 damage when you respawn
     }
 
 }

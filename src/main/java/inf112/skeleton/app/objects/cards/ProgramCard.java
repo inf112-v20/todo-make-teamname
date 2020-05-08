@@ -1,41 +1,68 @@
 package inf112.skeleton.app.objects.cards;
 
 import com.badlogic.gdx.graphics.Texture;
-import inf112.skeleton.app.objects.cards.ICard;
 
 public class ProgramCard implements ICard {
-    private boolean rotate;
-    private boolean rotateLeft;
-    private boolean rotateRight;
-    private int value;
+    private boolean rotate = false;
+    private boolean rotateLeft = false;
+    private boolean rotateRight = false;
+    private int value = 0;
     private boolean selected;
+    private int priorityValue;
     String name;
     String text;
 
+    private Texture sprite;
 
-    Texture [] images;
+    public ProgramCard(String cardName, Texture sprite, int priorityValue){
+        this.priorityValue = priorityValue;
+        this.sprite = sprite;
+        name = cardName;
+        switch (cardName){
+            case "UTurn":
+                rotate = true;
+                text = "Turns the robot 180 degrees around";
+                break;
+            case "RotateLeft":
+                rotate = true;
+                rotateLeft = true;
+                text = "Turns the robot 90 degrees to the left";
+                break;
+            case "RotateRight":
+                rotate = true;
+                rotateRight = true;
+                text = "Turns the robot 90 degrees to the right";
+                break;
+            case "Move1":
+                value = 1;
 
-    private int type;
+                text = "Moves the robot 1 space in the direction its facing";
+                break;
+            case "Move2":
+                value = 2;
 
-    public ProgramCard(int value,boolean rotate, boolean rotateLeft, boolean rotateRight, Texture[] images){
-        /*Value is for moving, rotate for rotating left, right or u turn, if both left and right is false, then robot
-        * will do a U-turn
-         */
-        this.images = images;
-        this.selected = false;
-        this.value = value;
-        this.rotate = rotate;
-        this.rotateLeft = rotateLeft;
-        this.rotateRight = rotateRight;
-
-        type = value * 1000 + (rotate ? 100 : 0) + (rotateLeft ? 10 : 0) + (rotateRight ? 1 : 0);
+                text = "Moves the robot 2 spaces in the direction its facing";
+                break;
+            case "Move3":
+                value = 3;
+                text = "Moves the robot 3 spaces in the direction its facing";
+                break;
+            case "BackUp":
+                value = -1;
+                text = "Moves the robot 1 space backwards";
+                break;
+            default:
+        }
     }
+
     public void setSelected(Boolean b){
         this.selected = b;
     }
+
     public boolean getSelected(){
         return this.selected;
     }
+
     @Override
     public String getName() {
         return this.name;
@@ -48,28 +75,12 @@ public class ProgramCard implements ICard {
 
     @Override
     public Texture getImage() {
-        switch (type) {
-            case 1000:
-                return images[0];
-            case 2000:
-                return images[1];
-            case 110:
-                return images[2];
-            case 101:
-                return images[3];
-            default:
-                return images[0];
-        }
+        return sprite;
     }
 
     @Override
     public Integer getValue() {
         return value;
-    }
-
-    // Flips the texture of the card between front and back
-    public void flip(){
-
     }
 
     public boolean getRotateLeft() {
@@ -84,18 +95,7 @@ public class ProgramCard implements ICard {
         return rotate;
     }
 
-
-
-    //public boolean getBackUp(){
-    //    return backup;
-    //}
-    //public boolean getMove1(){
-    //    return move1;
-    //}
-    //public boolean getMove2(){
-    //    return move2;
-    //}
-    //public boolean getMove3(){
-    //    return move3;
-    //}
+    public int getPriorityValue(){
+        return priorityValue;
+    }
 }

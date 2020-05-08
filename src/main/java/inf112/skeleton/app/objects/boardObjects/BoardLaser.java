@@ -3,6 +3,7 @@ package inf112.skeleton.app.objects.boardObjects;
 import inf112.skeleton.app.board.Direction;
 
 public class BoardLaser implements IBoardObject {
+    private int x,y;
 
     @Override
     public Direction getDirection() {
@@ -16,21 +17,21 @@ public class BoardLaser implements IBoardObject {
 
     @Override
     public int getTileX() {
-        return 0;
+        return x;
     }
 
     @Override
     public int getTileY() {
-        return 0;
+        return y;
     }
 
     @Override
     public void setTileX(int x) {
-
+        this.x = x;
     }
 
     @Override
     public void setTileY(int y) {
-
+        this.y = y;
     }
 }
