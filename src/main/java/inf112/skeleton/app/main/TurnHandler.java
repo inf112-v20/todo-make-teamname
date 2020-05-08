@@ -131,7 +131,10 @@ public class TurnHandler {
                     robotLasersShoot(robot);
                 }
                 game.setRenderRobotLasers(true);
-
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
+                }
                 for (int id: idPlayerHash.keySet()) {
                     pickUpFlag(idPlayerHash.get(id));
                 }
@@ -246,8 +249,7 @@ public class TurnHandler {
     public void pickUpFlag(Player myPlayer) {
         try {
             Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ignored) {
         }
         Robot robot = myPlayer.getRobot();
         if(robot.isDestroyed())return;
