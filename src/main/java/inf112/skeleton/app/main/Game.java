@@ -164,10 +164,6 @@ public class Game{
         return false;
     }
 
-    public boolean touchDragged(int screenX, int screenY, int pointer){
-        return false;
-    }
-
     //IMPORTANT
     //An object has to be initialized before being rendered
     public void render(SpriteBatch batch, BitmapFont font) {
@@ -215,6 +211,8 @@ public class Game{
             }else {
                 batch.draw(powerDownGreen, Settings.SCREEN_WIDTH / 74 * 12,
                         (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) -18, 16, 16);
+                font.draw(batch, "Flag(s): " + player.getFlags().size() + " of " + board.getFlagNr(), Settings.SCREEN_WIDTH / 74 * 14,
+                        (Settings.SCREEN_HEIGHT / 36) * (21 - 2*i) - 4);
             }
 
         }
