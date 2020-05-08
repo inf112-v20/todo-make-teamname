@@ -60,7 +60,6 @@ public class OptionsMenu {
     }
 
     public static void input(int keyCode) {
-        System.out.println(Gdx.graphics.getDisplayMode().width + "x"+Gdx.graphics.getDisplayMode().height);
         switch (keyCode){
             case Input.Keys.UP:
                 selected = selected == 0 ? 3 : selected - 1;
