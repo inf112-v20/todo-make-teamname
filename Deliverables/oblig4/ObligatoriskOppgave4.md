@@ -36,8 +36,12 @@ Vi har ikke implemert noen særlig store endringer til spillet men heller en god
     *   Akseptansekriterie: 
     *   Arbeidsoppgaver:
         			       
-*   Bugs:
+*   Bugs: En
  
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Hvordan prosjektet kjøres er forklart i README.md 
-*   Prosjektet har blitt testet på både Windows og OSX, men skal også fungere på Linux (her har testene kjørt).
+*   Prosjektet har blitt testet på både Windows og OSX, men skal også fungere på Linux (her har testene kjørt).<br><br>
+Manuelle tester:
+<li>    Velge forskjellige menyer med piltaster i MainMenu,<br> visst du kommer til bunns, så går du til toppen igjen.
+<li>    
+</li>

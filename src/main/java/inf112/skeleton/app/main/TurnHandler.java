@@ -245,7 +245,7 @@ public class TurnHandler {
      */
     public void pickUpFlag(Player myPlayer) {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

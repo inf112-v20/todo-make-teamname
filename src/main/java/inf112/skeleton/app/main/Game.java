@@ -644,7 +644,6 @@ public class Game{
      */
     public void setNrOfPlayers(int i){
         nrOfPlayers = i;
-        System.out.println(nrOfPlayers);
     }
 
     /**
