@@ -344,9 +344,9 @@ public class Game{
         ArrayList<ArrayList<int[]>> arrayListArrayList = turnHandler.getAllArraysOfCoordinates();
         for (ArrayList<int[]> listOfCoordinates: arrayListArrayList) {
             for (int[] coordinates: listOfCoordinates) {
-                batch.draw(robotLaser[coordinates[2]], (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH),
-                        (Settings.BOARD_LOC_Y) + (coordinates[1] * Settings.TILE_HEIGHT),
-                        Settings.TILE_WIDTH, Settings.TILE_HEIGHT);
+                batch.draw(robotLaser[coordinates[2]], (Settings.BOARD_LOC_X) + (coordinates[0] * Settings.TILE_WIDTH-10),
+                        (Settings.BOARD_LOC_Y) + (coordinates[1] * Settings.TILE_HEIGHT-7),
+                        Settings.TILE_WIDTH+20, Settings.TILE_HEIGHT+20);
             }
         }
     }
