@@ -22,7 +22,7 @@ public class ScreenHandler implements ApplicationListener {
     private Texture background;
     private Texture mainLogo;
     private InputHandler inputHandler;
-
+    private static String winner = "";
 
     @Override
     public void create() {
@@ -54,6 +54,7 @@ public class ScreenHandler implements ApplicationListener {
     public void render() {
         batch.begin();
         batch.draw(background, 0, 0, Settings.SCREEN_WIDTH, Settings.SCREEN_HEIGHT);
+
         //Changes what's getting rendered based on the ScreenState Enum
         switch (screenState) {
             case GAME:
@@ -76,7 +77,13 @@ public class ScreenHandler implements ApplicationListener {
                 break;
             case OPTIONS:
                 OptionsMenu.render(batch, font);
+                break;
+            case WINSCREEN:
                 batch.draw(mainLogo, 380, 500, 550, 160);
+                font.setColor(Color.YELLOW);
+                font.draw(batch, winner + " Has won the game!", Settings.SCREEN_WIDTH/2-250, Settings.SCREEN_HEIGHT/2, 500, 1, true);
+                font.draw(batch, "Press any key to exit...", Settings.SCREEN_WIDTH/2-250, Settings.SCREEN_HEIGHT/3, 500, 1, true);
+
                 break;
             default:
                 MainMenu.render(batch, font);
@@ -118,6 +125,10 @@ public class ScreenHandler implements ApplicationListener {
         screenState = ScreenState.HOSTGAME;
         hostGameMenu.create(boardName);
         lobbyMenu.setHost(true);
+    }
+    public static void changetoWinscreen(String w){
+        screenState = ScreenState.WINSCREEN;
+        winner = w;
     }
 
     public ScreenState getScreenState(){

@@ -41,6 +41,7 @@ public class InputHandler extends InputAdapter {
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.input(keycode);
         if(screenState.equals(ScreenState.LEVELSELECT)) levelSelectMenu.input(keycode);
         if(screenState.equals(ScreenState.HOSTGAME)) hostGameMenu.input(keycode);
+        if(screenState.equals(ScreenState.WINSCREEN)) Gdx.app.exit();
         return true;
     }
 
@@ -52,13 +53,12 @@ public class InputHandler extends InputAdapter {
         screenState = screenHandler.getScreenState();
         if(screenState.equals(ScreenState.GAME)) return game.touchDown(screenX, screenY, pointer, button);
         if(screenState.equals(ScreenState.LOBBYMENU)) lobbyMenu.touchDown(screenX, screenY, pointer, button);
+        if(screenState.equals(ScreenState.WINSCREEN)) Gdx.app.exit();
         return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        screenState = screenHandler.getScreenState();
-        if(screenState.equals(ScreenState.GAME)) return game.touchDragged(screenX, screenY, pointer);
         return true;
     }
 }

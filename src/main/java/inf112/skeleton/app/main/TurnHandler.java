@@ -260,8 +260,9 @@ public class TurnHandler {
                 game.addToLog(game.getNames()[myPlayer.getId()] + " picked up a flag.");
                 if (myPlayer.getFlags().size() == board.getFlagNr()) {
                     //TODO endscreen
-                    game.addToLog(game.getNames()[myPlayer.getId()] + " won the game.");
-                    ScreenHandler.changeScreenState(ScreenState.MAINMENU);
+                    String winner = game.getNames()[myPlayer.getId()];
+                    game.addToLog(winner + " won the game.");
+                    ScreenHandler.changetoWinscreen(winner);
                     gameIsDone = true;
                 }
             }
