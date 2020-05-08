@@ -58,7 +58,6 @@ public class InputHandler extends InputAdapter {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         screenState = screenHandler.getScreenState();
-        if(screenState.equals(ScreenState.GAME)) return game.touchDragged(screenX, screenY, pointer);
         return true;
     }
 }
