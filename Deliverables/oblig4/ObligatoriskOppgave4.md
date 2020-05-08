@@ -41,7 +41,17 @@ Vi har ikke implemert noen særlig store endringer til spillet men heller en god
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Hvordan prosjektet kjøres er forklart i README.md 
 *   Prosjektet har blitt testet på både Windows og OSX, men skal også fungere på Linux (her har testene kjørt).<br><br>
+
 Manuelle tester:
-<li>    Velge forskjellige menyer med piltaster i MainMenu,<br> visst du kommer til bunns, så går du til toppen igjen.
-<li>    
-</li>
+*    Velge forskjellige menyer med piltaster i MainMenu,<br> visst du kommer til bunns, så går du til toppen igjen.
+*   Visst du endrer skjermstørrelse i optionsMenu så endres skjermstørrelsen
+*   Får bilde representasjon av brettet du skal spille på når du velger brett
+*   Grønn hake kommer opp når en spiller har gjort seg klar i lobby
+*   Kan skrive i textfieldet på JoinGameMenu
+*   Når en spiller vinner spillet så går spillet til Win Screen
+*   Får selvmordstanker når planen din ikke fungerer 
+*	Hvis roboten kommer oppå et flagg så vil det registrere ved at det kommer opp en melding i log, i tillegg til å oppdatere flag counter ved siden av spillerne på venstre side av spillet.
+*	Når melding skrives inn i chatteboksen og trykkes ENTER så vil meldingen dukke opp i chatten.
+*	Kort blir korrekt markert når de blir trykket på ved å vise en gul ramme rundt, og det fungerer også å trykke igjen på samme kort for å av-velge det.
+*	Kort blir spilt i riktig rekkefølge i forhold til sin prioriterings verdi
+*	Skade ikonet går fra grå til gul når du tar skade fra laser, og går tilbake til grå når du gjenoppliver eller bruker “shutdown” knappen og når du står på reparerings ikonet.
