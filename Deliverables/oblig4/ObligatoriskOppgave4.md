@@ -36,7 +36,8 @@ Vi har ikke implemert noen særlig store endringer til spillet men heller en god
     *   Akseptansekriterie: 
     *   Arbeidsoppgaver:
         			       
-*   Bugs: En
+*   Bugs: Ett tilfelle der host ikke kunne ha 4 pleyrs tilkoblet, funket når vi byttet hvem som hostet,
+    lurer på om det er relatert til ruter som blir brukt.
  
 ## Deloppgave 3 - Produkeleveranse og kodekvalitet
 *   Hvordan prosjektet kjøres er forklart i README.md 
